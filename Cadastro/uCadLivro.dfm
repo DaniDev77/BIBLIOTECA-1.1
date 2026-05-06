@@ -1,0 +1,148 @@
+inherited frmCadLivro: TfrmCadLivro
+  Caption = 'frmCadLivro'
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited pgcPrincipal: TPageControl
+    ExplicitWidth = 653
+    ExplicitHeight = 268
+    inherited TabListagem: TTabSheet
+      ExplicitWidth = 645
+      ExplicitHeight = 240
+      inherited Listagem: TPanel
+        object btnExportarCSV: TBitBtn
+          Left = 391
+          Top = 18
+          Width = 75
+          Height = 25
+          Caption = '&EXPORTAR'
+          TabOrder = 0
+          OnClick = btnApagarClick
+        end
+      end
+    end
+    inherited TabManutencao: TTabSheet
+      ExplicitLeft = 8
+      ExplicitTop = 22
+      ExplicitWidth = 645
+      ExplicitHeight = 240
+      object edtLivroId: TLabeledEdit
+        Left = 25
+        Top = 40
+        Width = 72
+        Height = 21
+        EditLabel.Width = 49
+        EditLabel.Height = 13
+        EditLabel.Caption = 'edtLivroId'
+        TabOrder = 0
+      end
+      object edtTitulo: TLabeledEdit
+        Left = 150
+        Top = 40
+        Width = 272
+        Height = 21
+        EditLabel.Width = 42
+        EditLabel.Height = 13
+        EditLabel.Caption = 'edtTitulo'
+        TabOrder = 1
+      end
+      object edtAutor: TLabeledEdit
+        Left = 25
+        Top = 82
+        Width = 227
+        Height = 21
+        EditLabel.Width = 43
+        EditLabel.Height = 13
+        EditLabel.Caption = 'edtAutor'
+        TabOrder = 2
+      end
+      object edtGenero: TLabeledEdit
+        Left = 346
+        Top = 82
+        Width = 184
+        Height = 21
+        EditLabel.Width = 51
+        EditLabel.Height = 13
+        EditLabel.Caption = 'edtGenero'
+        TabOrder = 3
+      end
+      object edtAnoPub: TLabeledEdit
+        Left = 458
+        Top = 40
+        Width = 72
+        Height = 21
+        EditLabel.Width = 53
+        EditLabel.Height = 13
+        EditLabel.Caption = 'edtAnoPub'
+        TabOrder = 4
+      end
+      object edtResumo: TLabeledEdit
+        Left = 130
+        Top = 131
+        Width = 332
+        Height = 107
+        EditLabel.Width = 54
+        EditLabel.Height = 13
+        EditLabel.Caption = 'edtResumo'
+        TabOrder = 5
+      end
+    end
+  end
+  inherited Rodape: TPanel
+    ExplicitTop = 268
+    ExplicitWidth = 653
+    inherited btnFechar: TBitBtn
+      OnClick = btnFecharClick
+    end
+  end
+  inherited FDQListagem: TFDQuery
+    SQL.Strings = (
+      'SELECT '
+      '    id, '
+      '    titulo, '
+      '    autor, '
+      '    genero, '
+      '    ano_publicacao, '
+      '    resumo '
+      'FROM livros'
+      'ORDER BY titulo ASC')
+    Top = 168
+    object FDQListagemid: TIntegerField
+      FieldName = 'id'
+      Origin = 'id'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object FDQListagemtitulo: TStringField
+      FieldName = 'titulo'
+      Origin = 'titulo'
+      Required = True
+      Size = 255
+    end
+    object FDQListagemautor: TStringField
+      FieldName = 'autor'
+      Origin = 'autor'
+      Required = True
+      Size = 255
+    end
+    object FDQListagemgenero: TStringField
+      FieldName = 'genero'
+      Origin = 'genero'
+      Required = True
+      Size = 100
+    end
+    object FDQListagemano_publicacao: TIntegerField
+      FieldName = 'ano_publicacao'
+      Origin = 'ano_publicacao'
+      Required = True
+    end
+    object FDQListagemresumo: TMemoField
+      FieldName = 'resumo'
+      Origin = 'resumo'
+      BlobType = ftMemo
+    end
+  end
+  object SaveDialog1: TSaveDialog
+    Left = 564
+    Top = 216
+  end
+end

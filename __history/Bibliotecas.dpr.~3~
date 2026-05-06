@@ -1,0 +1,18 @@
+program Bibliotecas;
+
+uses
+  Vcl.Forms,
+  Bibliotecao in 'Bibliotecao.pas' {MenuPrincipal},
+  uTelaHeranca in 'Heranca\uTelaHeranca.pas' {Heranca},
+  uDTMConexao in 'DataModule\uDTMConexao.pas' {dtmPrincipal: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TMenuPrincipal, MenuPrincipal);
+  Application.CreateForm(THeranca, Heranca);
+  Application.CreateForm(TdtmPrincipal, dtmPrincipal);
+  Application.Run;
+end.

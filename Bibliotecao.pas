@@ -1,0 +1,55 @@
+unit Bibliotecao;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus;
+
+type
+  TMenuPrincipal = class(TForm)
+    MainMenu1: TMainMenu;
+    CADASTRO1: TMenuItem;
+    LIVROS1: TMenuItem;
+    N1: TMenuItem;
+    FECHAR1: TMenuItem;
+    procedure FECHAR1Click(Sender: TObject);
+    procedure LIVROS1Click(Sender: TObject); // Novo evento
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MenuPrincipal: TMenuPrincipal;
+
+implementation
+
+// Adicione as units necessárias aqui para o menu enxergar a tela de livros e o banco
+uses uCadLivro, uDTMConexao ;
+
+{$R *.dfm}
+
+procedure TMenuPrincipal.FECHAR1Click(Sender: TObject);
+begin
+  Application.Terminate;
+end;
+
+procedure TMenuPrincipal.LIVROS1Click(Sender: TObject);
+begin
+  begin
+  // Cria o formulário de Cadastro de Livros
+  frmCadLivro := TfrmCadLivro.Create(Self);
+  try
+    // Abre a tela como Modal (impede mexer no menu enquanto ela estiver aberta)
+    frmCadLivro.ShowModal;
+  finally
+    // Libera a memória assim que fechar a tela
+    frmCadLivro.Release;
+    frmCadLivro := nil;
+  end;
+end;
+end;
+
+end.

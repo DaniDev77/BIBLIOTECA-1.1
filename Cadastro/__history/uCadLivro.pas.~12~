@@ -1,0 +1,209 @@
+unit uCadLivro;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.ComCtrls,
+  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes;
+
+type
+  TfrmCadLivro = class(THeranca) // Certifique-se que o nome da classe pai está correto (THeranca ou TForm1)
+    edtLivroId: TLabeledEdit;
+    edtTitulo: TLabeledEdit;
+    edtAutor: TLabeledEdit;
+    edtGenero: TLabeledEdit;
+    edtAnoPub: TLabeledEdit;
+    FDQListagemid: TIntegerField;
+    FDQListagemtitulo: TStringField;
+    FDQListagemautor: TStringField;
+    FDQListagemgenero: TStringField;
+    FDQListagemano_publicacao: TIntegerField;
+    FDQListagemresumo: TMemoField;
+    edtResumo: TLabeledEdit;
+    SaveDialog1: TSaveDialog;
+    btnExportarCSV: TBitBtn;
+    procedure btnNovoClick(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnApagarClick(Sender: TObject);
+  private
+    { Private declarations }
+    oLivro: TLivro;
+    procedure ExportarCSV(ADataset: TDataSet); // Instância da nossa classe de negócio
+  public
+    { Public declarations }
+    // Sobrescrevendo os métodos da tela de herança
+    function Apagar: Boolean; override;
+    function Gravar(EstadoDoCadastro: TEstadoCadastro): Boolean; override;
+  end;
+
+var
+  frmCadLivro: TfrmCadLivro;
+
+implementation
+
+uses Bibliotecao; // Para acessar o dtmPrincipal
+
+{$R *.dfm}
+
+{$REGION 'Metodos de Persistencia'}
+
+function TfrmCadLivro.Apagar: Boolean;
+begin
+  // Pegamos o ID diretamente da Query de listagem
+  if oLivro.Selecionar(FDQListagem.FieldByName('id').AsInteger) then
+    Result := oLivro.Apagar
+  else
+    Result := False;
+end;
+
+function TfrmCadLivro.Gravar(EstadoDoCadastro: TEstadoCadastro): Boolean;
+begin
+  // 1. Passa os dados da tela para o objeto oLivro
+  if edtLivroId.Text <> EmptyStr then
+    oLivro.id := StrToInt(edtLivroId.Text)
+  else
+    oLivro.id := 0;
+
+  oLivro.titulo         := edtTitulo.Text;
+  oLivro.autor          := edtAutor.Text;
+  oLivro.genero         := edtGenero.Text;
+  oLivro.resumo         := edtResumo.Text;
+  oLivro.ano_publicacao := StrToIntDef(edtAnoPub.Text, 0);
+
+  // 2. Validação simples (Igual ao seu exemplo de Produto)
+  if Trim(oLivro.titulo) = '' then
+  begin
+    MessageDlg('O título é obrigatório!', mtWarning, [mbOK], 0);
+    edtTitulo.SetFocus;
+    Abort;
+  end;
+
+  // 3. Decide se Insere ou Atualiza
+  if (EstadoDoCadastro = ecInserir) then
+    Result := oLivro.Inserir
+  else if (EstadoDoCadastro = ecAlterar) then
+    Result := oLivro.Atualizar;
+end;
+
+{$ENDREGION}
+
+{$REGION 'Eventos do Form'}
+
+procedure TfrmCadLivro.FormCreate(Sender: TObject);
+begin
+  // Cria o objeto e aponta a conexão
+  oLivro := TLivro.Create(dtmPrincipal.dtmPrincipalDB);
+
+  FDQListagem.Open;
+  IndiceAtual := 'titulo'; // Define a busca padrão
+  inherited;
+end;
+
+procedure TfrmCadLivro.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  if Assigned(oLivro) then
+    FreeAndNil(oLivro);
+end;
+
+{$ENDREGION}
+
+{$REGION 'Botoes de Ação'}
+
+procedure TfrmCadLivro.btnNovoClick(Sender: TObject);
+begin
+  inherited;
+  edtTitulo.SetFocus;
+end;
+
+procedure TfrmCadLivro.btnAlterarClick(Sender: TObject);
+begin
+  inherited;
+  // Carrega os dados do banco para os campos da tela
+  if oLivro.Selecionar(FDQListagem.FieldByName('id').AsInteger) then
+  begin
+    edtLivroId.Text := IntToStr(oLivro.id);
+    edtTitulo.Text  := oLivro.titulo;
+    edtAutor.Text   := oLivro.autor;
+    edtGenero.Text  := oLivro.genero;
+    edtAnoPub.Text  := IntToStr(oLivro.ano_publicacao);
+    edtResumo.Text  := oLivro.resumo;
+  end
+  else
+  begin
+    btnCancelar.Click;
+    Abort;
+  end;
+end;
+
+procedure TfrmCadLivro.btnApagarClick(Sender: TObject);
+begin
+  // Verificamos se a lista não está vazia antes de exportar
+  if FDQListagem.IsEmpty then
+  begin
+    ShowMessage('Não há dados para exportar.');
+    Exit;
+  end;
+
+  // Chamamos a função passando a Query de listagem que já está na tela
+  ExportarCSV(FDQListagem);
+end;
+
+{$ENDREGION}
+
+{$REGION ' Exporta'}
+procedure TfrmCadLivro.ExportarCSV(ADataset: TDataSet);
+var
+  Lista: TStringList;
+begin
+  Lista := TStringList.Create;
+  try
+    // Cabeçalho adaptado para os campos de Livro
+    Lista.Add('ID;Titulo;Autor;Genero;Ano_Publicacao;Resumo');
+
+    ADataset.First;
+    while not ADataset.Eof do
+    begin
+      // Montagem da linha com os campos da sua tabela de livros
+      Lista.Add(
+        ADataset.FieldByName('id').AsString + ';' +
+        ADataset.FieldByName('titulo').AsString + ';' +
+        ADataset.FieldByName('autor').AsString + ';' +
+        ADataset.FieldByName('genero').AsString + ';' +
+        ADataset.FieldByName('ano_publicacao').AsString + ';' +
+        ADataset.FieldByName('resumo').AsString
+      );
+      ADataset.Next;
+    end;
+
+    try
+      SaveDialog1.FileName   := 'CatalogoLivros.csv';
+      SaveDialog1.DefaultExt := 'csv';
+      SaveDialog1.Filter     := 'Arquivo CSV (*.csv)|*.csv';
+
+      if SaveDialog1.Execute then
+      begin
+        TFile.WriteAllText(
+          SaveDialog1.FileName,
+          Lista.Text,
+          TEncoding.UTF8
+        );
+        ShowMessage('Exportação concluída com sucesso!');
+      end;
+    except
+      on E: Exception do
+        ShowMessage('Erro ao exportar CSV: ' + E.Message);
+    end;
+  finally
+    Lista.Free;
+  end;
+end;
+
+{$ENDREGION}
+
+end.

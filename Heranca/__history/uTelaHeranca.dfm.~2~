@@ -1,0 +1,118 @@
+object Heranca: THeranca
+  Left = 0
+  Top = 0
+  Caption = 'Heranca'
+  ClientHeight = 329
+  ClientWidth = 653
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 653
+    Height = 268
+    ActivePage = TabListagem
+    Align = alClient
+    TabOrder = 0
+    ExplicitWidth = 447
+    ExplicitHeight = 201
+    object TabListagem: TTabSheet
+      Caption = 'Listagem'
+      ExplicitWidth = 439
+      ExplicitHeight = 173
+      object Listagem: TPanel
+        Left = 0
+        Top = 0
+        Width = 645
+        Height = 49
+        Align = alTop
+        TabOrder = 0
+      end
+      object DBGrid1: TDBGrid
+        Left = 0
+        Top = 49
+        Width = 645
+        Height = 191
+        Align = alClient
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+      end
+    end
+    object TabManutencao: TTabSheet
+      Caption = 'Manuten'#231#227'o'
+      ImageIndex = 1
+      ExplicitWidth = 439
+      ExplicitHeight = 173
+    end
+  end
+  object Rodape: TPanel
+    Left = 0
+    Top = 268
+    Width = 653
+    Height = 61
+    Align = alBottom
+    Caption = 'Rodape'
+    TabOrder = 1
+    ExplicitTop = 240
+    ExplicitWidth = 645
+    object BitBtn1: TBitBtn
+      Left = 4
+      Top = 19
+      Width = 75
+      Height = 25
+      Caption = '&NOVO'
+      TabOrder = 0
+    end
+    object BitBtn2: TBitBtn
+      Left = 93
+      Top = 20
+      Width = 75
+      Height = 25
+      Caption = '&ALTERAR'
+      TabOrder = 1
+    end
+    object BitBtn3: TBitBtn
+      Left = 181
+      Top = 20
+      Width = 75
+      Height = 25
+      Caption = '&CANCELAR'
+      TabOrder = 2
+    end
+    object btnGravar: TBitBtn
+      Left = 270
+      Top = 20
+      Width = 75
+      Height = 25
+      Caption = '&GRAVAR'
+      TabOrder = 3
+    end
+    object btnApagar: TBitBtn
+      Left = 351
+      Top = 20
+      Width = 75
+      Height = 25
+      Caption = 'APAGA&R'
+      TabOrder = 4
+    end
+    object btnFechar: TBitBtn
+      Left = 528
+      Top = 20
+      Width = 75
+      Height = 25
+      Caption = '&FECHAR'
+      TabOrder = 5
+    end
+  end
+end

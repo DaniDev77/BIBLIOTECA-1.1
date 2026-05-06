@@ -1,0 +1,29 @@
+unit Bibliotecao;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus;
+
+type
+  TMenuPrincipal = class(TForm)
+    MainMenu1: TMainMenu;
+    CADASTRO1: TMenuItem;
+    LIVROS1: TMenuItem;
+    N1: TMenuItem;
+    FECHAR1: TMenuItem;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  MenuPrincipal: TMenuPrincipal;
+
+implementation
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,14 @@
+program Bibliotecas;
+
+uses
+  Vcl.Forms,
+  Bibliotecao in 'Bibliotecao.pas' {MenuPrincipal};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TMenuPrincipal, MenuPrincipal);
+  Application.Run;
+end.
