@@ -30,6 +30,39 @@ inherited frmCadLivro: TfrmCadLivro
           OnClick = btnImportarXLSXClick
         end
       end
+      inherited grdListagem: TDBGrid
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'id'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'titulo'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'autor'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'genero'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'resumo'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ano_de_publicacao'
+            Visible = True
+          end>
+      end
     end
     inherited TabManutencao: TTabSheet
       ExplicitLeft = 4
@@ -107,15 +140,16 @@ inherited frmCadLivro: TfrmCadLivro
   end
   inherited FDQListagem: TFDQuery
     SQL.Strings = (
-      'SELECT '
-      '    id, '
-      '    titulo, '
-      '    autor, '
-      '    genero, '
-      '    ano_publicacao, '
-      '    resumo '
-      'FROM livros'
-      'ORDER BY titulo ASC')
+      ' SELECT '
+      '  id,'
+      '  titulo,  '
+      '  autor,'
+      '  genero,'
+      '  resumo, '
+      '  ano_de_publicacao'
+      'FROM BIBLIOTECA.dbo.livros'
+      ''
+      'ORDER BY titulo')
     Top = 168
     object FDQListagemid: TIntegerField
       FieldName = 'id'
@@ -141,15 +175,15 @@ inherited frmCadLivro: TfrmCadLivro
       Required = True
       Size = 100
     end
-    object FDQListagemano_publicacao: TIntegerField
-      FieldName = 'ano_publicacao'
-      Origin = 'ano_publicacao'
-      Required = True
-    end
     object FDQListagemresumo: TMemoField
       FieldName = 'resumo'
       Origin = 'resumo'
       BlobType = ftMemo
+    end
+    object FDQListagemano_de_publicacao: TIntegerField
+      FieldName = 'ano_de_publicacao'
+      Origin = 'ano_de_publicacao'
+      Required = True
     end
   end
   object SaveDialog1: TSaveDialog

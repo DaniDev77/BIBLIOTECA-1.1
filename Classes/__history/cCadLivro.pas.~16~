@@ -125,9 +125,12 @@ begin
   FDQ := TFDQuery.Create(nil);
   try
     FDQ.Connection := dtmPrincipalDB;
-  FDQ.SQL.Add('INSERT INTO BIBLIOTECA.dbo.livros (id, titulo, autor, genero, resumo, ano_de_publicacao) ');
-  FDQ.SQL.Add('VALUES ((SELECT ISNULL(MAX(id),0)+1 FROM BIBLIOTECA.dbo.livros), :titulo, :autor, :genero, :resumo, :ano);');
-  FDQ.SQL.Add('SELECT SCOPE_IDENTITY() AS ID_GERADO;');
+
+    // 1. ADICIONADO ACENTOS EM [título] e [gênero]
+    // 2. ADICIONADO SELECT SCOPE_IDENTITY PARA O OPEN FUNCIONAR
+    FDQ.SQL.Add('INSERT INTO BIBLIOTECA.dbo.livros ([título], [autor], [gênero], [resumo], [ano_de_publicacao]) ');
+    FDQ.SQL.Add('VALUES (:titulo, :autor, :genero, :resumo, :ano);');
+    FDQ.SQL.Add('SELECT SCOPE_IDENTITY() AS ID_GERADO;');
 
     FDQ.ParamByName('titulo').AsString := F_titulo;
     FDQ.ParamByName('autor').AsString  := F_autor;
@@ -137,14 +140,17 @@ begin
 
     try
       if not dtmPrincipalDB.InTransaction then dtmPrincipalDB.StartTransaction;
+
+      // Usamos Open porque o SQL agora retorna uma tabela com o ID_GERADO
       FDQ.Open;
+
       if not FDQ.IsEmpty then
         Self.F_livroId := FDQ.FieldByName('ID_GERADO').AsInteger;
+
       dtmPrincipalDB.Commit;
       Result := True;
     except
-      on E: Exception do
-      begin
+      on E: Exception do begin
         if dtmPrincipalDB.InTransaction then dtmPrincipalDB.Rollback;
         ShowMessage('ERRO AO GRAVAR: ' + E.Message);
         Result := False;
@@ -154,8 +160,8 @@ begin
     FDQ.Free;
   end;
 end;
-{$ENDREGION}
 
+{$ENDREGION}
 
 {$REGION 'Selecionar'}
 function TLivro.Selecionar(id: Integer): Boolean;

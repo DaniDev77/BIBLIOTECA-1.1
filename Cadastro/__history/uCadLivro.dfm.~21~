@@ -6,12 +6,34 @@ inherited frmCadLivro: TfrmCadLivro
     ExplicitWidth = 653
     ExplicitHeight = 268
     inherited TabListagem: TTabSheet
+      ExplicitLeft = 4
+      ExplicitTop = 24
       ExplicitWidth = 645
       ExplicitHeight = 240
+      inherited Listagem: TPanel
+        object btnExportarCSV: TBitBtn
+          Left = 391
+          Top = 18
+          Width = 75
+          Height = 25
+          Caption = '&EXPORTAR'
+          TabOrder = 0
+          OnClick = btnExportarCSVClick
+        end
+        object btnImportarXLSX: TBitBtn
+          Left = 487
+          Top = 18
+          Width = 75
+          Height = 25
+          Caption = '&IMPORTAR'
+          TabOrder = 1
+          OnClick = btnImportarXLSXClick
+        end
+      end
     end
     inherited TabManutencao: TTabSheet
-      ExplicitLeft = 8
-      ExplicitTop = 22
+      ExplicitLeft = 4
+      ExplicitTop = 24
       ExplicitWidth = 645
       ExplicitHeight = 240
       object edtLivroId: TLabeledEdit
@@ -68,7 +90,7 @@ inherited frmCadLivro: TfrmCadLivro
         Left = 130
         Top = 131
         Width = 332
-        Height = 107
+        Height = 21
         EditLabel.Width = 54
         EditLabel.Height = 13
         EditLabel.Caption = 'edtResumo'
@@ -79,6 +101,9 @@ inherited frmCadLivro: TfrmCadLivro
   inherited Rodape: TPanel
     ExplicitTop = 268
     ExplicitWidth = 653
+    inherited btnFechar: TBitBtn
+      OnClick = btnFecharClick
+    end
   end
   inherited FDQListagem: TFDQuery
     SQL.Strings = (
@@ -87,7 +112,7 @@ inherited frmCadLivro: TfrmCadLivro
       '    titulo, '
       '    autor, '
       '    genero, '
-      '    ano_publicacao, '
+      '    ano_de_publicacao, '
       '    resumo '
       'FROM livros'
       'ORDER BY titulo ASC')
@@ -116,9 +141,9 @@ inherited frmCadLivro: TfrmCadLivro
       Required = True
       Size = 100
     end
-    object FDQListagemano_publicacao: TIntegerField
-      FieldName = 'ano_publicacao'
-      Origin = 'ano_publicacao'
+    object FDQListagemano_de_publicacao: TIntegerField
+      FieldName = 'ano_de_publicacao'
+      Origin = 'ano_de_publicacao'
       Required = True
     end
     object FDQListagemresumo: TMemoField
@@ -129,6 +154,11 @@ inherited frmCadLivro: TfrmCadLivro
   end
   object SaveDialog1: TSaveDialog
     Left = 564
+    Top = 216
+  end
+  object OpenDialog1: TOpenDialog
+    Filter = '*.xlsx'
+    Left = 500
     Top = 216
   end
 end

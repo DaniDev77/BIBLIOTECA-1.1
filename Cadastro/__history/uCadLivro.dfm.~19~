@@ -3,6 +3,7 @@ inherited frmCadLivro: TfrmCadLivro
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
+    ActivePage = TabManutencao
     ExplicitWidth = 653
     ExplicitHeight = 268
     inherited TabListagem: TTabSheet
@@ -27,7 +28,7 @@ inherited frmCadLivro: TfrmCadLivro
           Height = 25
           Caption = '&IMPORTAR'
           TabOrder = 1
-          OnClick = btnApagarClick
+          OnClick = btnImportarXLSXClick
         end
       end
     end
@@ -112,7 +113,7 @@ inherited frmCadLivro: TfrmCadLivro
       '    titulo, '
       '    autor, '
       '    genero, '
-      '    ano_publicacao, '
+      '    ano_de_publicacao, '
       '    resumo '
       'FROM livros'
       'ORDER BY titulo ASC')
@@ -141,9 +142,9 @@ inherited frmCadLivro: TfrmCadLivro
       Required = True
       Size = 100
     end
-    object FDQListagemano_publicacao: TIntegerField
-      FieldName = 'ano_publicacao'
-      Origin = 'ano_publicacao'
+    object FDQListagemano_de_publicacao: TIntegerField
+      FieldName = 'ano_de_publicacao'
+      Origin = 'ano_de_publicacao'
       Required = True
     end
     object FDQListagemresumo: TMemoField

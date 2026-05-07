@@ -16,17 +16,17 @@ type
     edtAutor: TLabeledEdit;
     edtGenero: TLabeledEdit;
     edtAnoPub: TLabeledEdit;
-    FDQListagemid: TIntegerField;
-    FDQListagemtitulo: TStringField;
-    FDQListagemautor: TStringField;
-    FDQListagemgenero: TStringField;
-    FDQListagemano_publicacao: TIntegerField;
-    FDQListagemresumo: TMemoField;
     edtResumo: TLabeledEdit;
     SaveDialog1: TSaveDialog;
     btnExportarCSV: TBitBtn;
     OpenDialog1: TOpenDialog;
     btnImportarXLSX: TBitBtn;
+    FDQListagemid: TIntegerField;
+    FDQListagemautor: TStringField;
+    FDQListagemgenero: TStringField;
+    FDQListagemresumo: TMemoField;
+    FDQListagemano_de_publicacao: TIntegerField;
+    FDQListagemtitulo: TStringField;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -34,6 +34,7 @@ type
     procedure btnApagarClick(Sender: TObject);
     procedure btnFecharClick(Sender: TObject);
     procedure btnExportarCSVClick(Sender: TObject);
+    procedure btnImportarXLSXClick(Sender: TObject);
   private
     { Private declarations }
     oLivro: TLivro;
@@ -174,6 +175,8 @@ begin
 
 end;
 
+
+
 {$ENDREGION}
 
 {$REGION ' Exporta'}
@@ -195,7 +198,7 @@ begin
         ADataset.FieldByName('titulo').AsString + ';' +
         ADataset.FieldByName('autor').AsString + ';' +
         ADataset.FieldByName('genero').AsString + ';' +
-        ADataset.FieldByName('ano_publicacao').AsString + ';' +
+        ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
         ADataset.FieldByName('resumo').AsString
       );
       ADataset.Next;
@@ -260,37 +263,35 @@ begin
     Linha := 2; // Começa na linha 2 para pular o cabeçalho
 
     // Loop enquanto a primeira célula da linha não estiver vazia
-    while not VarIsEmpty(Planilha.Cells[Linha, 1].Value) do
+   while not VarIsEmpty(Planilha.Cells[Linha, 1].Value) do
     begin
-      // Leitura das colunas (1=A, 2=B, 3=C, 4=D, 5=E)
-      Titulo := VarToStr(Planilha.Cells[Linha, 1].Value);
-      Autor  := VarToStr(Planilha.Cells[Linha, 2].Value);
-      Genero := VarToStr(Planilha.Cells[Linha, 3].Value);
-      Ano    := StrToIntDef(VarToStr(Planilha.Cells[Linha, 4].Value), 0);
-      Resumo := VarToStr(Planilha.Cells[Linha, 5].Value);
+      // Leitura conforme o teu ficheiro Daniel (1).xlsx
+      Titulo := VarToStr(Planilha.Cells[Linha, 1].Value); // Coluna A
+      Autor  := VarToStr(Planilha.Cells[Linha, 2].Value); // Coluna B
+      Genero := VarToStr(Planilha.Cells[Linha, 3].Value); // Coluna C
+      Resumo := VarToStr(Planilha.Cells[Linha, 4].Value); // Coluna D (Resumo agora vem antes)
+      Ano    := StrToIntDef(VarToStr(Planilha.Cells[Linha, 5].Value), 0); // Coluna E (Ano é a última)
 
-      // VALIDAÇÃO: Título e Autor são obrigatórios
-      if (Trim(Titulo) <> '') and (Trim(Autor) <> '') then
+      if (Trim(Titulo) <> '') then
       begin
-
-        // TRATAR DUPLICIDADE: Verifica se o livro já existe
+        // 1. VERIFICA SE JÁ EXISTE (Ajustado com acento no [título])
         QryConsulta.Close;
-        QryConsulta.SQL.Text := 'SELECT id FROM livros WHERE titulo = :t AND autor = :a';
+        QryConsulta.SQL.Text := 'SELECT id FROM BIBLIOTECA.dbo.livros WHERE [título] = :t';
         QryConsulta.ParamByName('t').AsString := Titulo;
-        QryConsulta.ParamByName('a').AsString := Autor;
         QryConsulta.Open;
 
         if QryConsulta.IsEmpty then
         begin
-          // GRAVAR: Usa o objeto oLivro
-          oLivro.id             := 0;
+          // 2. Preencher o objeto oLivro
+          oLivro.id:=0;
           oLivro.titulo         := Titulo;
           oLivro.autor          := Autor;
           oLivro.genero         := Genero;
-          oLivro.ano_publicacao := Ano;
           oLivro.resumo         := Resumo;
+          oLivro.ano_publicacao := Ano;
 
-          oLivro.Inserir; // Chama o Insert do banco
+          // 3. Inserir (O teu método Inserir já faz o Commit no banco correto)
+          oLivro.Inserir;
         end;
       end;
 
@@ -301,7 +302,7 @@ begin
     FDQListagem.Refresh; // Atualiza a sua Grid na tela
 
   finally
-    // Limpeza obrigatória para não travar o processo do Excel no Windows
+   //  Limpeza obrigatória para não travar o processo do Excel no Windows
     if not VarIsEmpty(Excel) then
     begin
       Excel.Quit;
@@ -311,5 +312,18 @@ begin
   end;
 end;
 
+procedure TfrmCadLivro.btnImportarXLSXClick(Sender: TObject);
+begin
+  if OpenDialog1.Execute then
+  begin
+    ImportarExcel(OpenDialog1.FileName);
+
+    // FORÇAR A ATUALIZAÇÃO DA TELA
+    FDQListagem.Close;
+    FDQListagem.Open;
+
+    ShowMessage('Processo finalizado. Total de registros: ' + IntToStr(FDQListagem.RecordCount));
+  end;
+end;
 
 end.

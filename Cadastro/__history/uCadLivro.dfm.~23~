@@ -18,7 +18,16 @@ inherited frmCadLivro: TfrmCadLivro
           Height = 25
           Caption = '&EXPORTAR'
           TabOrder = 0
-          OnClick = btnApagarClick
+          OnClick = btnExportarCSVClick
+        end
+        object btnImportarXLSX: TBitBtn
+          Left = 487
+          Top = 18
+          Width = 75
+          Height = 25
+          Caption = '&IMPORTAR'
+          TabOrder = 1
+          OnClick = btnImportarXLSXClick
         end
       end
     end
@@ -98,27 +107,22 @@ inherited frmCadLivro: TfrmCadLivro
   end
   inherited FDQListagem: TFDQuery
     SQL.Strings = (
-      'SELECT '
-      '    id, '
-      '    titulo, '
-      '    autor, '
-      '    genero, '
-      '    ano_publicacao, '
-      '    resumo '
-      'FROM livros'
-      'ORDER BY titulo ASC')
+      ' SELECT '
+      '  id,'
+      '  titulo  '
+      '  autor,'
+      '  genero,'
+      '  resumo, '
+      '  ano_de_publicacao'
+      'FROM BIBLIOTECA.dbo.livros'
+      ''
+      'ORDER BY titulo')
     Top = 168
     object FDQListagemid: TIntegerField
       FieldName = 'id'
       Origin = 'id'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
-    end
-    object FDQListagemtitulo: TStringField
-      FieldName = 'titulo'
-      Origin = 'titulo'
-      Required = True
-      Size = 255
     end
     object FDQListagemautor: TStringField
       FieldName = 'autor'
@@ -132,15 +136,15 @@ inherited frmCadLivro: TfrmCadLivro
       Required = True
       Size = 100
     end
-    object FDQListagemano_publicacao: TIntegerField
-      FieldName = 'ano_publicacao'
-      Origin = 'ano_publicacao'
-      Required = True
-    end
     object FDQListagemresumo: TMemoField
       FieldName = 'resumo'
       Origin = 'resumo'
       BlobType = ftMemo
+    end
+    object FDQListagemano_de_publicacao: TIntegerField
+      FieldName = 'ano_de_publicacao'
+      Origin = 'ano_de_publicacao'
+      Required = True
     end
   end
   object SaveDialog1: TSaveDialog

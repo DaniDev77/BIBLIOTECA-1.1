@@ -125,9 +125,9 @@ begin
   FDQ := TFDQuery.Create(nil);
   try
     FDQ.Connection := dtmPrincipalDB;
-  FDQ.SQL.Add('INSERT INTO BIBLIOTECA.dbo.livros (id, titulo, autor, genero, resumo, ano_de_publicacao) ');
-  FDQ.SQL.Add('VALUES ((SELECT ISNULL(MAX(id),0)+1 FROM BIBLIOTECA.dbo.livros), :titulo, :autor, :genero, :resumo, :ano);');
-  FDQ.SQL.Add('SELECT SCOPE_IDENTITY() AS ID_GERADO;');
+    FDQ.SQL.Add('INSERT INTO BIBLIOTECA.dbo.livros (titulo, autor, genero, resumo, ano_de_publicacao) ');
+    FDQ.SQL.Add('VALUES (:titulo, :autor, :genero, :resumo, :ano);');
+    FDQ.SQL.Add('SELECT SCOPE_IDENTITY() AS ID_GERADO;');
 
     FDQ.ParamByName('titulo').AsString := F_titulo;
     FDQ.ParamByName('autor').AsString  := F_autor;

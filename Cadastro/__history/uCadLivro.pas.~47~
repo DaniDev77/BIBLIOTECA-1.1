@@ -16,24 +16,29 @@ type
     edtAutor: TLabeledEdit;
     edtGenero: TLabeledEdit;
     edtAnoPub: TLabeledEdit;
-    FDQListagemid: TIntegerField;
-    FDQListagemtitulo: TStringField;
-    FDQListagemautor: TStringField;
-    FDQListagemgenero: TStringField;
-    FDQListagemano_publicacao: TIntegerField;
-    FDQListagemresumo: TMemoField;
     edtResumo: TLabeledEdit;
     SaveDialog1: TSaveDialog;
     btnExportarCSV: TBitBtn;
+    OpenDialog1: TOpenDialog;
+    btnImportarXLSX: TBitBtn;
+    FDQListagemid: TIntegerField;
+    FDQListagemautor: TStringField;
+    FDQListagemgenero: TStringField;
+    FDQListagemresumo: TMemoField;
+    FDQListagemano_de_publicacao: TIntegerField;
+    FDQListagemtitulo: TStringField;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure btnApagarClick(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
+    procedure btnExportarCSVClick(Sender: TObject);
+    procedure btnImportarXLSXClick(Sender: TObject);
   private
     { Private declarations }
     oLivro: TLivro;
-    procedure ExportarCSV(ADataset: TDataSet); // Instância da nossa classe de negócio
+    procedure ExportarCSV(ADataset: TDataSet);
+    procedure ImportarExcel(AFileName: string); // Instância da nossa classe de negócio
   public
     { Public declarations }
     // Sobrescrevendo os métodos da tela de herança
@@ -96,11 +101,19 @@ end;
 
 procedure TfrmCadLivro.FormCreate(Sender: TObject);
 begin
-  // Cria o objeto e aponta a conexão
-  //oLivro := TLivro.Create(dtmPrincipal.dtmPrincipalDB);
+  // 1. Primeiro, dizemos para a Query qual é a conexão dela
+  // Isso resolve o erro [FireDAC][Comp][Clnt]-512
+  FDQListagem.Connection := dtmPrincipal.dtmPrincipalDB;
 
+  // 2. Depois, criamos o objeto oLivro
+  // Agora que o dtmPrincipal está no topo da lista (Passo 1), não dará mais Access Violation
+  oLivro := TLivro.Create(dtmPrincipal.dtmPrincipalDB);
+
+  // 3. Agora podemos abrir a busca com segurança
   FDQListagem.Open;
-  IndiceAtual := 'titulo'; // Define a busca padrão
+
+  IndiceAtual := 'titulo'; // Define o índice padrão para busca/exportação
+
   inherited;
 end;
 
@@ -141,18 +154,13 @@ begin
   end;
 end;
 
-procedure TfrmCadLivro.btnApagarClick(Sender: TObject);
+procedure TfrmCadLivro.btnFecharClick(Sender: TObject);
 begin
-  // Verificamos se a lista não está vazia antes de exportar
-  if FDQListagem.IsEmpty then
-  begin
-    ShowMessage('Não há dados para exportar.');
-    Exit;
-  end;
+  inherited;
 
-  // Chamamos a função passando a Query de listagem que já está na tela
-  ExportarCSV(FDQListagem);
 end;
+
+
 
 {$ENDREGION}
 
@@ -175,7 +183,7 @@ begin
         ADataset.FieldByName('titulo').AsString + ';' +
         ADataset.FieldByName('autor').AsString + ';' +
         ADataset.FieldByName('genero').AsString + ';' +
-        ADataset.FieldByName('ano_publicacao').AsString + ';' +
+        ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
         ADataset.FieldByName('resumo').AsString
       );
       ADataset.Next;
@@ -204,6 +212,115 @@ begin
   end;
 end;
 
+procedure TfrmCadLivro.btnExportarCSVClick(Sender: TObject);
+begin
+  // Verificamos se a lista não está vazia antes de exportar
+  if FDQListagem.IsEmpty then
+  begin
+    ShowMessage('Não há dados para exportar.');
+    Exit;
+  end;
+
+  // Chamamos a função passando a Query de listagem que já está na tela
+  ExportarCSV(FDQListagem);
+end;
 {$ENDREGION}
+
+procedure TfrmCadLivro.ImportarExcel(AFileName: string);
+var
+  Excel, Planilha: Variant;
+  Linha: Integer;
+  Titulo, Autor, Genero, Resumo: string;
+  Ano: Integer;
+  QryConsulta: TFDQuery;
+  CelVal: string;
+begin
+  QryConsulta := TFDQuery.Create(nil);
+  QryConsulta.Connection := dtmPrincipal.dtmPrincipalDB;
+
+  try
+    Excel := CreateOleObject('Excel.Application');
+    Excel.Visible    := False;
+    Excel.DisplayAlerts := False; // evita popups do Excel
+    Excel.Workbooks.Open(AFileName);
+    Planilha := Excel.Workbooks[1].Sheets[1]; // primeira aba, independente do nome
+
+    Linha := 2; // pula o cabeçalho
+
+    // Loop seguro: usa Trim+VarToStr em vez de VarIsEmpty
+    while True do
+    begin
+      CelVal := Trim(VarToStr(Planilha.Cells[Linha, 1].Value));
+      if CelVal = '' then Break; // célula vazia = fim dos dados
+
+      // Ordem correta conforme seu arquivo:
+      // Col A=título, B=autor, C=gênero, D=resumo, E=ano
+      Titulo := Trim(VarToStr(Planilha.Cells[Linha, 1].Value));
+      Autor  := Trim(VarToStr(Planilha.Cells[Linha, 2].Value));
+      Genero := Trim(VarToStr(Planilha.Cells[Linha, 3].Value));
+      Resumo := Trim(VarToStr(Planilha.Cells[Linha, 4].Value));
+      Ano    := StrToIntDef(VarToStr(Planilha.Cells[Linha, 5].Value), 0);
+
+      if Titulo <> '' then
+      begin
+        // Verifica duplicidade pelo título
+        QryConsulta.Close;
+        QryConsulta.SQL.Text := 'SELECT id FROM BIBLIOTECA.dbo.livros WHERE titulo = :t';
+        QryConsulta.ParamByName('t').AsString := Titulo;
+        QryConsulta.Open;
+
+        if QryConsulta.IsEmpty then
+        begin
+          oLivro.id            := 0;
+          oLivro.titulo        := Titulo;
+          oLivro.autor         := Autor;
+          oLivro.genero        := Genero;
+          oLivro.resumo        := Resumo;
+          oLivro.ano_publicacao := Ano;
+          oLivro.Inserir;
+        end;
+      end;
+
+      Linha := Linha + 1;
+    end;
+
+    ShowMessage('Importação concluída! Livros importados com sucesso.');
+    FDQListagem.Refresh;
+
+  finally
+    if not VarIsEmpty(Excel) and not VarIsNull(Excel) then
+    begin
+      Excel.Workbooks.Close;
+      Excel.Quit;
+      Excel := Unassigned;
+    end;
+    QryConsulta.Free;
+  end;
+end;
+
+// Botão de importar limpo, sem ShowMessage duplicado:
+procedure TfrmCadLivro.btnImportarXLSXClick(Sender: TObject);
+begin
+  OpenDialog1.Filter := 'Planilha Excel (*.xlsx)|*.xlsx';
+  if OpenDialog1.Execute then
+  begin
+    ImportarExcel(OpenDialog1.FileName);
+    FDQListagem.Close;
+    FDQListagem.Open;
+  end;
+end;
+//procedure TfrmCadLivro.btnImportarXLSXClick(Sender: TObject);
+//begin
+//  if OpenDialog1.Execute then
+//  begin
+//    ImportarExcel(OpenDialog1.FileName);
+//
+//    // FORÇAR A ATUALIZAÇÃO DA TELA
+//    FDQListagem.Close;
+//    FDQListagem.Open;
+//
+//    ShowMessage('Processo finalizado. Total de registros: ' + IntToStr(FDQListagem.RecordCount));
+//  end;
+//end;
 
 end.
