@@ -18,16 +18,7 @@ inherited frmCadLivro: TfrmCadLivro
           Height = 25
           Caption = '&EXPORTAR'
           TabOrder = 0
-          OnClick = btnExportarCSVClick
-        end
-        object btnImportarXLSX: TBitBtn
-          Left = 487
-          Top = 18
-          Width = 75
-          Height = 25
-          Caption = '&IMPORTAR'
-          TabOrder = 1
-          OnClick = btnImportarXLSXClick
+          OnClick = btnApagarClick
         end
       end
     end

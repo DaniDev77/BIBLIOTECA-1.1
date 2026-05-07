@@ -1,0 +1,202 @@
+unit cCadLivro;
+
+interface
+
+uses System.Classes,
+     Vcl.Controls,
+     Vcl.ExtCtrls,
+     Vcl.Dialogs, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf,
+     FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
+     FireDAC.Phys, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,
+     System.SysUtils,
+     System.StrUtils,
+     System.Variants;
+
+type
+  TLivro = class
+  private
+    dtmPrincipalDB: TFDConnection;
+    F_livroId: Integer;
+    F_titulo: string;
+    F_autor: string;
+    F_genero: string;
+    F_anoPublicacao: Integer;
+    F_resumo: string;
+
+  public
+    constructor Create(aConexao: TFDConnection);
+    destructor Destroy; override;
+    function Atualizar: Boolean;
+    function Apagar: Boolean;
+    function Inserir: Boolean;
+    function Selecionar(id: Integer): Boolean;
+
+  published
+    property id: Integer             read F_livroId        write F_livroId;
+    property titulo: string          read F_titulo         write F_titulo;
+    property autor: string           read F_autor          write F_autor;
+    property genero: string          read F_genero         write F_genero;
+    property ano_publicacao: Integer read F_anoPublicacao  write F_anoPublicacao;
+    property resumo: string          read F_resumo         write F_resumo;
+  end;
+
+implementation
+
+{$REGION 'Create e Destroy'}
+constructor TLivro.Create(aConexao: TFDConnection);
+begin
+  dtmPrincipalDB := aConexao;
+end;
+
+destructor TLivro.Destroy;
+begin
+  inherited;
+end;
+{$ENDREGION}
+
+{$REGION 'APAGAR'}
+function TLivro.Apagar: Boolean;
+var FDQ: TFDQuery;
+begin
+  // Segue o seu modelo de confirmação com MessageDlg
+  if MessageDlg('Apagar o livro: ' + #13 + #13 + #13 +
+                'Código: ' + IntToStr(F_livroId) + #13 + #13 +
+                'Título: ' + F_titulo, mtConfirmation, [mbYes, mbNo], 0) = mrNo then
+  begin
+    Result := False;
+    Abort;
+  end;
+
+  try
+    Result := True;
+    FDQ := TFDQuery.Create(nil);
+    FDQ.Connection := dtmPrincipalDB;
+    FDQ.SQL.Clear;
+    FDQ.SQL.Add('DELETE FROM livros WHERE id = :id');
+    FDQ.ParamByName('id').AsInteger := F_livroId;
+
+    try
+      dtmPrincipalDB.StartTransaction;
+      FDQ.ExecSQL;
+      dtmPrincipalDB.Commit;
+    except
+      dtmPrincipalDB.Rollback;
+      Result := False;
+    end;
+  finally
+    if Assigned(FDQ) then
+      FreeAndNil(FDQ);
+  end;
+end;
+{$ENDREGION}
+
+{$REGION 'Atualizar'}
+function TLivro.Atualizar: Boolean;
+var FDQ: TFDQuery;
+begin
+  try
+    Result := True;
+    FDQ := TFDQuery.Create(nil);
+    FDQ.Connection := dtmPrincipalDB;
+    FDQ.SQL.Clear;
+    FDQ.SQL.Add('UPDATE livros ' +
+                '   SET titulo         = :titulo ' +
+                '      ,autor          = :autor ' +
+                '      ,genero         = :genero ' +
+                '      ,ano_publicacao = :ano ' +
+                '      ,resumo         = :resumo ' +
+                ' WHERE id = :id');
+
+    FDQ.ParamByName('id').AsInteger     := Self.F_livroId;
+    FDQ.ParamByName('titulo').AsString  := Self.F_titulo;
+    FDQ.ParamByName('autor').AsString   := Self.F_autor;
+    FDQ.ParamByName('genero').AsString  := Self.F_genero;
+    FDQ.ParamByName('ano').AsInteger    := Self.F_anoPublicacao;
+    FDQ.ParamByName('resumo').AsString  := Self.F_resumo;
+
+    try
+      dtmPrincipalDB.StartTransaction;
+      FDQ.ExecSQL;
+      dtmPrincipalDB.Commit;
+    except
+      dtmPrincipalDB.Rollback;
+      Result := False;
+    end;
+  finally
+    if Assigned(FDQ) then
+      FreeAndNil(FDQ);
+  end;
+end;
+{$ENDREGION}
+
+{$REGION 'Inserir'}
+function TLivro.Inserir: Boolean;
+var FDQ: TFDQuery;
+begin
+  try
+    Result := True;
+    FDQ := TFDQuery.Create(nil);
+    FDQ.Connection := dtmPrincipalDB;
+    FDQ.SQL.Clear;
+    FDQ.SQL.Add('INSERT INTO livros (titulo, autor, genero, ano_publicacao, resumo) ' +
+                'VALUES (:titulo, :autor, :genero, :ano, :resumo)');
+
+    FDQ.ParamByName('titulo').AsString := Self.F_titulo;
+    FDQ.ParamByName('autor').AsString  := Self.F_autor;
+    FDQ.ParamByName('genero').AsString := Self.F_genero;
+    FDQ.ParamByName('ano').AsInteger   := Self.F_anoPublicacao;
+    FDQ.ParamByName('resumo').AsString := Self.F_resumo;
+
+    try
+      dtmPrincipalDB.StartTransaction;
+      ShowMessage('Gravando: ' + Self.F_titulo);
+      FDQ.ExecSQL;
+      dtmPrincipalDB.Commit;
+    except
+      dtmPrincipalDB.Rollback;
+      Result := False;
+    end;
+  finally
+    if Assigned(FDQ) then
+      FreeAndNil(FDQ);
+  end;
+end;
+{$ENDREGION}
+
+{$REGION 'Selecionar'}
+function TLivro.Selecionar(id: Integer): Boolean;
+var FDQ: TFDQuery;
+begin
+  try
+    Result := True;
+    FDQ := TFDQuery.Create(nil);
+    FDQ.Connection := dtmPrincipalDB;
+    FDQ.SQL.Clear;
+    FDQ.SQL.Add('SELECT id, titulo, autor, genero, ano_publicacao, resumo ' +
+                '  FROM livros WHERE id = :id');
+    FDQ.ParamByName('id').AsInteger := id;
+
+    try
+      FDQ.Open;
+      if not FDQ.IsEmpty then
+      begin
+        Self.F_livroId       := FDQ.FieldByName('id').AsInteger;
+        Self.F_titulo        := FDQ.FieldByName('titulo').AsString;
+        Self.F_autor         := FDQ.FieldByName('autor').AsString;
+        Self.F_genero        := FDQ.FieldByName('genero').AsString;
+        Self.F_anoPublicacao := FDQ.FieldByName('ano_publicacao').AsInteger;
+        Self.F_resumo        := FDQ.FieldByName('resumo').AsString;
+      end
+      else
+        Result := False;
+    except
+      Result := False;
+    end;
+  finally
+    if Assigned(FDQ) then
+      FreeAndNil(FDQ);
+  end;
+end;
+{$ENDREGION}
+
+end.

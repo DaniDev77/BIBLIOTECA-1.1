@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.ComCtrls,
-  cCadLivro, uEnum, uDTMConexao;
+  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes;
 
 type
   TfrmCadLivro = class(THeranca) // Certifique-se que o nome da classe pai está correto (THeranca ou TForm1)
@@ -23,13 +23,18 @@ type
     FDQListagemano_publicacao: TIntegerField;
     FDQListagemresumo: TMemoField;
     edtResumo: TLabeledEdit;
+    SaveDialog1: TSaveDialog;
+    btnExportarCSV: TBitBtn;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnApagarClick(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
   private
     { Private declarations }
-    oLivro: TLivro; // Instância da nossa classe de negócio
+    oLivro: TLivro;
+    procedure ExportarCSV(ADataset: TDataSet); // Instância da nossa classe de negócio
   public
     { Public declarations }
     // Sobrescrevendo os métodos da tela de herança
@@ -92,11 +97,19 @@ end;
 
 procedure TfrmCadLivro.FormCreate(Sender: TObject);
 begin
-  // Cria o objeto e aponta a conexão
+  // 1. Primeiro, dizemos para a Query qual é a conexão dela
+  // Isso resolve o erro [FireDAC][Comp][Clnt]-512
+  FDQListagem.Connection := dtmPrincipal.dtmPrincipalDB;
+
+  // 2. Depois, criamos o objeto oLivro
+  // Agora que o dtmPrincipal está no topo da lista (Passo 1), não dará mais Access Violation
   oLivro := TLivro.Create(dtmPrincipal.dtmPrincipalDB);
 
+  // 3. Agora podemos abrir a busca com segurança
   FDQListagem.Open;
-  IndiceAtual := 'titulo'; // Define a busca padrão
+
+  IndiceAtual := 'titulo'; // Define o índice padrão para busca/exportação
+
   inherited;
 end;
 
@@ -134,6 +147,75 @@ begin
   begin
     btnCancelar.Click;
     Abort;
+  end;
+end;
+
+procedure TfrmCadLivro.btnApagarClick(Sender: TObject);
+begin
+  // Verificamos se a lista não está vazia antes de exportar
+  if FDQListagem.IsEmpty then
+  begin
+    ShowMessage('Não há dados para exportar.');
+    Exit;
+  end;
+
+  // Chamamos a função passando a Query de listagem que já está na tela
+  ExportarCSV(FDQListagem);
+end;
+
+procedure TfrmCadLivro.btnFecharClick(Sender: TObject);
+begin
+  inherited;
+
+end;
+
+{$ENDREGION}
+
+{$REGION ' Exporta'}
+procedure TfrmCadLivro.ExportarCSV(ADataset: TDataSet);
+var
+  Lista: TStringList;
+begin
+  Lista := TStringList.Create;
+  try
+    // Cabeçalho adaptado para os campos de Livro
+    Lista.Add('ID;Titulo;Autor;Genero;Ano_Publicacao;Resumo');
+
+    ADataset.First;
+    while not ADataset.Eof do
+    begin
+      // Montagem da linha com os campos da sua tabela de livros
+      Lista.Add(
+        ADataset.FieldByName('id').AsString + ';' +
+        ADataset.FieldByName('titulo').AsString + ';' +
+        ADataset.FieldByName('autor').AsString + ';' +
+        ADataset.FieldByName('genero').AsString + ';' +
+        ADataset.FieldByName('ano_publicacao').AsString + ';' +
+        ADataset.FieldByName('resumo').AsString
+      );
+      ADataset.Next;
+    end;
+
+    try
+      SaveDialog1.FileName   := 'CatalogoLivros.csv';
+      SaveDialog1.DefaultExt := 'csv';
+      SaveDialog1.Filter     := 'Arquivo CSV (*.csv)|*.csv';
+
+      if SaveDialog1.Execute then
+      begin
+        TFile.WriteAllText(
+          SaveDialog1.FileName,
+          Lista.Text,
+          TEncoding.UTF8
+        );
+        ShowMessage('Exportação concluída com sucesso!');
+      end;
+    except
+      on E: Exception do
+        ShowMessage('Erro ao exportar CSV: ' + E.Message);
+    end;
+  finally
+    Lista.Free;
   end;
 end;
 

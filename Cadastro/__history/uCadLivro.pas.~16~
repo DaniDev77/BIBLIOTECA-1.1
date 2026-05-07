@@ -26,20 +26,16 @@ type
     SaveDialog1: TSaveDialog;
     btnExportarCSV: TBitBtn;
     OpenDialog1: TOpenDialog;
-    btnImportarXLSX: TBitBtn;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnApagarClick(Sender: TObject);
     procedure btnFecharClick(Sender: TObject);
-    procedure btnExportarCSVClick(Sender: TObject);
-    procedure btnImportarXLSXClick(Sender: TObject);
   private
     { Private declarations }
     oLivro: TLivro;
-    procedure ExportarCSV(ADataset: TDataSet);
-    procedure ImportarExcel(AFileName: string); // Instância da nossa classe de negócio
+    procedure ExportarCSV(ADataset: TDataSet); // Instância da nossa classe de negócio
   public
     { Public declarations }
     // Sobrescrevendo os métodos da tela de herança
@@ -168,14 +164,11 @@ begin
   ExportarCSV(FDQListagem);
 end;
 
-
 procedure TfrmCadLivro.btnFecharClick(Sender: TObject);
 begin
   inherited;
 
 end;
-
-
 
 {$ENDREGION}
 
@@ -227,18 +220,6 @@ begin
   end;
 end;
 
-procedure TfrmCadLivro.btnExportarCSVClick(Sender: TObject);
-begin
-  // Verificamos se a lista não está vazia antes de exportar
-  if FDQListagem.IsEmpty then
-  begin
-    ShowMessage('Não há dados para exportar.');
-    Exit;
-  end;
-
-  // Chamamos a função passando a Query de listagem que já está na tela
-  ExportarCSV(FDQListagem);
-end;
 {$ENDREGION}
 
 procedure TfrmCadLivro.ImportarExcel(AFileName: string);
@@ -285,7 +266,7 @@ begin
 
         if QryConsulta.IsEmpty then
         begin
-          // GRAVAR: Usa o objeto oLivro
+          // GRAVAR: Usa o objeto oLivro que já criamos
           oLivro.id             := 0;
           oLivro.titulo         := Titulo;
           oLivro.autor          := Autor;
@@ -314,18 +295,5 @@ begin
   end;
 end;
 
-procedure TfrmCadLivro.btnImportarXLSXClick(Sender: TObject);
-begin
-  if OpenDialog1.Execute then
-  begin
-    ImportarExcel(OpenDialog1.FileName);
-
-    // FORÇAR A ATUALIZAÇÃO DA TELA
-    FDQListagem.Close;
-    FDQListagem.Open;
-
-    ShowMessage('Processo finalizado. Total de registros: ' + IntToStr(FDQListagem.RecordCount));
-  end;
-end;
 
 end.

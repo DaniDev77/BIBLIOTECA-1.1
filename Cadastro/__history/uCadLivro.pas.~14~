@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.ComCtrls,
-  cCadLivro, uEnum, uDTMConexao,System.IOUtils;
+  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes;
 
 type
   TfrmCadLivro = class(THeranca) // Certifique-se que o nome da classe pai está correto (THeranca ou TForm1)
@@ -30,6 +30,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnApagarClick(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
   private
     { Private declarations }
     oLivro: TLivro;
@@ -99,8 +100,8 @@ begin
   // Cria o objeto e aponta a conexão
   oLivro := TLivro.Create(dtmPrincipal.dtmPrincipalDB);
 
-  FDQListagem.Open;
-  IndiceAtual := 'titulo'; // Define a busca padrão
+ // FDQListagem.Open;
+ // IndiceAtual := 'titulo'; // Define a busca padrão
   inherited;
 end;
 
@@ -152,6 +153,12 @@ begin
 
   // Chamamos a função passando a Query de listagem que já está na tela
   ExportarCSV(FDQListagem);
+end;
+
+procedure TfrmCadLivro.btnFecharClick(Sender: TObject);
+begin
+  inherited;
+
 end;
 
 {$ENDREGION}

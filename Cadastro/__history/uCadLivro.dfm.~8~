@@ -6,8 +6,6 @@ inherited frmCadLivro: TfrmCadLivro
     ExplicitWidth = 653
     ExplicitHeight = 268
     inherited TabListagem: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
       ExplicitWidth = 645
       ExplicitHeight = 240
       inherited Listagem: TPanel
@@ -18,22 +16,13 @@ inherited frmCadLivro: TfrmCadLivro
           Height = 25
           Caption = '&EXPORTAR'
           TabOrder = 0
-          OnClick = btnExportarCSVClick
-        end
-        object btnImportarXLSX: TBitBtn
-          Left = 487
-          Top = 18
-          Width = 75
-          Height = 25
-          Caption = '&IMPORTAR'
-          TabOrder = 1
-          OnClick = btnImportarXLSXClick
+          OnClick = btnApagarClick
         end
       end
     end
     inherited TabManutencao: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
+      ExplicitLeft = 8
+      ExplicitTop = 22
       ExplicitWidth = 645
       ExplicitHeight = 240
       object edtLivroId: TLabeledEdit
@@ -90,7 +79,7 @@ inherited frmCadLivro: TfrmCadLivro
         Left = 130
         Top = 131
         Width = 332
-        Height = 21
+        Height = 107
         EditLabel.Width = 54
         EditLabel.Height = 13
         EditLabel.Caption = 'edtResumo'
@@ -154,11 +143,6 @@ inherited frmCadLivro: TfrmCadLivro
   end
   object SaveDialog1: TSaveDialog
     Left = 564
-    Top = 216
-  end
-  object OpenDialog1: TOpenDialog
-    Filter = '*.xlsx'
-    Left = 500
     Top = 216
   end
 end

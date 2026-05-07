@@ -11,7 +11,6 @@ type
   TdtmPrincipal = class(TDataModule)
     dtmPrincipalDB: TFDConnection;
   private
-    procedure DataModuleCreate(Sender: TObject);
     { Private declarations }
   public
     { Public declarations }
@@ -25,15 +24,5 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
-   procedure TdtmPrincipal.DataModuleCreate(Sender: TObject);
-begin
-  dtmPrincipalDB.Params.Clear;
-  dtmPrincipalDB.Params.Add('DriverID=MSSQL');
-  dtmPrincipalDB.Params.Add('Server=DC-TR-01-VM\SERVERCURSO');
-  dtmPrincipalDB.Params.Add('Database=BIBLIOTECA');
-  dtmPrincipalDB.Params.Add('OSAuthent=Yes');
-  dtmPrincipalDB.LoginPrompt := False;
-  dtmPrincipalDB.Connected := True;
-end;
 
 end.

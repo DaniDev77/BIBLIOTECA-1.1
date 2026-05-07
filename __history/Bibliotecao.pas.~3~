@@ -14,8 +14,7 @@ type
     N1: TMenuItem;
     FECHAR1: TMenuItem;
     procedure FECHAR1Click(Sender: TObject);
-    procedure LIVROS1Click(Sender: TObject);
-    procedure FormCreate(Sender: TObject); // Novo evento
+    procedure LIVROS1Click(Sender: TObject); // Novo evento
   private
     { Private declarations }
   public
@@ -35,11 +34,6 @@ uses uCadLivro, uDTMConexao ;
 procedure TMenuPrincipal.FECHAR1Click(Sender: TObject);
 begin
   Application.Terminate;
-end;
-
-procedure TMenuPrincipal.FormCreate(Sender: TObject);
-begin
-  dtmPrincipal := TdtmPrincipal.Create(Self);
 end;
 
 procedure TMenuPrincipal.LIVROS1Click(Sender: TObject);

@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.ComCtrls,
-  cCadLivro, uEnum, uDTMConexao,System.IOUtils;
+  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes;
 
 type
   TfrmCadLivro = class(THeranca) // Certifique-se que o nome da classe pai está correto (THeranca ou TForm1)
@@ -24,13 +24,17 @@ type
     FDQListagemresumo: TMemoField;
     edtResumo: TLabeledEdit;
     SaveDialog1: TSaveDialog;
+    btnExportarCSV: TBitBtn;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnApagarClick(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
   private
     { Private declarations }
-    oLivro: TLivro; // Instância da nossa classe de negócio
+    oLivro: TLivro;
+    procedure ExportarCSV(ADataset: TDataSet); // Instância da nossa classe de negócio
   public
     { Public declarations }
     // Sobrescrevendo os métodos da tela de herança
@@ -138,6 +142,25 @@ begin
   end;
 end;
 
+procedure TfrmCadLivro.btnApagarClick(Sender: TObject);
+begin
+  // Verificamos se a lista não está vazia antes de exportar
+  if FDQListagem.IsEmpty then
+  begin
+    ShowMessage('Não há dados para exportar.');
+    Exit;
+  end;
+
+  // Chamamos a função passando a Query de listagem que já está na tela
+  ExportarCSV(FDQListagem);
+end;
+
+procedure TfrmCadLivro.btnFecharClick(Sender: TObject);
+begin
+  inherited;
+
+end;
+
 {$ENDREGION}
 
 {$REGION ' Exporta'}
@@ -187,6 +210,7 @@ begin
     Lista.Free;
   end;
 end;
+
 {$ENDREGION}
 
 end.
