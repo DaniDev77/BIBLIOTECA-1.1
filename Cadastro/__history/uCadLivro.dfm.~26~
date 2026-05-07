@@ -1,9 +1,8 @@
-﻿inherited frmCadLivro: TfrmCadLivro
+inherited frmCadLivro: TfrmCadLivro
   Caption = 'frmCadLivro'
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
-    ActivePage = TabManutencao
     ExplicitWidth = 653
     ExplicitHeight = 268
     inherited TabListagem: TTabSheet
@@ -30,6 +29,39 @@
           TabOrder = 1
           OnClick = btnImportarXLSXClick
         end
+      end
+      inherited grdListagem: TDBGrid
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'id'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'titulo'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'autor'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'genero'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'resumo'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ano_de_publicacao'
+            Visible = True
+          end>
       end
     end
     inherited TabManutencao: TTabSheet
@@ -107,16 +139,16 @@
     end
   end
   inherited FDQListagem: TFDQuery
-    Active = True
     SQL.Strings = (
-      'SELECT '
-      '    id, '
-      '    titulo AS t'#237'tulo, '
-      '    autor AS autor, '
-      '    genero AS g'#234'nero, '
-      '    resumo AS resumo, '
-      '    ano_publicacao AS ano_de_publicacao'
+      ' SELECT '
+      '  id,'
+      '  titulo,  '
+      '  autor,'
+      '  genero,'
+      '  resumo, '
+      '  ano_de_publicacao'
       'FROM BIBLIOTECA.dbo.livros'
+      ''
       'ORDER BY titulo')
     Top = 168
     object FDQListagemid: TIntegerField
@@ -125,9 +157,9 @@
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
     end
-    object FDQListagemtítulo: TStringField
-      FieldName = 't'#237'tulo'
-      Origin = '[t'#237'tulo]'
+    object FDQListagemtitulo: TStringField
+      FieldName = 'titulo'
+      Origin = 'titulo'
       Required = True
       Size = 255
     end
@@ -137,9 +169,9 @@
       Required = True
       Size = 255
     end
-    object FDQListagemgênero: TStringField
-      FieldName = 'g'#234'nero'
-      Origin = '[g'#234'nero]'
+    object FDQListagemgenero: TStringField
+      FieldName = 'genero'
+      Origin = 'genero'
       Required = True
       Size = 100
     end

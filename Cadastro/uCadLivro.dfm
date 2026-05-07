@@ -139,6 +139,7 @@ inherited frmCadLivro: TfrmCadLivro
     end
   end
   inherited FDQListagem: TFDQuery
+    Active = True
     SQL.Strings = (
       ' SELECT '
       '  id,'
@@ -187,6 +188,7 @@ inherited frmCadLivro: TfrmCadLivro
     end
   end
   object SaveDialog1: TSaveDialog
+    Filter = '|*.csv'
     Left = 564
     Top = 216
   end

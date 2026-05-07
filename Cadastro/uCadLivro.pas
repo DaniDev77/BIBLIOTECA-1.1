@@ -164,49 +164,81 @@ end;
 
 {$ENDREGION}
 
-{$REGION ' Exporta'}
+
+{$REGION 'Exporta'}
+{$REGION 'Exporta'}
 procedure TfrmCadLivro.ExportarCSV(ADataset: TDataSet);
 var
   Lista: TStringList;
+  Linha: string;
+  Contador: Integer;
 begin
+  ShowMessage('DEBUG 1: Iniciando exportação. Registros no Dataset: ' + IntToStr(ADataset.RecordCount));
+
+  if ADataset.IsEmpty then
+  begin
+    ShowMessage('DEBUG: Dataset está vazio. Abortando.');
+    Exit;
+  end;
+
   Lista := TStringList.Create;
+  Contador := 0;
   try
-    // Cabeçalho adaptado para os campos de Livro
-    Lista.Add('ID;Titulo;Autor;Genero;Ano_Publicacao;Resumo');
+    Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo');
 
-    ADataset.First;
-    while not ADataset.Eof do
-    begin
-      // Montagem da linha com os campos da sua tabela de livros
-      Lista.Add(
-        ADataset.FieldByName('id').AsString + ';' +
-        ADataset.FieldByName('titulo').AsString + ';' +
-        ADataset.FieldByName('autor').AsString + ';' +
-        ADataset.FieldByName('genero').AsString + ';' +
-        ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
-        ADataset.FieldByName('resumo').AsString
-      );
-      ADataset.Next;
-    end;
-
+    ADataset.DisableControls;
     try
-      SaveDialog1.FileName   := 'CatalogoLivros.csv';
-      SaveDialog1.DefaultExt := 'csv';
-      SaveDialog1.Filter     := 'Arquivo CSV (*.csv)|*.csv';
+      ADataset.First;
 
-      if SaveDialog1.Execute then
+      while not ADataset.Eof do
       begin
-        TFile.WriteAllText(
-          SaveDialog1.FileName,
-          Lista.Text,
-          TEncoding.UTF8
-        );
-        ShowMessage('Exportação concluída com sucesso!');
+        Inc(Contador);
+        try
+          // DEBUG: Se falhar aqui, o erro dirá qual campo está errado
+          Linha :=
+            ADataset.FieldByName('id').AsString             + ';' +
+            '"' + ADataset.FieldByName('titulo').AsString   + '";' +
+            '"' + ADataset.FieldByName('autor').AsString    + '";' +
+            '"' + ADataset.FieldByName('genero').AsString   + '";' +
+            ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
+            '"' + ADataset.FieldByName('resumo').AsString   + '"';
+
+          Lista.Add(Linha);
+        except
+          on E: Exception do
+          begin
+            ShowMessage('ERRO NO REGISTRO ' + IntToStr(Contador) + ': ' + E.Message +
+                        sLineBreak + 'Verifique se os nomes dos campos no SQL estão corretos.');
+            Abort; // Para a execução para você ver o erro
+          end;
+        end;
+
+        ADataset.Next;
       end;
-    except
-      on E: Exception do
-        ShowMessage('Erro ao exportar CSV: ' + E.Message);
+    finally
+      ADataset.EnableControls;
     end;
+
+    ShowMessage('DEBUG 2: Processamento concluído. Linhas na lista: ' + IntToStr(Lista.Count));
+
+    SaveDialog1.FileName := 'CatalogoLivros.csv';
+    SaveDialog1.DefaultExt := 'csv';
+    SaveDialog1.Filter := 'Arquivos CSV|*.csv';
+
+    if SaveDialog1.Execute then
+    begin
+      ShowMessage('DEBUG 3: Tentando gravar arquivo em: ' + SaveDialog1.FileName);
+      try
+        TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
+        ShowMessage('Sucesso! Verifique o arquivo agora.');
+      except
+        on E: Exception do
+          ShowMessage('ERRO CRÍTICO AO GRAVAR: ' + E.Message);
+      end;
+    end
+    else
+      ShowMessage('DEBUG: Usuário cancelou o SaveDialog.');
+
   finally
     Lista.Free;
   end;
@@ -214,18 +246,16 @@ end;
 
 procedure TfrmCadLivro.btnExportarCSVClick(Sender: TObject);
 begin
-  // Verificamos se a lista não está vazia antes de exportar
   if FDQListagem.IsEmpty then
   begin
     ShowMessage('Não há dados para exportar.');
     Exit;
   end;
-
-  // Chamamos a função passando a Query de listagem que já está na tela
   ExportarCSV(FDQListagem);
 end;
 {$ENDREGION}
 
+{$REGION 'Impotar'}
 procedure TfrmCadLivro.ImportarExcel(AFileName: string);
 var
   Excel, Planilha: Variant;
@@ -335,6 +365,6 @@ begin
     FDQListagem.Open;
   end;
 end;
-
+{$ENDREGION}
 
 end.
