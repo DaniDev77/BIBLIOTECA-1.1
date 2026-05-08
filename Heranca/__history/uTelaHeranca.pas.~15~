@@ -431,8 +431,6 @@ end;
 begin
    if (FDQListagem.SQL.Text<>EmptyStr) then begin
      FDQListagem.IndexFieldNames:=IndiceAtual;
-     ExibirLabelIndice(IndiceAtual,lblIndice);
-    SelectOriginal:=FDQListagem.SQL.Text;
      FDQListagem.Open;
      end;
      ControlarIndiceTab( pgcPrincipal,0);

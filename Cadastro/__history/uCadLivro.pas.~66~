@@ -164,6 +164,8 @@ end;
 
 {$ENDREGION}
 
+
+{$REGION 'Exporta'}
 {$REGION 'Exporta'}
 procedure TfrmCadLivro.ExportarCSV(ADataset: TDataSet);
 var
@@ -172,27 +174,34 @@ var
 begin
   Lista := TStringList.Create;
   try
-    Lista.Add('ID;Titulo;Autor;Genero;Ano_Publicacao;Resumo');
+    Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo');
 
-    ADataset.DisableControls; // congela a grid durante a exportação
+    // Salva posição atual e vai para o início
+    ADataset.DisableControls;
+    ADataset.First;
     try
-      ADataset.First;
       while not ADataset.Eof do
       begin
-        // Aspas duplas para proteger campos com ponto-e-vírgula (ex: resumo)
         Linha :=
-          ADataset.FieldByName('id').AsString                  + ';' +
-          '"' + ADataset.FieldByName('titulo').AsString         + '";' +
-          '"' + ADataset.FieldByName('autor').AsString          + '";' +
-          '"' + ADataset.FieldByName('genero').AsString         + '";' +
-          ADataset.FieldByName('ano_de_publicacao').AsString    + ';' +
-          '"' + ADataset.FieldByName('resumo').AsString         + '"';
+          ADataset.FieldByName('id').AsString                    + ';' +
+          '"' + ADataset.FieldByName('titulo').AsString          + '";' +
+          '"' + ADataset.FieldByName('autor').AsString           + '";' +
+          '"' + ADataset.FieldByName('genero').AsString          + '";' +
+          ADataset.FieldByName('ano_de_publicacao').AsString     + ';' +
+          '"' + ADataset.FieldByName('resumo').AsString          + '"';
 
         Lista.Add(Linha);
         ADataset.Next;
       end;
     finally
-      ADataset.EnableControls; // sempre reativa a grid
+      ADataset.EnableControls;
+    end;
+
+    // Verifica se montou algo além do cabeçalho
+    if Lista.Count <= 1 then
+    begin
+      ShowMessage('Nenhum registro foi lido do dataset!');
+      Exit;
     end;
 
     SaveDialog1.FileName   := 'CatalogoLivros.csv';

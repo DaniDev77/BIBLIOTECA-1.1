@@ -164,51 +164,80 @@ end;
 
 {$ENDREGION}
 
+
+{$REGION 'Exporta'}
 {$REGION 'Exporta'}
 procedure TfrmCadLivro.ExportarCSV(ADataset: TDataSet);
 var
   Lista: TStringList;
   Linha: string;
+  Contador: Integer;
 begin
-  Lista := TStringList.Create;
-  try
-    Lista.Add('ID;Titulo;Autor;Genero;Ano_Publicacao;Resumo');
+  ShowMessage('DEBUG 1: Iniciando exportação. Registros no Dataset: ' + IntToStr(ADataset.RecordCount));
 
-    ADataset.DisableControls; // congela a grid durante a exportação
+  if ADataset.IsEmpty then
+  begin
+    ShowMessage('DEBUG: Dataset está vazio. Abortando.');
+    Exit;
+  end;
+
+  Lista := TStringList.Create;
+  Contador := 0;
+  try
+    Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo');
+
+    ADataset.DisableControls;
     try
       ADataset.First;
+
       while not ADataset.Eof do
       begin
-        // Aspas duplas para proteger campos com ponto-e-vírgula (ex: resumo)
-        Linha :=
-          ADataset.FieldByName('id').AsString                  + ';' +
-          '"' + ADataset.FieldByName('titulo').AsString         + '";' +
-          '"' + ADataset.FieldByName('autor').AsString          + '";' +
-          '"' + ADataset.FieldByName('genero').AsString         + '";' +
-          ADataset.FieldByName('ano_de_publicacao').AsString    + ';' +
-          '"' + ADataset.FieldByName('resumo').AsString         + '"';
+        Inc(Contador);
+        try
+          // DEBUG: Se falhar aqui, o erro dirá qual campo está errado
+          Linha :=
+            ADataset.FieldByName('id').AsString             + ';' +
+            '"' + ADataset.FieldByName('titulo').AsString   + '";' +
+            '"' + ADataset.FieldByName('autor').AsString    + '";' +
+            '"' + ADataset.FieldByName('genero').AsString   + '";' +
+            ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
+            '"' + ADataset.FieldByName('resumo').AsString   + '"';
 
-        Lista.Add(Linha);
+          Lista.Add(Linha);
+        except
+          on E: Exception do
+          begin
+            ShowMessage('ERRO NO REGISTRO ' + IntToStr(Contador) + ': ' + E.Message +
+                        sLineBreak + 'Verifique se os nomes dos campos no SQL estão corretos.');
+            Abort; // Para a execução para você ver o erro
+          end;
+        end;
+
         ADataset.Next;
       end;
     finally
-      ADataset.EnableControls; // sempre reativa a grid
+      ADataset.EnableControls;
     end;
 
-    SaveDialog1.FileName   := 'CatalogoLivros.csv';
-    SaveDialog1.DefaultExt := 'csv';
+    ShowMessage('DEBUG 2: Processamento concluído. Linhas na lista: ' + IntToStr(Lista.Count));
+
+    SaveDialog1.FileName := 'CatalogoLivros.csv';
+    SaveDialog1.DefaultExt := 'csv';;
 
     if SaveDialog1.Execute then
     begin
+      ShowMessage('DEBUG 3: Tentando gravar arquivo em: ' + SaveDialog1.FileName);
       try
         TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
-        ShowMessage('Exportação concluída! ' +
-                    IntToStr(Lista.Count - 1) + ' registro(s) exportado(s).');
+        ShowMessage('Sucesso! Verifique o arquivo agora.');
       except
         on E: Exception do
-          ShowMessage('Erro ao salvar arquivo: ' + E.Message);
+          ShowMessage('ERRO CRÍTICO AO GRAVAR: ' + E.Message);
       end;
-    end;
+    end
+    else
+      ShowMessage('DEBUG: Usuário cancelou o SaveDialog.');
+
   finally
     Lista.Free;
   end;

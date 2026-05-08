@@ -164,6 +164,8 @@ end;
 
 {$ENDREGION}
 
+
+{$REGION 'Exporta'}
 {$REGION 'Exporta'}
 procedure TfrmCadLivro.ExportarCSV(ADataset: TDataSet);
 var
@@ -172,28 +174,21 @@ var
 begin
   Lista := TStringList.Create;
   try
-    // Cabeçalho
-    Lista.Add('ID;Titulo;Autor;Genero;Ano_Publicacao;Resumo');
-
-    // Força o dataset a salvar qualquer edição pendente antes de começar
-    if ADataset.State in [dsEdit, dsInsert] then
-      ADataset.Post;
+    Lista.Add('sep=;');  // <- faz o Excel/WPS abrir corretamente
+    Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo');
 
     ADataset.DisableControls;
+    ADataset.First;
     try
-      ADataset.First; // Vai para o primeiro registro
-
       while not ADataset.Eof do
       begin
-        // AQUI ESTÁ O SEGREDO: Use os nomes EXATOS que aparecem no DBGrid
-        // Se no DBGrid tem acento, aqui PRECISA ter acento.
         Linha :=
-          ADataset.FieldByName('id').AsString                   + ';' +
-          '"' + ADataset.FieldByName('titulo').AsString         + '";' + // com acento í
-          '"' + ADataset.FieldByName('autor').AsString          + '";' +
-          '"' + ADataset.FieldByName('genero').AsString         + '";' + // com acento ê
-          ADataset.FieldByName('ano_de_publicacao').AsString    + ';' +
-          '"' + ADataset.FieldByName('resumo').AsString         + '"';
+          ADataset.FieldByName('id').AsString                + ';' +
+          '"' + ADataset.FieldByName('titulo').AsString      + '";' +
+          '"' + ADataset.FieldByName('autor').AsString       + '";' +
+          '"' + ADataset.FieldByName('genero').AsString      + '";' +
+          ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
+          '"' + ADataset.FieldByName('resumo').AsString      + '"';
 
         Lista.Add(Linha);
         ADataset.Next;
@@ -202,43 +197,37 @@ begin
       ADataset.EnableControls;
     end;
 
-    // Se Lista.Count for 1, significa que só tem o cabeçalho
-    if Lista.Count <= 1 then
-    begin
-      ShowMessage('A exportação gerou um arquivo vazio. Verifique se os dados aparecem na tela.');
-      Exit;
-    end;
-
     SaveDialog1.FileName   := 'CatalogoLivros.csv';
     SaveDialog1.DefaultExt := 'csv';
-    SaveDialog1.Filter     := 'Arquivos CSV|*.csv';
+    SaveDialog1.Filter     := 'Arquivo CSV (*.csv)|*.csv';
 
     if SaveDialog1.Execute then
     begin
-      try
-        // Salvando
-        TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
-
-        ShowMessage('Exportação concluída! ' +
-                    IntToStr(Lista.Count - 1) + ' registro(s) exportado(s).');
-      except
-        on E: Exception do
-          ShowMessage('Erro ao gravar arquivo: ' + E.Message);
-      end;
+      TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
+      ShowMessage('Exportação concluída! ' +
+                  IntToStr(Lista.Count - 2) + ' registro(s) exportado(s).');
     end;
   finally
     Lista.Free;
   end;
 end;
+
 procedure TfrmCadLivro.btnExportarCSVClick(Sender: TObject);
 begin
+  // Recarrega o dataset para garantir que não está em EOF
+  FDQListagem.Close;
+  FDQListagem.Open;
+
   if FDQListagem.IsEmpty then
   begin
     ShowMessage('Não há dados para exportar.');
     Exit;
   end;
+
   ExportarCSV(FDQListagem);
 end;
+
+
 {$ENDREGION}
 
 {$REGION 'Impotar'}

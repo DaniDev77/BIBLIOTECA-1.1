@@ -37,11 +37,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnFecharClick(Sender: TObject);
-    procedure btnPesquisarClick(Sender: TObject);
-    procedure mskPesquisarChange(Sender: TObject);
 
   private
-  SelectOriginal:string;
     procedure ControlarBotoes(btnNovo, btnAlterar, btnCancelar, btnGravar, btnApagar: TBitBtn; pgcPrincipal: TPageControl;
       Flag:Boolean);
     procedure ControlarIndiceTab(pgcPrincipal: TPageControl; Indice: Integer);
@@ -168,156 +165,9 @@ begin
       end;
     end;
 
-{$ENDREGION}
 
-{$REGION 'PESQUISAR'}
-procedure THeranca.btnPesquisarClick(Sender: TObject);
-var
-  I: Integer;
-  TipoCampo: TFieldType;
-  NomeCampo: string;
-  WhereOrAnd: string;
-  CondicaoSQL: string;
-  SQLSemOrder: string;
-  OrderByClause: string;
-  PosOrder: Integer;
-  Texto: string;
-begin
-  Texto := Trim(mskPesquisar.Text);
+             {$ENDREGION}
 
-  if FDQListagem.State in [dsEdit, dsInsert] then
-    FDQListagem.Cancel;
-
-  // Se vazio, restaura o SELECT original
-  if Texto = '' then
-  begin
-    FDQListagem.Close;
-    FDQListagem.SQL.Text := SelectOriginal;
-    FDQListagem.Open;
-    Exit;
-  end;
-
-  NomeCampo   := '';
-  CondicaoSQL := '';
-
-  // Remove ORDER BY para montar o WHERE
-  PosOrder := Pos('ORDER BY', UpperCase(SelectOriginal));
-  if PosOrder > 0 then
-  begin
-    SQLSemOrder   := Copy(SelectOriginal, 1, PosOrder - 1);
-    OrderByClause := Copy(SelectOriginal, PosOrder, Length(SelectOriginal));
-  end
-  else
-  begin
-    SQLSemOrder   := SelectOriginal;
-    OrderByClause := '';
-  end;
-
-  // WHERE ou AND dependendo se já existe WHERE no SQL
-  if Pos('WHERE', UpperCase(SQLSemOrder)) > 0 then
-    WhereOrAnd := ' AND '
-  else
-    WhereOrAnd := ' WHERE ';
-
-  // Identifica o campo e tipo conforme IndiceAtual
-  for I := 0 to FDQListagem.FieldCount - 1 do
-  begin
-    if FDQListagem.Fields[I].FieldName = IndiceAtual then
-    begin
-      TipoCampo := FDQListagem.Fields[I].DataType;
-
-      if IndiceAtual = 'id' then
-      begin
-        NomeCampo := 'id';
-        TipoCampo := ftInteger;
-      end
-      else if IndiceAtual = 'titulo' then
-        NomeCampo := 'titulo'
-      else if IndiceAtual = 'autor' then
-        NomeCampo := 'autor'
-      else if IndiceAtual = 'genero' then
-        NomeCampo := 'genero'
-      else if IndiceAtual = 'ano_de_publicacao' then
-      begin
-        NomeCampo := 'ano_de_publicacao';
-        TipoCampo := ftInteger;
-      end
-      else if IndiceAtual = 'resumo' then
-        NomeCampo := 'resumo'
-      else
-        NomeCampo := FDQListagem.Fields[I].FieldName;
-
-      Break;
-    end;
-  end;
-
-  if NomeCampo = '' then
-  begin
-    ShowMessage('Campo inválido para pesquisa!');
-    Exit;
-  end;
-
-  // Monta condição conforme tipo do campo
-  if TipoCampo in [ftInteger, ftSmallint, ftAutoInc] then
-  begin
-    if not TryStrToInt(Texto, I) then
-    begin
-      ShowMessage('Digite um número válido!');
-      Exit;
-    end;
-    CondicaoSQL := WhereOrAnd + NomeCampo + ' = ' + IntToStr(I);
-  end
-  else if TipoCampo in [ftString, ftWideString, ftMemo, ftWideMemo] then
-  begin
-    CondicaoSQL :=
-      WhereOrAnd +
-      'UPPER(' + NomeCampo + ') LIKE ' +
-      QuotedStr('%' + UpperCase(Texto) + '%');
-  end;
-
-  // Executa a pesquisa
-  FDQListagem.Close;
-  FDQListagem.SQL.Clear;
-  FDQListagem.SQL.Text :=
-    Trim(SQLSemOrder) + ' ' +
-    Trim(CondicaoSQL) + ' ' +
-    Trim(OrderByClause);
-  FDQListagem.Open;
-
-  mskPesquisar.Clear;
-  mskPesquisar.SetFocus;
-end;
-
-procedure THeranca.mskPesquisarChange(Sender: TObject);
-var
-  Date: TDateTime;
-begin
-  if Trim(TMaskEdit(Sender).Text) = '' then
-    Exit;
-
-  if FDQListagem.FieldByName(IndiceAtual).DataType in
-     [ftString, ftWideString, ftMemo, ftWideMemo] then
-  begin
-    FDQListagem.Locate(IndiceAtual, TMaskEdit(Sender).Text, [loPartialKey]);
-  end
-  else if FDQListagem.FieldByName(IndiceAtual).DataType in
-          [ftInteger, ftSmallint, ftAutoInc] then
-  begin
-    try
-      FDQListagem.Locate(IndiceAtual, TMaskEdit(Sender).Text, []);
-    except
-    end;
-  end
-  else if FDQListagem.FieldByName(IndiceAtual).DataType in
-          [ftDate, ftDateTime, ftTimeStamp] then
-  begin
-    if TryStrToDate(TMaskEdit(Sender).Text, Date) then
-      FDQListagem.Locate(IndiceAtual, Date, []);
-  end
-  else
-    FDQListagem.Locate(IndiceAtual, TMaskEdit(Sender).Text, []);
-end;
-{$ENDREGION}
 
 {$REGION ' INDICETAB'}{  }
 procedure THeranca.ControlarIndiceTab( pgcPrincipal: TPageControl ; Indice:Integer);
@@ -337,8 +187,6 @@ ControlarBotoes(btnNovo, btnAlterar, btnCancelar ,
                     btnGravar, btnApagar,pgcPrincipal,false);
 EstadoDoCadastro:=ecInserir;
 end;
-
-
 {$ENDREGION}
 
 {$REGION ' BOTAO ALTERAR'}{ }
@@ -380,7 +228,6 @@ begin
                 btnGravar, btnApagar,pgcPrincipal,true);
  ControlarIndiceTab( pgcPrincipal,0);
   EstadoDoCadastro:=ecNenhum;
-  LimparEdits;
 end;
 
 procedure THeranca.btnFecharClick(Sender: TObject);
@@ -431,8 +278,6 @@ end;
 begin
    if (FDQListagem.SQL.Text<>EmptyStr) then begin
      FDQListagem.IndexFieldNames:=IndiceAtual;
-     ExibirLabelIndice(IndiceAtual,lblIndice);
-    SelectOriginal:=FDQListagem.SQL.Text;
      FDQListagem.Open;
      end;
      ControlarIndiceTab( pgcPrincipal,0);

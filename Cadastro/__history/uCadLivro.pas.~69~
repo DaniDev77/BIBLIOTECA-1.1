@@ -164,47 +164,85 @@ end;
 
 {$ENDREGION}
 
+
+{$REGION 'Exporta'}
+{$REGION 'Exporta'}
 procedure TfrmCadLivro.ExportarCSV(ADataset: TDataSet);
 var
   Lista: TStringList;
+  Linha: string;
 begin
+  // DEBUG - verificar estado DENTRO da função
+  ShowMessage('Dentro do ExportarCSV:' + #13 +
+              'RecordCount: ' + IntToStr(ADataset.RecordCount) + #13 +
+              'EOF: ' + BoolToStr(ADataset.Eof, True) + #13 +
+              'BOF: ' + BoolToStr(ADataset.Bof, True));
+
   Lista := TStringList.Create;
   try
-    Lista.Add('ID;Titulo;Autor;Genero;Ano_Publicacao;Resumo');
+    Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo');
 
+    ADataset.DisableControls;
     ADataset.First;
-    while not ADataset.Eof do
-    begin
-      if Trim(ADataset.FieldByName('titulo').AsString) <> '' then
-        Lista.Add(
-          ADataset.FieldByName('id').AsString + ';' +
-          '"' + ADataset.FieldByName('titulo').AsString + '";' +
-          '"' + ADataset.FieldByName('autor').AsString + '";' +
-          '"' + ADataset.FieldByName('genero').AsString + '";' +
+
+    // DEBUG - após o First
+    ShowMessage('Após First:' + #13 +
+                'EOF: ' + BoolToStr(ADataset.Eof, True) + #13 +
+                'Titulo da linha atual: ' + ADataset.FieldByName('titulo').AsString);
+
+    try
+      while not ADataset.Eof do
+      begin
+        Linha :=
+          ADataset.FieldByName('id').AsString                + ';' +
+          '"' + ADataset.FieldByName('titulo').AsString      + '";' +
+          '"' + ADataset.FieldByName('autor').AsString       + '";' +
+          '"' + ADataset.FieldByName('genero').AsString      + '";' +
           ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
-          '"' + ADataset.FieldByName('resumo').AsString + '"'
-        );
+          '"' + ADataset.FieldByName('resumo').AsString      + '"';
 
-      ADataset.Next;
+        Lista.Add(Linha);
+        ShowMessage('Linha adicionada: ' + Linha); // DEBUG cada linha
+        ADataset.Next;
+      end;
+    finally
+      ADataset.EnableControls;
     end;
 
-    // Não salva arquivo vazio
-    if Lista.Count = 1 then
-    begin
-      ShowMessage('Nenhum registro para exportar.');
-      Exit;
-    end;
+    ShowMessage('Total de linhas na lista: ' + IntToStr(Lista.Count));
+
+    SaveDialog1.FileName   := 'CatalogoLivros.csv';
+    SaveDialog1.DefaultExt := 'csv';
+    SaveDialog1.Filter     := 'Arquivo CSV (*.csv)|*.csv';
 
     if SaveDialog1.Execute then
     begin
       TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
-      ShowMessage('Exportação concluída!');
+      ShowMessage('Arquivo gravado! Linhas: ' + IntToStr(Lista.Count));
     end;
-
   finally
     Lista.Free;
   end;
 end;
+
+procedure TfrmCadLivro.btnExportarCSVClick(Sender: TObject);
+begin
+  // Recarrega o dataset para garantir que não está em EOF
+  FDQListagem.Close;
+  FDQListagem.Open;
+
+  if FDQListagem.IsEmpty then
+  begin
+    ShowMessage('Não há dados para exportar.');
+    Exit;
+  end;
+
+  ExportarCSV(FDQListagem);
+end;
+
+
+{$ENDREGION}
+
 {$REGION 'Impotar'}
 procedure TfrmCadLivro.ImportarExcel(AFileName: string);
 var

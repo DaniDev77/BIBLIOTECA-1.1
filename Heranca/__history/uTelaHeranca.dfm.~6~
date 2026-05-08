@@ -33,31 +33,6 @@ object Heranca: THeranca
         Height = 49
         Align = alTop
         TabOrder = 0
-        object lblIndice: TLabel
-          Left = 16
-          Top = 1
-          Width = 93
-          Height = 13
-          Caption = 'Campo de Pesquisa'
-        end
-        object mskPesquisar: TMaskEdit
-          Left = 3
-          Top = 17
-          Width = 161
-          Height = 21
-          TabOrder = 0
-          Text = ''
-          OnChange = mskPesquisarChange
-        end
-        object btnPesquisar: TBitBtn
-          Left = 201
-          Top = 15
-          Width = 75
-          Height = 25
-          Caption = '&PESQUISAR'
-          TabOrder = 1
-          OnClick = btnPesquisarClick
-        end
       end
       object grdListagem: TDBGrid
         Left = 0

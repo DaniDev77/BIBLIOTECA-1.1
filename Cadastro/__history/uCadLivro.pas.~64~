@@ -164,69 +164,86 @@ end;
 
 {$ENDREGION}
 
+
+{$REGION 'Exporta'}
 {$REGION 'Exporta'}
 procedure TfrmCadLivro.ExportarCSV(ADataset: TDataSet);
 var
   Lista: TStringList;
   Linha: string;
+  Contador: Integer;
 begin
-  // Verificação de segurança: se o dataset estiver fechado ou vazio, não faz nada
-  if (not ADataset.Active) or (ADataset.IsEmpty) then
+  ShowMessage('DEBUG 1: Iniciando exportação. Registros no Dataset: ' + IntToStr(ADataset.RecordCount));
+
+  if ADataset.IsEmpty then
   begin
-    ShowMessage('Não existem dados na grelha para exportar.');
+    ShowMessage('DEBUG: Dataset está vazio. Abortando.');
     Exit;
   end;
 
   Lista := TStringList.Create;
+  Contador := 0;
   try
-    // Cabeçalho do arquivo CSV (pode usar nomes amigáveis aqui)
-    Lista.Add('ID;Título;Autor;Gênero;Ano_Publicação;Resumo');
+    Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo');
 
-    ADataset.DisableControls; // Evita que a grelha "pisque" durante o processo
+    ADataset.DisableControls;
     try
       ADataset.First;
+
       while not ADataset.Eof do
       begin
-        // Montagem da linha. IMPORTANTE: Use exatamente os nomes das colunas do SQL
-        // Usamos aspas duplas (") para campos de texto para evitar erro caso haja ";" no resumo
-        Linha :=
-          ADataset.FieldByName('id').AsString + ';' +
-          '"' + ADataset.FieldByName('título').AsString + '";' +
-          '"' + ADataset.FieldByName('autor').AsString + '";' +
-          '"' + ADataset.FieldByName('gênero').AsString + '";' +
-          ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
-          '"' + ADataset.FieldByName('resumo').AsString + '"';
+        Inc(Contador);
+        try
+          // DEBUG: Se falhar aqui, o erro dirá qual campo está errado
+          Linha :=
+            ADataset.FieldByName('id').AsString             + ';' +
+            '"' + ADataset.FieldByName('titulo').AsString   + '";' +
+            '"' + ADataset.FieldByName('autor').AsString    + '";' +
+            '"' + ADataset.FieldByName('genero').AsString   + '";' +
+            ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
+            '"' + ADataset.FieldByName('resumo').AsString   + '"';
 
-        Lista.Add(Linha);
+          Lista.Add(Linha);
+        except
+          on E: Exception do
+          begin
+            ShowMessage('ERRO NO REGISTRO ' + IntToStr(Contador) + ': ' + E.Message +
+                        sLineBreak + 'Verifique se os nomes dos campos no SQL estão corretos.');
+            Abort; // Para a execução para você ver o erro
+          end;
+        end;
+
         ADataset.Next;
       end;
     finally
       ADataset.EnableControls;
     end;
 
-    // Configuração da janela para salvar
-    SaveDialog1.Title := 'Salvar Catálogo de Livros';
-    SaveDialog1.FileName := 'Catalogo_Livros_' + FormatDateTime('ddmmyyyy', Now) + '.csv';
+    ShowMessage('DEBUG 2: Processamento concluído. Linhas na lista: ' + IntToStr(Lista.Count));
+
+    SaveDialog1.FileName := 'CatalogoLivros.csv';
     SaveDialog1.DefaultExt := 'csv';
-    SaveDialog1.Filter := 'Arquivo CSV (*.csv)|*.csv|Todos os ficheiros (*.*)|*.*';
+    SaveDialog1.Filter := 'Arquivos CSV|*.csv';
 
     if SaveDialog1.Execute then
     begin
+      ShowMessage('DEBUG 3: Tentando gravar arquivo em: ' + SaveDialog1.FileName);
       try
-        // Grava o arquivo usando UTF8 para garantir que os acentos não fiquem corrompidos no Excel
         TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
-
-        ShowMessage('Sucesso!' + sLineBreak +
-                    IntToStr(Lista.Count - 1) + ' livros exportados corretamente.');
+        ShowMessage('Sucesso! Verifique o arquivo agora.');
       except
         on E: Exception do
-          ShowMessage('Erro crítico ao gravar o arquivo: ' + E.Message);
+          ShowMessage('ERRO CRÍTICO AO GRAVAR: ' + E.Message);
       end;
-    end;
+    end
+    else
+      ShowMessage('DEBUG: Usuário cancelou o SaveDialog.');
+
   finally
     Lista.Free;
   end;
 end;
+
 procedure TfrmCadLivro.btnExportarCSVClick(Sender: TObject);
 begin
   if FDQListagem.IsEmpty then

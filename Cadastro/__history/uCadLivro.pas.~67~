@@ -164,57 +164,84 @@ end;
 
 {$ENDREGION}
 
+
+{$REGION 'Exporta'}
 {$REGION 'Exporta'}
 procedure TfrmCadLivro.ExportarCSV(ADataset: TDataSet);
 var
   Lista: TStringList;
+  Linha: string;
 begin
   Lista := TStringList.Create;
   try
-    Lista.Add('ID;Titulo;Autor;Genero;Ano_Publicacao;Resumo');
+    Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo');
 
+    // Salva posição atual e vai para o início
+    ADataset.DisableControls;
     ADataset.First;
-    while not ADataset.Eof do
-    begin
-      if Trim(ADataset.FieldByName('titulo').AsString) <> '' then
-        Lista.Add(
-          ADataset.FieldByName('id').AsString + ';' +
-          '"' + ADataset.FieldByName('titulo').AsString + '";' +
-          '"' + ADataset.FieldByName('autor').AsString + '";' +
-          '"' + ADataset.FieldByName('genero').AsString + '";' +
-          ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
-          '"' + ADataset.FieldByName('resumo').AsString + '"'
-        );
+    try
+      while not ADataset.Eof do
+      begin
+        Linha :=
+          ADataset.FieldByName('id').AsString                    + ';' +
+          '"' + ADataset.FieldByName('titulo').AsString          + '";' +
+          '"' + ADataset.FieldByName('autor').AsString           + '";' +
+          '"' + ADataset.FieldByName('genero').AsString          + '";' +
+          ADataset.FieldByName('ano_de_publicacao').AsString     + ';' +
+          '"' + ADataset.FieldByName('resumo').AsString          + '"';
 
-      ADataset.Next;
+        Lista.Add(Linha);
+        ADataset.Next;
+      end;
+    finally
+      ADataset.EnableControls;
     end;
 
-    // Não salva arquivo vazio
-    if Lista.Count = 1 then
+    // Verifica se montou algo além do cabeçalho
+    if Lista.Count <= 1 then
     begin
-      ShowMessage('Nenhum registro para exportar.');
+      ShowMessage('Nenhum registro foi lido do dataset!');
       Exit;
     end;
 
+    SaveDialog1.FileName   := 'CatalogoLivros.csv';
+    SaveDialog1.DefaultExt := 'csv';
+    SaveDialog1.Filter     := 'Arquivo CSV (*.csv)|*.csv';
+
     if SaveDialog1.Execute then
     begin
-      TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
-      ShowMessage('Exportação concluída!');
+      try
+        TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
+        ShowMessage('Exportação concluída! ' +
+                    IntToStr(Lista.Count - 1) + ' registro(s) exportado(s).');
+      except
+        on E: Exception do
+          ShowMessage('Erro ao salvar arquivo: ' + E.Message);
+      end;
     end;
-
   finally
     Lista.Free;
   end;
 end;
+
 procedure TfrmCadLivro.btnExportarCSVClick(Sender: TObject);
 begin
+  // DEBUG - me diz o que aparecer aqui
+  ShowMessage('RecordCount: ' + IntToStr(FDQListagem.RecordCount) + #13 +
+              'IsEmpty: ' + BoolToStr(FDQListagem.IsEmpty, True) + #13 +
+              'BOF: ' + BoolToStr(FDQListagem.Bof, True) + #13 +
+              'EOF: ' + BoolToStr(FDQListagem.Eof, True));
+
   if FDQListagem.IsEmpty then
   begin
     ShowMessage('Não há dados para exportar.');
     Exit;
   end;
+
   ExportarCSV(FDQListagem);
 end;
+
+
 {$ENDREGION}
 
 {$REGION 'Impotar'}

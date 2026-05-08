@@ -3,15 +3,9 @@ inherited frmCadLivro: TfrmCadLivro
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
-    ExplicitWidth = 653
-    ExplicitHeight = 268
     inherited TabListagem: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
-      ExplicitWidth = 645
-      ExplicitHeight = 240
       inherited Listagem: TPanel
-        object btnExportarCSV: TBitBtn
+        object btnExportarCSV: TBitBtn [1]
           Left = 391
           Top = 18
           Width = 75
@@ -20,7 +14,7 @@ inherited frmCadLivro: TfrmCadLivro
           TabOrder = 0
           OnClick = btnExportarCSVClick
         end
-        object btnImportarXLSX: TBitBtn
+        object btnImportarXLSX: TBitBtn [2]
           Left = 487
           Top = 18
           Width = 75
@@ -28,6 +22,12 @@ inherited frmCadLivro: TfrmCadLivro
           Caption = '&IMPORTAR'
           TabOrder = 1
           OnClick = btnImportarXLSXClick
+        end
+        inherited mskPesquisar: TMaskEdit
+          TabOrder = 2
+        end
+        inherited btnPesquisar: TBitBtn
+          TabOrder = 3
         end
       end
       inherited grdListagem: TDBGrid
@@ -65,10 +65,6 @@ inherited frmCadLivro: TfrmCadLivro
       end
     end
     inherited TabManutencao: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
-      ExplicitWidth = 645
-      ExplicitHeight = 240
       object edtLivroId: TLabeledEdit
         Left = 25
         Top = 40
@@ -129,13 +125,6 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Caption = 'edtResumo'
         TabOrder = 5
       end
-    end
-  end
-  inherited Rodape: TPanel
-    ExplicitTop = 268
-    ExplicitWidth = 653
-    inherited btnFechar: TBitBtn
-      OnClick = btnFecharClick
     end
   end
   inherited FDQListagem: TFDQuery
