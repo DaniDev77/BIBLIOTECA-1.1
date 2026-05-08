@@ -80,13 +80,33 @@ begin
   oLivro.resumo         := edtResumo.Text;
   oLivro.ano_publicacao := StrToIntDef(edtAnoPub.Text, 0);
 
-  // 2. Validação simples (Igual ao seu exemplo de Produto)
+  // 2. Validações de Campos Obrigatórios
   if Trim(oLivro.titulo) = '' then
   begin
-    MessageDlg('O título é obrigatório!', mtWarning, [mbOK], 0);
+    MessageDlg('O título do livro é obrigatório!', mtWarning, [mbOK], 0);
     edtTitulo.SetFocus;
     Abort;
+  end
+  else if Trim(oLivro.autor) = '' then
+  begin
+    MessageDlg('O nome do autor é obrigatório!', mtWarning, [mbOK], 0);
+    edtAutor.SetFocus;
+    Abort;
+  end
+  else if Trim(oLivro.genero) = '' then
+  begin
+    MessageDlg('O gênero do livro é obrigatório!', mtWarning, [mbOK], 0);
+    edtGenero.SetFocus;
+    Abort;
+  end
+  else if (oLivro.ano_publicacao <= 0) or (oLivro.ano_publicacao > 2100) then
+  begin
+    MessageDlg('Por favor, informe um ano de publicação válido!', mtWarning, [mbOK], 0);
+    edtAnoPub.SetFocus;
+    Abort;
   end;
+
+
 
   // 3. Decide se Insere ou Atualiza
   if (EstadoDoCadastro = ecInserir) then
@@ -332,14 +352,25 @@ end;
 // Botão de importar limpo, sem ShowMessage duplicado:
 procedure TfrmCadLivro.btnImportarXLSXClick(Sender: TObject);
 begin
+  OpenDialog1.Title      := 'Selecionar Planilha Excel';
+  OpenDialog1.Filter     := 'Planilha Excel (*.xlsx)|*.xlsx';
+  OpenDialog1.DefaultExt := 'xlsx';
 
   if OpenDialog1.Execute then
   begin
+    // Validação extra: garante que só aceita .xlsx mesmo
+    if not SameText(ExtractFileExt(OpenDialog1.FileName), '.xlsx') then
+    begin
+      ShowMessage('Arquivo inválido! Selecione apenas arquivos .xlsx');
+      Exit;
+    end;
+
     ImportarExcel(OpenDialog1.FileName);
     FDQListagem.Close;
     FDQListagem.Open;
   end;
 end;
+
 {$ENDREGION}
 
 end.

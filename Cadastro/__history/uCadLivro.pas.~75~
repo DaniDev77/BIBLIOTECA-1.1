@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.ComCtrls,
-  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes;
+  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes, Vcl.Mask;
 
 type
   TfrmCadLivro = class(THeranca) // Certifique-se que o nome da classe pai está correto (THeranca ou TForm1)
@@ -80,13 +80,33 @@ begin
   oLivro.resumo         := edtResumo.Text;
   oLivro.ano_publicacao := StrToIntDef(edtAnoPub.Text, 0);
 
-  // 2. Validação simples (Igual ao seu exemplo de Produto)
+  // 2. Validações de Campos Obrigatórios
   if Trim(oLivro.titulo) = '' then
   begin
-    MessageDlg('O título é obrigatório!', mtWarning, [mbOK], 0);
+    MessageDlg('O título do livro é obrigatório!', mtWarning, [mbOK], 0);
     edtTitulo.SetFocus;
     Abort;
+  end
+  else if Trim(oLivro.autor) = '' then
+  begin
+    MessageDlg('O nome do autor é obrigatório!', mtWarning, [mbOK], 0);
+    edtAutor.SetFocus;
+    Abort;
+  end
+  else if Trim(oLivro.genero) = '' then
+  begin
+    MessageDlg('O gênero do livro é obrigatório!', mtWarning, [mbOK], 0);
+    edtGenero.SetFocus;
+    Abort;
+  end
+  else if (oLivro.ano_publicacao <= 0) or (oLivro.ano_publicacao > 2100) then
+  begin
+    MessageDlg('Por favor, informe um ano de publicação válido!', mtWarning, [mbOK], 0);
+    edtAnoPub.SetFocus;
+    Abort;
   end;
+
+
 
   // 3. Decide se Insere ou Atualiza
   if (EstadoDoCadastro = ecInserir) then
@@ -165,80 +185,48 @@ end;
 {$ENDREGION}
 
 
-{$REGION 'Exporta'}
+
 {$REGION 'Exporta'}
 procedure TfrmCadLivro.ExportarCSV(ADataset: TDataSet);
 var
   Lista: TStringList;
   Linha: string;
-  Contador: Integer;
 begin
-  ShowMessage('DEBUG 1: Iniciando exportação. Registros no Dataset: ' + IntToStr(ADataset.RecordCount));
-
-  if ADataset.IsEmpty then
-  begin
-    ShowMessage('DEBUG: Dataset está vazio. Abortando.');
-    Exit;
-  end;
-
   Lista := TStringList.Create;
-  Contador := 0;
   try
+    Lista.Add('sep=;');  // <- faz o Excel/WPS abrir corretamente
     Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo');
 
     ADataset.DisableControls;
+    ADataset.First;
     try
-      ADataset.First;
-
       while not ADataset.Eof do
       begin
-        Inc(Contador);
-        try
-          // DEBUG: Se falhar aqui, o erro dirá qual campo está errado
-          Linha :=
-            ADataset.FieldByName('id').AsString             + ';' +
-            '"' + ADataset.FieldByName('titulo').AsString   + '";' +
-            '"' + ADataset.FieldByName('autor').AsString    + '";' +
-            '"' + ADataset.FieldByName('genero').AsString   + '";' +
-            ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
-            '"' + ADataset.FieldByName('resumo').AsString   + '"';
+        Linha :=
+          ADataset.FieldByName('id').AsString                + ';' +
+          '"' + ADataset.FieldByName('titulo').AsString      + '";' +
+          '"' + ADataset.FieldByName('autor').AsString       + '";' +
+          '"' + ADataset.FieldByName('genero').AsString      + '";' +
+          ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
+          '"' + ADataset.FieldByName('resumo').AsString      + '"';
 
-          Lista.Add(Linha);
-        except
-          on E: Exception do
-          begin
-            ShowMessage('ERRO NO REGISTRO ' + IntToStr(Contador) + ': ' + E.Message +
-                        sLineBreak + 'Verifique se os nomes dos campos no SQL estão corretos.');
-            Abort; // Para a execução para você ver o erro
-          end;
-        end;
-
+        Lista.Add(Linha);
         ADataset.Next;
       end;
     finally
       ADataset.EnableControls;
     end;
 
-    ShowMessage('DEBUG 2: Processamento concluído. Linhas na lista: ' + IntToStr(Lista.Count));
-
-    SaveDialog1.FileName := 'CatalogoLivros.csv';
+    SaveDialog1.FileName   := 'CatalogoLivros.csv';
     SaveDialog1.DefaultExt := 'csv';
-    SaveDialog1.Filter := 'Arquivos CSV|*.csv';
+    SaveDialog1.Filter     := 'Arquivo CSV (*.csv)|*.csv';
 
     if SaveDialog1.Execute then
     begin
-      ShowMessage('DEBUG 3: Tentando gravar arquivo em: ' + SaveDialog1.FileName);
-      try
-        TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
-        ShowMessage('Sucesso! Verifique o arquivo agora.');
-      except
-        on E: Exception do
-          ShowMessage('ERRO CRÍTICO AO GRAVAR: ' + E.Message);
-      end;
-    end
-    else
-      ShowMessage('DEBUG: Usuário cancelou o SaveDialog.');
-
+      TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
+      ShowMessage('Exportação concluída! ' +
+                  IntToStr(Lista.Count - 2) + ' registro(s) exportado(s).');
+    end;
   finally
     Lista.Free;
   end;
@@ -246,13 +234,20 @@ end;
 
 procedure TfrmCadLivro.btnExportarCSVClick(Sender: TObject);
 begin
+  // Recarrega o dataset para garantir que não está em EOF
+  FDQListagem.Close;
+  FDQListagem.Open;
+
   if FDQListagem.IsEmpty then
   begin
-    ShowMessage('Não há dados para exportar.');
+    ShowMessage('Não há dados para exportar o arquivo.');
     Exit;
   end;
+
   ExportarCSV(FDQListagem);
 end;
+
+
 {$ENDREGION}
 
 {$REGION 'Impotar'}
