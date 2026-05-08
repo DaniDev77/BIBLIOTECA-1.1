@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.ComCtrls,
-  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes;
+  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes, Vcl.Mask;
 
 type
   TfrmCadLivro = class(THeranca) // Certifique-se que o nome da classe pai está correto (THeranca ou TForm1)
@@ -165,38 +165,30 @@ end;
 {$ENDREGION}
 
 
+
 {$REGION 'Exporta'}
 procedure TfrmCadLivro.ExportarCSV(ADataset: TDataSet);
 var
   Lista: TStringList;
   Linha: string;
 begin
-  // 1. Verificação de segurança
-  if ADataset.IsEmpty then
-  begin
-    ShowMessage('Não há dados para exportar.');
-    Exit;
-  end;
-
   Lista := TStringList.Create;
   try
-    // Cabeçalho (Nomes amigáveis para as colunas do Excel)
+    Lista.Add('sep=;');  // <- faz o Excel/WPS abrir corretamente
     Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo');
 
     ADataset.DisableControls;
+    ADataset.First;
     try
-      ADataset.First;
-
       while not ADataset.Eof do
       begin
-        // NOMES AJUSTADOS PARA O SEU BANCO (titulo, genero, ano_publicacao)
         Linha :=
-          ADataset.FieldByName('id').AsString             + ';' +
-          '"' + ADataset.FieldByName('titulo').AsString   + '";' +
-          '"' + ADataset.FieldByName('autor').AsString    + '";' +
-          '"' + ADataset.FieldByName('genero').AsString   + '";' +
+          ADataset.FieldByName('id').AsString                + ';' +
+          '"' + ADataset.FieldByName('titulo').AsString      + '";' +
+          '"' + ADataset.FieldByName('autor').AsString       + '";' +
+          '"' + ADataset.FieldByName('genero').AsString      + '";' +
           ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
-          '"' + ADataset.FieldByName('resumo').AsString   + '"';
+          '"' + ADataset.FieldByName('resumo').AsString      + '"';
 
         Lista.Add(Linha);
         ADataset.Next;
@@ -205,33 +197,37 @@ begin
       ADataset.EnableControls;
     end;
 
-    // 2. Configura o Salvamento
-    SaveDialog1.FileName := 'CatalogoLivros.csv';
+    SaveDialog1.FileName   := 'CatalogoLivros.csv';
     SaveDialog1.DefaultExt := 'csv';
-    //SaveDialog1.Filter := 'Arquivos CSV|*.csv';
+    SaveDialog1.Filter     := 'Arquivo CSV (*.csv)|*.csv';
 
     if SaveDialog1.Execute then
     begin
-      // Grava o conteúdo da Lista no arquivo escolhido
       TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
-
       ShowMessage('Exportação concluída! ' +
-                  IntToStr(Lista.Count - 1) + ' registro(s) salvos em: ' +
-                  SaveDialog1.FileName);
+                  IntToStr(Lista.Count - 2) + ' registro(s) exportado(s).');
     end;
   finally
     Lista.Free;
   end;
 end;
+
 procedure TfrmCadLivro.btnExportarCSVClick(Sender: TObject);
 begin
+  // Recarrega o dataset para garantir que não está em EOF
+  FDQListagem.Close;
+  FDQListagem.Open;
+
   if FDQListagem.IsEmpty then
   begin
     ShowMessage('Não há dados para exportar.');
     Exit;
   end;
+
   ExportarCSV(FDQListagem);
 end;
+
+
 {$ENDREGION}
 
 {$REGION 'Impotar'}

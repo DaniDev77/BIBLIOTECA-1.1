@@ -220,7 +220,7 @@ begin
 
   if FDQListagem.IsEmpty then
   begin
-    ShowMessage('Não há dados para exportar.');
+    ShowMessage('Não há dados para exportar o arquivo.');
     Exit;
   end;
 

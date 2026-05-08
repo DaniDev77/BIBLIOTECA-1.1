@@ -1,36 +1,72 @@
 inherited frmCadLivro: TfrmCadLivro
   Caption = 'frmCadLivro'
+  ClientWidth = 823
+  ExplicitWidth = 839
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
-    ExplicitWidth = 653
-    ExplicitHeight = 268
+    Width = 823
     inherited TabListagem: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
-      ExplicitWidth = 645
-      ExplicitHeight = 240
       inherited Listagem: TPanel
-        object btnExportarCSV: TBitBtn
-          Left = 391
+        Width = 815
+        Height = 73
+        ExplicitWidth = 815
+        ExplicitHeight = 73
+        inherited lblIndice: TLabel
+          Left = 22
+          Top = -2
+          Width = 163
+          Height = 23
+          Font.Height = -19
+          ParentFont = False
+          ExplicitLeft = 22
+          ExplicitTop = -2
+          ExplicitWidth = 163
+          ExplicitHeight = 23
+        end
+        object btnExportarCSV: TBitBtn [1]
+          Left = 383
           Top = 18
-          Width = 75
-          Height = 25
+          Width = 90
+          Height = 39
           Caption = '&EXPORTAR'
-          TabOrder = 0
+          TabOrder = 2
           OnClick = btnExportarCSVClick
         end
-        object btnImportarXLSX: TBitBtn
+        object btnImportarXLSX: TBitBtn [2]
           Left = 487
           Top = 18
-          Width = 75
-          Height = 25
+          Width = 90
+          Height = 39
           Caption = '&IMPORTAR'
-          TabOrder = 1
+          TabOrder = 3
           OnClick = btnImportarXLSXClick
+        end
+        inherited mskPesquisar: TMaskEdit
+          Left = 19
+          Top = 27
+          Width = 166
+          Height = 30
+          ExplicitLeft = 19
+          ExplicitTop = 27
+          ExplicitWidth = 166
+          ExplicitHeight = 30
+        end
+        inherited btnPesquisar: TBitBtn
+          Left = 217
+          Top = 18
+          Width = 96
+          Height = 39
+          ExplicitLeft = 217
+          ExplicitTop = 18
+          ExplicitWidth = 96
+          ExplicitHeight = 39
         end
       end
       inherited grdListagem: TDBGrid
+        Top = 73
+        Width = 815
+        Height = 167
         Columns = <
           item
             Expanded = False
@@ -65,11 +101,8 @@ inherited frmCadLivro: TfrmCadLivro
       end
     end
     inherited TabManutencao: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
-      ExplicitWidth = 645
-      ExplicitHeight = 240
       object edtLivroId: TLabeledEdit
+        Tag = 1
         Left = 25
         Top = 40
         Width = 72
@@ -77,6 +110,8 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Width = 49
         EditLabel.Height = 13
         EditLabel.Caption = 'edtLivroId'
+        Enabled = False
+        NumbersOnly = True
         TabOrder = 0
       end
       object edtTitulo: TLabeledEdit
@@ -97,7 +132,8 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Width = 43
         EditLabel.Height = 13
         EditLabel.Caption = 'edtAutor'
-        TabOrder = 2
+        MaxLength = 255
+        TabOrder = 3
       end
       object edtGenero: TLabeledEdit
         Left = 346
@@ -107,7 +143,8 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Width = 51
         EditLabel.Height = 13
         EditLabel.Caption = 'edtGenero'
-        TabOrder = 3
+        MaxLength = 100
+        TabOrder = 4
       end
       object edtAnoPub: TLabeledEdit
         Left = 458
@@ -117,7 +154,9 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Width = 53
         EditLabel.Height = 13
         EditLabel.Caption = 'edtAnoPub'
-        TabOrder = 4
+        MaxLength = 255
+        NumbersOnly = True
+        TabOrder = 2
       end
       object edtResumo: TLabeledEdit
         Left = 130
@@ -132,13 +171,10 @@ inherited frmCadLivro: TfrmCadLivro
     end
   end
   inherited Rodape: TPanel
-    ExplicitTop = 268
-    ExplicitWidth = 653
-    inherited btnFechar: TBitBtn
-      OnClick = btnFecharClick
-    end
+    Width = 823
   end
   inherited FDQListagem: TFDQuery
+    Active = True
     SQL.Strings = (
       ' SELECT '
       '  id,'
@@ -187,6 +223,7 @@ inherited frmCadLivro: TfrmCadLivro
     end
   end
   object SaveDialog1: TSaveDialog
+    Filter = '|*.csv'
     Left = 564
     Top = 216
   end

@@ -1,31 +1,97 @@
 inherited frmCadLivro: TfrmCadLivro
   Caption = 'frmCadLivro'
+  ClientWidth = 823
+  Font.Charset = ANSI_CHARSET
+  Font.Name = 'Times New Roman'
+  ExplicitWidth = 839
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 14
   inherited pgcPrincipal: TPageControl
-    ActivePage = TabManutencao
+    Width = 823
+    Font.Charset = ANSI_CHARSET
+    Font.Name = 'Times New Roman'
+    Font.Style = [fsBold]
+    ParentFont = False
+    ExplicitWidth = 823
     inherited TabListagem: TTabSheet
       inherited Listagem: TPanel
+        Width = 815
+        Height = 73
+        ExplicitWidth = 815
+        ExplicitHeight = 73
+        inherited lblIndice: TLabel
+          Left = 18
+          Top = 2
+          Width = 149
+          Height = 21
+          Font.Charset = ANSI_CHARSET
+          Font.Height = -19
+          Font.Name = 'Times New Roman'
+          ParentFont = False
+          ExplicitLeft = 18
+          ExplicitTop = 2
+          ExplicitWidth = 149
+          ExplicitHeight = 21
+        end
         object btnExportarCSV: TBitBtn [1]
-          Left = 391
+          Left = 383
           Top = 18
-          Width = 75
-          Height = 25
+          Width = 90
+          Height = 39
           Caption = '&EXPORTAR'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
           TabOrder = 2
           OnClick = btnExportarCSVClick
         end
         object btnImportarXLSX: TBitBtn [2]
           Left = 487
           Top = 18
-          Width = 75
-          Height = 25
+          Width = 90
+          Height = 39
           Caption = '&IMPORTAR'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Times New Roman'
+          Font.Style = []
+          ParentFont = False
           TabOrder = 3
           OnClick = btnImportarXLSXClick
         end
+        inherited mskPesquisar: TMaskEdit
+          Left = 19
+          Top = 27
+          Width = 166
+          ExplicitLeft = 19
+          ExplicitTop = 27
+          ExplicitWidth = 166
+        end
+        inherited btnPesquisar: TBitBtn
+          Left = 217
+          Top = 18
+          Width = 96
+          Height = 39
+          Font.Charset = ANSI_CHARSET
+          Font.Name = 'Times New Roman'
+          ParentFont = False
+          ExplicitLeft = 217
+          ExplicitTop = 18
+          ExplicitWidth = 96
+          ExplicitHeight = 39
+        end
       end
       inherited grdListagem: TDBGrid
+        Top = 73
+        Width = 815
+        Height = 167
+        Font.Charset = ANSI_CHARSET
+        Font.Name = 'Times New Roman'
+        ParentFont = False
         Columns = <
           item
             Expanded = False
@@ -66,9 +132,9 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 40
         Width = 72
         Height = 21
-        EditLabel.Width = 49
+        EditLabel.Width = 41
         EditLabel.Height = 13
-        EditLabel.Caption = 'edtLivroId'
+        EditLabel.Caption = 'C'#243'digo:'
         Enabled = False
         NumbersOnly = True
         TabOrder = 0
@@ -78,9 +144,9 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 40
         Width = 272
         Height = 21
-        EditLabel.Width = 42
+        EditLabel.Width = 35
         EditLabel.Height = 13
-        EditLabel.Caption = 'edtTitulo'
+        EditLabel.Caption = 'T'#237'tulo:'
         TabOrder = 1
       end
       object edtAutor: TLabeledEdit
@@ -88,9 +154,9 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 82
         Width = 227
         Height = 21
-        EditLabel.Width = 43
+        EditLabel.Width = 34
         EditLabel.Height = 13
-        EditLabel.Caption = 'edtAutor'
+        EditLabel.Caption = 'Autor:'
         MaxLength = 255
         TabOrder = 3
       end
@@ -99,20 +165,20 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 82
         Width = 184
         Height = 21
-        EditLabel.Width = 51
+        EditLabel.Width = 43
         EditLabel.Height = 13
-        EditLabel.Caption = 'edtGenero'
+        EditLabel.Caption = 'G'#234'nero:'
         MaxLength = 100
         TabOrder = 4
       end
       object edtAnoPub: TLabeledEdit
-        Left = 458
+        Left = 450
         Top = 40
         Width = 72
         Height = 21
-        EditLabel.Width = 53
+        EditLabel.Width = 99
         EditLabel.Height = 13
-        EditLabel.Caption = 'edtAnoPub'
+        EditLabel.Caption = 'Ano de Publica'#231#227'o:'
         MaxLength = 255
         NumbersOnly = True
         TabOrder = 2
@@ -122,12 +188,15 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 131
         Width = 332
         Height = 21
-        EditLabel.Width = 54
+        EditLabel.Width = 46
         EditLabel.Height = 13
-        EditLabel.Caption = 'edtResumo'
+        EditLabel.Caption = 'Resumo:'
         TabOrder = 5
       end
     end
+  end
+  inherited Rodape: TPanel
+    Width = 823
   end
   inherited FDQListagem: TFDQuery
     Active = True
@@ -144,35 +213,41 @@ inherited frmCadLivro: TfrmCadLivro
       'ORDER BY titulo')
     Top = 168
     object FDQListagemid: TIntegerField
+      DisplayLabel = 'C'#243'digo'
       FieldName = 'id'
       Origin = 'id'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
       Required = True
     end
     object FDQListagemtitulo: TStringField
+      DisplayLabel = 'T'#237'tulo'
       FieldName = 'titulo'
       Origin = 'titulo'
       Required = True
       Size = 255
     end
     object FDQListagemautor: TStringField
+      DisplayLabel = 'Autor'
       FieldName = 'autor'
       Origin = 'autor'
       Required = True
       Size = 255
     end
     object FDQListagemgenero: TStringField
+      DisplayLabel = 'G'#234'nero'
       FieldName = 'genero'
       Origin = 'genero'
       Required = True
       Size = 100
     end
     object FDQListagemresumo: TMemoField
+      DisplayLabel = 'Resumo'
       FieldName = 'resumo'
       Origin = 'resumo'
       BlobType = ftMemo
     end
     object FDQListagemano_de_publicacao: TIntegerField
+      DisplayLabel = 'Ano de Publica'#231#227'o'
       FieldName = 'ano_de_publicacao'
       Origin = 'ano_de_publicacao'
       Required = True
