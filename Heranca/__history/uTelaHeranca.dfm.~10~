@@ -72,7 +72,6 @@ object Heranca: THeranca
         TitleFont.Height = -11
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
-        OnTitleClick = grdListagemTitleClick
       end
     end
     object TabManutencao: TTabSheet

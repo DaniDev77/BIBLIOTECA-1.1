@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls,
   Vcl.ComCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client
-  ,uEnum,uDTMConexao;
+  ,uEnum,uDTMConexao, Vcl.Mask;
 
 type
   THeranca = class(TForm)
@@ -25,6 +25,9 @@ type
     btnFechar: TBitBtn;
     FDQListagem: TFDQuery;
     dtslistagem: TDataSource;
+    mskPesquisar: TMaskEdit;
+    btnPesquisar: TBitBtn;
+    lblIndice: TLabel;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure btnApagarClick(Sender: TObject);
@@ -33,11 +36,21 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
+    procedure btnPesquisarClick(Sender: TObject);
+    procedure mskPesquisarChange(Sender: TObject);
+    procedure grdListagemTitleClick(Column: TColumn);
 
   private
+  SelectOriginal:string;
     procedure ControlarBotoes(btnNovo, btnAlterar, btnCancelar, btnGravar, btnApagar: TBitBtn; pgcPrincipal: TPageControl;
       Flag:Boolean);
     procedure ControlarIndiceTab(pgcPrincipal: TPageControl; Indice: Integer);
+    procedure DesabilitarEditPK;
+    procedure ExibirLabelIndice(Campo: string; aLabel: TLabel);
+    function ExisteCampoObrigatorio: Boolean;
+    procedure LimparEdits;
+    function RetornarCampoTraduzido(Campo: string): string;
 
     { Private declarations }
   public
@@ -88,6 +101,152 @@ begin
 
 end;
 
+
+
+{$ENDREGION}
+
+{$REGION ' FUNÇAO PARA RETORNAR CAMPO'}
+   function THeranca.RetornarCampoTraduzido(Campo:string):string;
+    var i :Integer;
+   begin
+    for I := 0 to FDQListagem.Fields.Count-1 do begin
+      if LowerCase(FDQListagem.Fields[i].FieldName)=LowerCase(Campo) then begin
+      Result :=FDQListagem.Fields[i].DisplayLabel;
+       Break
+      end;
+    end;
+   end;
+
+
+procedure THeranca.ExibirLabelIndice(Campo:string; aLabel:TLabel);
+   begin
+     aLabel.Caption:=RetornarCampoTraduzido(Campo);
+   end;
+        //FUNÇÃO CAMPO OBRIGATORIO
+  function THeranca.ExisteCampoObrigatorio:Boolean;
+  var i:Integer;
+   begin
+   Result:=False;
+   for I := 0 to ComponentCount -1 do begin
+    if(Components[i] is TLabeledEdit) then begin
+      if (TLabeledEdit(Components[i]).Tag =2)and
+         (TLabeledEdit(Components[i]).Text=EmptyStr) then begin
+         MessageDlg(TLabeledEdit(Components[i]).EditLabel.Caption +
+                      'é um campo obrigatorio',mtInformation,[mbOK],0);
+         TLabeledEdit(Components[i]).SetFocus;
+         Result:=true;
+         Break;
+         end;
+
+     end;
+   end;
+
+   end;
+
+procedure THeranca.DesabilitarEditPK;
+var i:Integer;
+begin
+  for I := 0 to ComponentCount -1 do begin
+    if(Components[i] is TLabeledEdit) then begin
+      if (TLabeledEdit(Components[i]).Tag =1) then begin
+        TLabeledEdit(Components[i]).Enabled:=False;
+        Break;
+      end;
+    end;
+  end;
+end;
+
+procedure THeranca.LimparEdits;
+var i:Integer;
+begin
+  for I := 0 to ComponentCount -1 do begin
+    if(Components[i] is TLabeledEdit) then
+        TLabeledEdit(Components[i]).Text:=EmptyStr
+    else if (Components[i] is TEdit) then
+    TEdit(Components[i]).Text:=''
+     else if (Components[i] is TMaskEdit) then
+    TMaskEdit(Components[i]).Text:=''
+     else if (Components[i] is TMemo) then
+      TMemo(Components[i]).Text:=''
+      end;
+    end;
+
+{$ENDREGION}
+
+{$REGION 'PESQUISAR'}
+procedure THeranca.btnPesquisarClick(Sender: TObject);
+var
+  I: Integer;
+  TipoCampo: TFieldType;
+  NomeCampo, Texto, CondicaoSQL: string;
+begin
+  Texto := Trim(mskPesquisar.Text);
+  if Texto = '' then Exit;
+
+  // Busca o campo clicado dentro da Query
+  NomeCampo := '';
+  for I := 0 to FDQListagem.FieldCount - 1 do
+  begin
+    if SameText(FDQListagem.Fields[I].FieldName, IndiceAtual) then
+    begin
+      NomeCampo := FDQListagem.Fields[I].FieldName;
+      TipoCampo := FDQListagem.Fields[I].DataType;
+      Break;
+    end;
+  end;
+
+  // Monta a SQL de acordo com o tipo
+  // Se for o ano_de_publicacao, ele entrará aqui (ftInteger)
+  if TipoCampo in [ftInteger, ftSmallint, ftAutoInc] then
+  begin
+    if not TryStrToInt(Texto, I) then
+    begin
+      ShowMessage('Para pesquisar nesta coluna, digite apenas números!');
+      Exit;
+    end;
+    CondicaoSQL := ' WHERE ' + NomeCampo + ' = ' + Texto;
+  end
+  else
+  begin
+    // Para Título, Autor, etc.
+    CondicaoSQL := ' WHERE UPPER(' + NomeCampo + ') LIKE ' + QuotedStr('%' + UpperCase(Texto) + '%');
+  end;
+
+  // Aplica e abre
+  FDQListagem.Close;
+  FDQListagem.SQL.Text := 'SELECT * FROM BIBLIOTECA.dbo.livros ' + CondicaoSQL;
+  FDQListagem.Open;
+end;
+
+procedure THeranca.mskPesquisarChange(Sender: TObject);
+var
+  Date: TDateTime;
+begin
+  if Trim(TMaskEdit(Sender).Text) = '' then
+    Exit;
+
+  if FDQListagem.FieldByName(IndiceAtual).DataType in
+     [ftString, ftWideString, ftMemo, ftWideMemo] then
+  begin
+    FDQListagem.Locate(IndiceAtual, TMaskEdit(Sender).Text, [loPartialKey]);
+  end
+  else if FDQListagem.FieldByName(IndiceAtual).DataType in
+          [ftInteger, ftSmallint, ftAutoInc] then
+  begin
+    try
+      FDQListagem.Locate(IndiceAtual, TMaskEdit(Sender).Text, []);
+    except
+    end;
+  end
+  else if FDQListagem.FieldByName(IndiceAtual).DataType in
+          [ftDate, ftDateTime, ftTimeStamp] then
+  begin
+    if TryStrToDate(TMaskEdit(Sender).Text, Date) then
+      FDQListagem.Locate(IndiceAtual, Date, []);
+  end
+  else
+    FDQListagem.Locate(IndiceAtual, TMaskEdit(Sender).Text, []);
+end;
 {$ENDREGION}
 
 {$REGION ' INDICETAB'}{  }
@@ -108,6 +267,8 @@ ControlarBotoes(btnNovo, btnAlterar, btnCancelar ,
                     btnGravar, btnApagar,pgcPrincipal,false);
 EstadoDoCadastro:=ecInserir;
 end;
+
+
 {$ENDREGION}
 
 {$REGION ' BOTAO ALTERAR'}{ }
@@ -149,6 +310,12 @@ begin
                 btnGravar, btnApagar,pgcPrincipal,true);
  ControlarIndiceTab( pgcPrincipal,0);
   EstadoDoCadastro:=ecNenhum;
+  LimparEdits;
+end;
+
+procedure THeranca.btnFecharClick(Sender: TObject);
+begin
+Close;
 end;
 
 {$ENDREGION}
@@ -171,6 +338,7 @@ try
   end;
 end;
  {$ENDREGION}
+
  {$REGION 'FORMS'}
 procedure THeranca.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
@@ -193,6 +361,8 @@ end;
 begin
    if (FDQListagem.SQL.Text<>EmptyStr) then begin
      FDQListagem.IndexFieldNames:=IndiceAtual;
+     ExibirLabelIndice(IndiceAtual,lblIndice);
+    SelectOriginal:=FDQListagem.SQL.Text;
      FDQListagem.Open;
      end;
      ControlarIndiceTab( pgcPrincipal,0);
@@ -200,5 +370,18 @@ begin
                     btnGravar, btnApagar,pgcPrincipal,True);
 end;
                {$ENDREGION}
+
+{$REGION ' AREA DO FILDNAME'}
+procedure THeranca.grdListagemTitleClick(Column: TColumn);
+begin
+    IndiceAtual:= Column.FieldName;
+    FDQListagem.IndexFieldNames:=IndiceAtual;
+    ExibirLabelIndice(IndiceAtual,lblIndice);
+end;
+
+   {$ENDREGION}
+
+
+
 
                end.

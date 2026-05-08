@@ -191,7 +191,7 @@ begin
   if FDQListagem.State in [dsEdit, dsInsert] then
     FDQListagem.Cancel;
 
-  // Se vazio, restaura o SELECT original
+  // Se a pesquisa estiver vazia, restaura o SELECT original e sai
   if Texto = '' then
   begin
     FDQListagem.Close;
@@ -203,7 +203,7 @@ begin
   NomeCampo   := '';
   CondicaoSQL := '';
 
-  // Remove ORDER BY para montar o WHERE
+  // 1. Separa o ORDER BY do restante do SQL para não quebrar a sintaxe
   PosOrder := Pos('ORDER BY', UpperCase(SelectOriginal));
   if PosOrder > 0 then
   begin
@@ -216,76 +216,66 @@ begin
     OrderByClause := '';
   end;
 
-  // WHERE ou AND dependendo se já existe WHERE no SQL
+  // 2. Define se usa WHERE ou AND (caso o SQL original já tenha um filtro fixo)
   if Pos('WHERE', UpperCase(SQLSemOrder)) > 0 then
     WhereOrAnd := ' AND '
   else
     WhereOrAnd := ' WHERE ';
 
-  // Identifica o campo e tipo conforme IndiceAtual
+  // 3. Identifica o campo atual e seu tipo de dado dinamicamente
   for I := 0 to FDQListagem.FieldCount - 1 do
   begin
-    if FDQListagem.Fields[I].FieldName = IndiceAtual then
+    // SameText compara strings sem diferenciar maiúsculas de minúsculas
+    if SameText(FDQListagem.Fields[I].FieldName, IndiceAtual) then
     begin
+      NomeCampo := FDQListagem.Fields[I].FieldName;
       TipoCampo := FDQListagem.Fields[I].DataType;
-
-      if IndiceAtual = 'id' then
-      begin
-        NomeCampo := 'id';
-        TipoCampo := ftInteger;
-      end
-      else if IndiceAtual = 'titulo' then
-        NomeCampo := 'titulo'
-      else if IndiceAtual = 'autor' then
-        NomeCampo := 'autor'
-      else if IndiceAtual = 'genero' then
-        NomeCampo := 'genero'
-      else if IndiceAtual = 'ano_de_publicacao' then
-      begin
-        NomeCampo := 'ano_de_publicacao';
-        TipoCampo := ftInteger;
-      end
-      else if IndiceAtual = 'resumo' then
-        NomeCampo := 'resumo'
-      else
-        NomeCampo := FDQListagem.Fields[I].FieldName;
-
       Break;
     end;
   end;
 
+  // Validação caso o índice não seja encontrado
   if NomeCampo = '' then
   begin
-    ShowMessage('Campo inválido para pesquisa!');
+    ShowMessage('Selecione uma coluna no Grid para pesquisar!');
     Exit;
   end;
 
-  // Monta condição conforme tipo do campo
-  if TipoCampo in [ftInteger, ftSmallint, ftAutoInc] then
+  // 4. Monta a condição SQL baseada no tipo do campo
+  // Trata campos Numéricos (ID, Ano, etc)
+  if TipoCampo in [ftInteger, ftSmallint, ftAutoInc, ftWord, ftLongWord] then
   begin
     if not TryStrToInt(Texto, I) then
     begin
-      ShowMessage('Digite um número válido!');
+      ShowMessage('Digite apenas números para pesquisar nesta coluna!');
+      mskPesquisar.SetFocus;
       Exit;
     end;
-    CondicaoSQL := WhereOrAnd + NomeCampo + ' = ' + IntToStr(I);
+    CondicaoSQL := WhereOrAnd + NomeCampo + ' = ' + Texto;
   end
-  else if TipoCampo in [ftString, ftWideString, ftMemo, ftWideMemo] then
+  // Trata campos de Texto (Título, Autor, Gênero, etc)
+  else
   begin
-    CondicaoSQL :=
-      WhereOrAnd +
-      'UPPER(' + NomeCampo + ') LIKE ' +
-      QuotedStr('%' + UpperCase(Texto) + '%');
+    CondicaoSQL := WhereOrAnd + 'UPPER(' + NomeCampo + ') LIKE ' +
+                   QuotedStr('%' + UpperCase(Texto) + '%');
   end;
 
-  // Executa a pesquisa
+  // 5. Aplica o novo SQL e abre a consulta
   FDQListagem.Close;
   FDQListagem.SQL.Clear;
-  FDQListagem.SQL.Text :=
-    Trim(SQLSemOrder) + ' ' +
-    Trim(CondicaoSQL) + ' ' +
-    Trim(OrderByClause);
-  FDQListagem.Open;
+  FDQListagem.SQL.Text := Trim(SQLSemOrder) + ' ' +
+                          Trim(CondicaoSQL) + ' ' +
+                          Trim(OrderByClause);
+  try
+    FDQListagem.Open;
+  except
+    on E: Exception do
+    begin
+      ShowMessage('Erro ao pesquisar: ' + E.Message);
+      FDQListagem.SQL.Text := SelectOriginal;
+      FDQListagem.Open;
+    end;
+  end;
 
   mskPesquisar.Clear;
   mskPesquisar.SetFocus;

@@ -290,6 +290,7 @@ begin
   mskPesquisar.Clear;
   mskPesquisar.SetFocus;
 end;
+
 procedure THeranca.mskPesquisarChange(Sender: TObject);
 var
   Date: TDateTime;

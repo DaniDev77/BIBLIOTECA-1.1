@@ -39,7 +39,6 @@ type
     procedure btnFecharClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure mskPesquisarChange(Sender: TObject);
-    procedure grdListagemTitleClick(Column: TColumn);
 
   private
   SelectOriginal:string;
@@ -100,8 +99,6 @@ begin
      Result := True;
 
 end;
-
-
 
 {$ENDREGION}
 
@@ -290,6 +287,7 @@ begin
   mskPesquisar.Clear;
   mskPesquisar.SetFocus;
 end;
+
 procedure THeranca.mskPesquisarChange(Sender: TObject);
 var
   Date: TDateTime;
@@ -442,18 +440,5 @@ begin
                     btnGravar, btnApagar,pgcPrincipal,True);
 end;
                {$ENDREGION}
-
-{$REGION ' AREA DO FILDNAME'}
-procedure THeranca.grdListagemTitleClick(Column: TColumn);
-begin
-    IndiceAtual:= Column.FieldName;
-    FDQListagem.IndexFieldNames:=IndiceAtual;
-    ExibirLabelIndice(IndiceAtual,lblIndice);
-end;
-
-   {$ENDREGION}
-
-
-
 
                end.
