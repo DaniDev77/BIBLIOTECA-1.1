@@ -1,0 +1,13 @@
+ Script SQL para criar tabela:
+
+CREATE TABLE livros (
+    id INTEGER PRIMARY KEY ,
+    titulo VARCHAR(255) NOT NULL,
+    autor VARCHAR(255) NOT NULL,
+    genero VARCHAR(100) NOT NULL,
+    ano_publicacao INTEGER NOT NULL,
+    resumo TEXT, -- TEXT aceita textos longos, conforme solicitado
+    
+    -- Regra específica: Não permitir o mesmo título para o mesmo autor
+    CONSTRAINT uq_titulo_autor UNIQUE (titulo, autor)
+);

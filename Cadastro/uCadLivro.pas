@@ -117,7 +117,7 @@ end;
 
 {$ENDREGION}
 
-{$REGION 'Eventos do Form'}
+{$REGION ' Form'}
 
 procedure TfrmCadLivro.FormCreate(Sender: TObject);
 begin

@@ -8,6 +8,7 @@ inherited frmCadLivro: TfrmCadLivro
   TextHeight = 14
   inherited pgcPrincipal: TPageControl
     Width = 823
+    ActivePage = TabManutencao
     Font.Charset = ANSI_CHARSET
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
