@@ -3,6 +3,7 @@ inherited frmCadLivro: TfrmCadLivro
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
+    ActivePage = TabManutencao
     inherited TabListagem: TTabSheet
       inherited Listagem: TPanel
         object btnExportarCSV: TBitBtn [1]
@@ -11,7 +12,7 @@ inherited frmCadLivro: TfrmCadLivro
           Width = 75
           Height = 25
           Caption = '&EXPORTAR'
-          TabOrder = 0
+          TabOrder = 2
           OnClick = btnExportarCSVClick
         end
         object btnImportarXLSX: TBitBtn [2]
@@ -20,14 +21,8 @@ inherited frmCadLivro: TfrmCadLivro
           Width = 75
           Height = 25
           Caption = '&IMPORTAR'
-          TabOrder = 1
-          OnClick = btnImportarXLSXClick
-        end
-        inherited mskPesquisar: TMaskEdit
-          TabOrder = 2
-        end
-        inherited btnPesquisar: TBitBtn
           TabOrder = 3
+          OnClick = btnImportarXLSXClick
         end
       end
       inherited grdListagem: TDBGrid
@@ -66,6 +61,7 @@ inherited frmCadLivro: TfrmCadLivro
     end
     inherited TabManutencao: TTabSheet
       object edtLivroId: TLabeledEdit
+        Tag = 1
         Left = 25
         Top = 40
         Width = 72
@@ -73,6 +69,8 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Width = 49
         EditLabel.Height = 13
         EditLabel.Caption = 'edtLivroId'
+        Enabled = False
+        NumbersOnly = True
         TabOrder = 0
       end
       object edtTitulo: TLabeledEdit
@@ -93,7 +91,8 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Width = 43
         EditLabel.Height = 13
         EditLabel.Caption = 'edtAutor'
-        TabOrder = 2
+        MaxLength = 255
+        TabOrder = 3
       end
       object edtGenero: TLabeledEdit
         Left = 346
@@ -103,7 +102,8 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Width = 51
         EditLabel.Height = 13
         EditLabel.Caption = 'edtGenero'
-        TabOrder = 3
+        MaxLength = 100
+        TabOrder = 4
       end
       object edtAnoPub: TLabeledEdit
         Left = 458
@@ -113,7 +113,9 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Width = 53
         EditLabel.Height = 13
         EditLabel.Caption = 'edtAnoPub'
-        TabOrder = 4
+        MaxLength = 255
+        NumbersOnly = True
+        TabOrder = 2
       end
       object edtResumo: TLabeledEdit
         Left = 130
