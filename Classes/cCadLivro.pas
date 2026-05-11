@@ -91,7 +91,7 @@ begin
   try
     FDQ.Connection := dtmPrincipalDB;
     // FORÇANDO O BANCO BIBLIOTECA
-    FDQ.SQL.Add('UPDATE BIBLIOTECA.dbo.livros SET titulo = :titulo, autor = :autor, ');
+    FDQ.SQL.Add('UPDATE BIBLIOTECA.dbo.livros SET titulo = :titulo, autor = :autor, editora = :editora, ');
     FDQ.SQL.Add('genero = :genero, ano_de_publicacao = :ano, resumo = :resumo WHERE id = :id');
 
     FDQ.ParamByName('id').AsInteger      := F_livroId;

@@ -14,7 +14,6 @@ inherited frmCadLivro: TfrmCadLivro
       inherited grdListagem: TDBGrid
         Width = 815
         Height = 151
-        TitleFont.Style = [fsBold]
         Columns = <
           item
             Expanded = False
@@ -1732,7 +1731,6 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 36
         Width = 72
         Height = 23
-        Color = clMaroon
         EditLabel.Width = 42
         EditLabel.Height = 15
         EditLabel.Caption = 'C'#243'digo:'
@@ -1745,7 +1743,6 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 36
         Width = 272
         Height = 23
-        Color = clMaroon
         EditLabel.Width = 37
         EditLabel.Height = 15
         EditLabel.Caption = 'T'#237'tulo:'
@@ -1756,7 +1753,6 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 78
         Width = 227
         Height = 23
-        Color = clMaroon
         EditLabel.Width = 36
         EditLabel.Height = 15
         EditLabel.Caption = 'Autor:'
@@ -1768,7 +1764,6 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 78
         Width = 184
         Height = 23
-        Color = clMaroon
         EditLabel.Width = 44
         EditLabel.Height = 15
         EditLabel.Caption = 'G'#234'nero:'
@@ -1780,7 +1775,6 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 36
         Width = 72
         Height = 23
-        Color = clMaroon
         EditLabel.Width = 103
         EditLabel.Height = 15
         EditLabel.Caption = 'Ano de Publica'#231#227'o:'
@@ -1799,7 +1793,6 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 159
         Width = 322
         Height = 66
-        Color = clMaroon
         EditLabel.Width = 48
         EditLabel.Height = 15
         EditLabel.Caption = 'Resumo:'
@@ -1810,7 +1803,6 @@ inherited frmCadLivro: TfrmCadLivro
         Top = 121
         Width = 184
         Height = 23
-        Color = clMaroon
         EditLabel.Width = 43
         EditLabel.Height = 15
         EditLabel.Caption = 'Editora:'

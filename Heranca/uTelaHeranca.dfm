@@ -34,7 +34,7 @@ object Heranca: THeranca
     Top = 0
     Width = 761
     Height = 268
-    ActivePage = TabListagem
+    ActivePage = TabManutencao
     Align = alClient
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
