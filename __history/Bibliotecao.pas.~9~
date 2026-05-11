@@ -18,7 +18,6 @@ type
     img1: TImage;
     BitBtn1: TBitBtn;
     Label1: TLabel;
-    Image1: TImage;
     procedure FECHAR1Click(Sender: TObject);
     procedure LIVROS1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);

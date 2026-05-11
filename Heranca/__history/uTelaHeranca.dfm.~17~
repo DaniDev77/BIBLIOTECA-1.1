@@ -70,8 +70,6 @@ object Heranca: THeranca
         TitleFont.Height = -11
         TitleFont.Name = 'Times New Roman'
         TitleFont.Style = []
-        OnDblClick = grdListagemDblClick
-        OnKeyDown = grdListagemKeyDown
         OnTitleClick = grdListagemTitleClick
       end
       object Listagem: TPanel

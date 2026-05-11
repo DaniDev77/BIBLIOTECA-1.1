@@ -4,8 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, Vcl.Imaging.pngimage, Vcl.Imaging.jpeg, Vcl.ExtCtrls, Vcl.StdCtrls,
-  Vcl.Buttons;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, Vcl.Imaging.pngimage, Vcl.Imaging.jpeg, Vcl.ExtCtrls;
 
 type
   TMenuPrincipal = class(TForm)
@@ -15,14 +14,14 @@ type
     N1: TMenuItem;
     FECHAR1: TMenuItem;
     Panel1: TPanel;
-    img1: TImage;
-    BitBtn1: TBitBtn;
-    Label1: TLabel;
     Image1: TImage;
+    Image2: TImage;
+    Image3: TImage;
+    Image4: TImage;
+    img1: TImage;
     procedure FECHAR1Click(Sender: TObject);
     procedure LIVROS1Click(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure BitBtn1Click(Sender: TObject); // Novo evento
+    procedure FormCreate(Sender: TObject); // Novo evento
   private
     { Private declarations }
   public
@@ -39,7 +38,6 @@ uses uCadLivro, uDTMConexao ;
 
 {$R *.dfm}
 
-
 procedure TMenuPrincipal.FECHAR1Click(Sender: TObject);
 begin
   Application.Terminate;
@@ -52,6 +50,7 @@ end;
 
 procedure TMenuPrincipal.LIVROS1Click(Sender: TObject);
 begin
+  begin
   // Cria o formulário de Cadastro de Livros
   frmCadLivro := TfrmCadLivro.Create(Self);
   try
@@ -63,17 +62,6 @@ begin
     frmCadLivro := nil;
   end;
 end;
-  procedure TMenuPrincipal.BitBtn1Click(Sender: TObject);
-begin
-      frmCadLivro := TfrmCadLivro.Create(Self);
-  try
-    // Abre a tela como Modal (impede mexer no menu enquanto ela estiver aberta)
-    frmCadLivro.ShowModal;
-  finally
-    // Libera a memória assim que fechar a tela
-    frmCadLivro.Release;
-    frmCadLivro := nil;
-  end;
 end;
 
 end.

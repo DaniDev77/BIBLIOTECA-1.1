@@ -10533,7 +10533,7 @@ object MenuPrincipal: TMenuPrincipal
       ParentFont = False
     end
     object img1: TImage
-      Left = 232
+      Left = 236
       Top = 28
       Width = 361
       Height = 265
@@ -12139,7 +12139,7 @@ object MenuPrincipal: TMenuPrincipal
         10044190A1F2FF03416475AD6CB8980D0000000049454E44AE426082}
     end
     object BitBtn1: TBitBtn
-      Left = 322
+      Left = 325
       Top = 292
       Width = 225
       Height = 49

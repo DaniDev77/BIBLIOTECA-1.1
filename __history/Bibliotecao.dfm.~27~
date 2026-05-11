@@ -10517,10 +10517,11 @@ object MenuPrincipal: TMenuPrincipal
       ShowHint = False
       Stretch = True
       ExplicitLeft = 2
+      ExplicitTop = 2
     end
     object Label1: TLabel
-      Left = 171
-      Top = 46
+      Left = 164
+      Top = 29
       Width = 563
       Height = 36
       Anchors = [akTop]
@@ -10533,8 +10534,8 @@ object MenuPrincipal: TMenuPrincipal
       ParentFont = False
     end
     object img1: TImage
-      Left = 232
-      Top = 28
+      Left = 239
+      Top = 1
       Width = 361
       Height = 265
       Anchors = [akTop, akBottom]
@@ -12139,8 +12140,8 @@ object MenuPrincipal: TMenuPrincipal
         10044190A1F2FF03416475AD6CB8980D0000000049454E44AE426082}
     end
     object BitBtn1: TBitBtn
-      Left = 322
-      Top = 292
+      Left = 342
+      Top = 272
       Width = 225
       Height = 49
       Anchors = [akTop]

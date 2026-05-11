@@ -42,7 +42,6 @@ type
     procedure mskPesquisarChange(Sender: TObject);
     procedure grdListagemTitleClick(Column: TColumn);
     procedure grdListagemKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure grdListagemDblClick(Sender: TObject);
 
   private
   SelectOriginal:string;
@@ -456,12 +455,7 @@ begin
 end;
                {$ENDREGION}
 
-{$REGION ' AREA DO FILDNAME e gride'}
-procedure THeranca.grdListagemDblClick(Sender: TObject);
-begin
-btnAlterar.Click;
-end;
-
+{$REGION ' AREA DO FILDNAME'}
 procedure THeranca.grdListagemKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
  BloqueiaCTRL_DEL_DBGrid(Key,Shift);

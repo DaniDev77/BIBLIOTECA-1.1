@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.ComCtrls,
-  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes, Vcl.Mask, Vcl.Imaging.pngimage;
+  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes, Vcl.Mask;
 
 type
   TfrmCadLivro = class(THeranca) // Certifique-se que o nome da classe pai está correto (THeranca ou TForm1)
@@ -27,9 +27,6 @@ type
     FDQListagemresumo: TMemoField;
     FDQListagemano_de_publicacao: TIntegerField;
     FDQListagemtitulo: TStringField;
-    FDQListagemeditora: TStringField;
-    edtEditora: TLabeledEdit;
-    Image1: TImage;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -80,7 +77,6 @@ begin
   oLivro.titulo         := edtTitulo.Text;
   oLivro.autor          := edtAutor.Text;
   oLivro.genero         := edtGenero.Text;
-  oLivro.editora        := edtEditora.Text;
   oLivro.resumo         := edtResumo.Text;
   oLivro.ano_publicacao := StrToIntDef(edtAnoPub.Text, 0);
 
@@ -101,12 +97,6 @@ begin
   begin
     MessageDlg('O gênero do livro é obrigatório!', mtWarning, [mbOK], 0);
     edtGenero.SetFocus;
-    Abort;
-  end
-   else if Trim(oLivro.editora) = '' then
-  begin
-    MessageDlg('A editora do livro é obrigatória!', mtWarning, [mbOK], 0);
-    edtEditora.SetFocus;
     Abort;
   end
   else if (oLivro.ano_publicacao <= 0) or (oLivro.ano_publicacao > 2100) then
@@ -174,7 +164,6 @@ begin
     edtTitulo.Text  := oLivro.titulo;
     edtAutor.Text   := oLivro.autor;
     edtGenero.Text  := oLivro.genero;
-    edtEditora.Text := oLivro.editora;
     edtAnoPub.Text  := IntToStr(oLivro.ano_publicacao);
     edtResumo.Text  := oLivro.resumo;
   end
@@ -206,7 +195,7 @@ begin
   Lista := TStringList.Create;
   try
     Lista.Add('sep=;');  // <- faz o Excel/WPS abrir corretamente
-    Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo;Editora');
+    Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo');
 
     ADataset.DisableControls;
     ADataset.First;
@@ -219,8 +208,7 @@ begin
           '"' + ADataset.FieldByName('autor').AsString       + '";' +
           '"' + ADataset.FieldByName('genero').AsString      + '";' +
           ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
-          '"' + ADataset.FieldByName('resumo').AsString      + '"'+
-           '"' + ADataset.FieldByName('editora').AsString      + '";' ;
+          '"' + ADataset.FieldByName('resumo').AsString      + '"';
 
         Lista.Add(Linha);
         ADataset.Next;
@@ -267,7 +255,7 @@ procedure TfrmCadLivro.ImportarExcel(AFileName: string);
 var
   Excel, Planilha: Variant;
   Linha: Integer;
-  Titulo, Autor, Genero,Editora ,Resumo: string;
+  Titulo, Autor, Genero, Resumo: string;
   Ano: Integer;
   QryConsulta: TFDQuery;
   CelVal: string;
@@ -302,19 +290,17 @@ begin
 
       if CelVal = '' then Break;
 
-      Titulo  := Trim(VarToStr(Planilha.Cells[Linha, 1].Value));
-      Autor   := Trim(VarToStr(Planilha.Cells[Linha, 2].Value));
-      Genero  := Trim(VarToStr(Planilha.Cells[Linha, 3].Value));
-      Resumo  := Trim(VarToStr(Planilha.Cells[Linha, 4].Value));
-      Ano     := StrToIntDef(VarToStr(Planilha.Cells[Linha, 5].Value), 0);
-      Editora := Trim(VarToStr(Planilha.Cells[Linha, 6].Value));
+      Titulo := Trim(VarToStr(Planilha.Cells[Linha, 1].Value));
+      Autor  := Trim(VarToStr(Planilha.Cells[Linha, 2].Value));
+      Genero := Trim(VarToStr(Planilha.Cells[Linha, 3].Value));
+      Resumo := Trim(VarToStr(Planilha.Cells[Linha, 4].Value));
+      Ano    := StrToIntDef(VarToStr(Planilha.Cells[Linha, 5].Value), 0);
 
       // DEBUG 4 - dados lidos corretamente?
       ShowMessage('Passo 4 - Dados:' + #13 +
                   'Titulo: ' + Titulo + #13 +
                   'Autor: '  + Autor  + #13 +
                   'Genero: ' + Genero + #13 +
-                  'Editora: ' + Editora + #13 +
                   'Ano: '    + IntToStr(Ano));
 
       if Titulo <> '' then
@@ -336,7 +322,6 @@ begin
           oLivro.genero         := Genero;
           oLivro.resumo         := Resumo;
           oLivro.ano_publicacao := Ano;
-          oLivro.editora        := Editora;
 
           if oLivro.Inserir then
           begin

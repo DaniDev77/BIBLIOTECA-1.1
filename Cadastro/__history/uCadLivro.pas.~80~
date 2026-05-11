@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.ComCtrls,
-  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes, Vcl.Mask, Vcl.Imaging.pngimage;
+  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes, Vcl.Mask;
 
 type
   TfrmCadLivro = class(THeranca) // Certifique-se que o nome da classe pai está correto (THeranca ou TForm1)
@@ -29,7 +29,6 @@ type
     FDQListagemtitulo: TStringField;
     FDQListagemeditora: TStringField;
     edtEditora: TLabeledEdit;
-    Image1: TImage;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -206,7 +205,7 @@ begin
   Lista := TStringList.Create;
   try
     Lista.Add('sep=;');  // <- faz o Excel/WPS abrir corretamente
-    Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo;Editora');
+    Lista.Add('ID;Titulo;Autor;Genero;Editora;Ano;Resumo');
 
     ADataset.DisableControls;
     ADataset.First;
@@ -219,7 +218,7 @@ begin
           '"' + ADataset.FieldByName('autor').AsString       + '";' +
           '"' + ADataset.FieldByName('genero').AsString      + '";' +
           ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
-          '"' + ADataset.FieldByName('resumo').AsString      + '"'+
+          +'"' + ADataset.FieldByName('resumo').AsString      + '"'+
            '"' + ADataset.FieldByName('editora').AsString      + '";' ;
 
         Lista.Add(Linha);
@@ -305,9 +304,9 @@ begin
       Titulo  := Trim(VarToStr(Planilha.Cells[Linha, 1].Value));
       Autor   := Trim(VarToStr(Planilha.Cells[Linha, 2].Value));
       Genero  := Trim(VarToStr(Planilha.Cells[Linha, 3].Value));
-      Resumo  := Trim(VarToStr(Planilha.Cells[Linha, 4].Value));
-      Ano     := StrToIntDef(VarToStr(Planilha.Cells[Linha, 5].Value), 0);
-      Editora := Trim(VarToStr(Planilha.Cells[Linha, 6].Value));
+      Editora := Trim(VarToStr(Planilha.Cells[Linha, 4].Value));
+      Resumo  := Trim(VarToStr(Planilha.Cells[Linha, 5].Value));
+      Ano     := StrToIntDef(VarToStr(Planilha.Cells[Linha, 6].Value), 0);
 
       // DEBUG 4 - dados lidos corretamente?
       ShowMessage('Passo 4 - Dados:' + #13 +
@@ -335,8 +334,8 @@ begin
           oLivro.autor          := Autor;
           oLivro.genero         := Genero;
           oLivro.resumo         := Resumo;
-          oLivro.ano_publicacao := Ano;
           oLivro.editora        := Editora;
+          oLivro.ano_publicacao := Ano;
 
           if oLivro.Inserir then
           begin

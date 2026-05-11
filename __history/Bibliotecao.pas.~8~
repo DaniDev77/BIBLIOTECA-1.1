@@ -15,10 +15,14 @@ type
     N1: TMenuItem;
     FECHAR1: TMenuItem;
     Panel1: TPanel;
+    Image1: TImage;
+    Image3: TImage;
+    Image4: TImage;
     img1: TImage;
     BitBtn1: TBitBtn;
+    Image2: TImage;
     Label1: TLabel;
-    Image1: TImage;
+    Image5: TImage;
     procedure FECHAR1Click(Sender: TObject);
     procedure LIVROS1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
