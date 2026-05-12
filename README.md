@@ -517,7 +517,7 @@ Projeto desenvolvido como atividade de estágio em 2026.
 ## Contato e Suporte
 
 Para dúvidas sobre o projeto:
-- 📧 Email: danidev77@example.com
+
 - 💻 GitHub: [@DaniDev77](https://github.com/DaniDev77)
 
 ---
