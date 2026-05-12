@@ -21,13 +21,6 @@ type
     btnExportarCSV: TBitBtn;
     OpenDialog1: TOpenDialog;
     btnImportarXLSX: TBitBtn;
-    FDQListagemid: TIntegerField;
-    FDQListagemautor: TStringField;
-    FDQListagemgenero: TStringField;
-    FDQListagemresumo: TMemoField;
-    FDQListagemano_de_publicacao: TIntegerField;
-    FDQListagemtitulo: TStringField;
-    FDQListagemeditora: TStringField;
     edtEditora: TLabeledEdit;
     Image1: TImage;
     procedure btnNovoClick(Sender: TObject);

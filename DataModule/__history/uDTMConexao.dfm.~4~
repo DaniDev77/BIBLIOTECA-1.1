@@ -5,9 +5,10 @@ object dtmPrincipal: TdtmPrincipal
   object dtmPrincipalDB: TFDConnection
     Params.Strings = (
       'Server=DC-TR-01-VM\SERVERCURSO'
-      'Database=BIBLIOTECA'
+      'Database=BIBLIOTECAteste'
       'OSAuthent=Yes'
       'DriverID=MSSQL')
+    Connected = True
     LoginPrompt = False
     Left = 104
     Top = 72

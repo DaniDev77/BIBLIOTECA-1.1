@@ -1,12 +1,12 @@
 inherited frmCadLivro: TfrmCadLivro
   Caption = 'frmCadLivro'
-  ClientWidth = 989
+  ClientWidth = 823
   Position = poScreenCenter
-  ExplicitWidth = 1005
+  ExplicitWidth = 839
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
-    Width = 989
+    Width = 823
     ActivePage = TabListagem
     Font.Style = [fsBold]
     ExplicitWidth = 823
@@ -14,7 +14,7 @@ inherited frmCadLivro: TfrmCadLivro
       ExplicitLeft = 4
       ExplicitWidth = 815
       inherited grdListagem: TDBGrid
-        Width = 981
+        Width = 815
         Height = 151
         TitleFont.Style = [fsBold]
         Columns = <
@@ -26,48 +26,36 @@ inherited frmCadLivro: TfrmCadLivro
           item
             Expanded = False
             FieldName = 'titulo'
-            Title.Caption = 'T'#237'tulo'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'autor'
-            Title.Caption = 'Autor'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'genero'
-            Title.Caption = 'G'#234'nero'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'editora'
-            Title.Caption = 'Editora'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'resumo'
-            Title.Caption = 'Resumo'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'ano_de_publicacao'
-            Title.Caption = 'Ano de Publica'#231#227'o'
-            Width = 100
             Visible = True
           end>
       end
       inherited Listagem: TPanel
-        Width = 981
+        Width = 815
         Color = 394831
         ParentBackground = False
         ExplicitWidth = 815
@@ -1869,7 +1857,7 @@ inherited frmCadLivro: TfrmCadLivro
     end
   end
   inherited Rodape: TPanel
-    Width = 989
+    Width = 823
     ExplicitWidth = 823
   end
   inherited FDQListagem: TFDQuery
@@ -1887,6 +1875,37 @@ inherited frmCadLivro: TfrmCadLivro
       ''
       'ORDER BY titulo')
     Top = 168
+    object FDQListagemid: TIntegerField
+      FieldName = 'id'
+      Required = True
+    end
+    object FDQListagemtitulo: TStringField
+      FieldName = 'titulo'
+      Required = True
+      Size = 255
+    end
+    object FDQListagemautor: TStringField
+      FieldName = 'autor'
+      Required = True
+      Size = 255
+    end
+    object FDQListagemgenero: TStringField
+      FieldName = 'genero'
+      Required = True
+      Size = 100
+    end
+    object FDQListagemeditora: TStringField
+      FieldName = 'editora'
+      Size = 255
+    end
+    object FDQListagemresumo: TMemoField
+      FieldName = 'resumo'
+      BlobType = ftMemo
+    end
+    object FDQListagemano_de_publicacao: TIntegerField
+      FieldName = 'ano_de_publicacao'
+      Required = True
+    end
   end
   object SaveDialog1: TSaveDialog
     Filter = '|*.csv'

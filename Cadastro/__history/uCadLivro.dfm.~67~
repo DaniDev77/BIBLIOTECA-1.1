@@ -20,49 +20,46 @@ inherited frmCadLivro: TfrmCadLivro
         Columns = <
           item
             Expanded = False
-            FieldName = 'id'
-            Visible = True
-          end
-          item
-            Expanded = False
             FieldName = 'titulo'
             Title.Caption = 'T'#237'tulo'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'autor'
             Title.Caption = 'Autor'
-            Width = 200
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'genero'
-            Title.Caption = 'G'#234'nero'
-            Width = 200
-            Visible = True
-          end
-          item
-            Expanded = False
-            FieldName = 'editora'
-            Title.Caption = 'Editora'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'resumo'
             Title.Caption = 'Resumo'
-            Width = 200
+            Width = 59
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'id'
+            Title.Caption = 'Id'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'genero'
+            Title.Caption = 'G'#234'nero'
+            Width = 147
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'editora'
+            Title.Caption = 'Editora'
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'ano_de_publicacao'
             Title.Caption = 'Ano de Publica'#231#227'o'
-            Width = 100
             Visible = True
           end>
       end
@@ -1887,6 +1884,37 @@ inherited frmCadLivro: TfrmCadLivro
       ''
       'ORDER BY titulo')
     Top = 168
+    object FDQListagemid: TIntegerField
+      FieldName = 'id'
+      Required = True
+    end
+    object FDQListagemtitulo: TStringField
+      FieldName = 'titulo'
+      Required = True
+      Size = 255
+    end
+    object FDQListagemautor: TStringField
+      FieldName = 'autor'
+      Required = True
+      Size = 255
+    end
+    object FDQListagemgenero: TStringField
+      FieldName = 'genero'
+      Required = True
+      Size = 100
+    end
+    object FDQListagemeditora: TStringField
+      FieldName = 'editora'
+      Size = 255
+    end
+    object FDQListagemresumo: TMemoField
+      FieldName = 'resumo'
+      BlobType = ftMemo
+    end
+    object FDQListagemano_de_publicacao: TIntegerField
+      FieldName = 'ano_de_publicacao'
+      Required = True
+    end
   end
   object SaveDialog1: TSaveDialog
     Filter = '|*.csv'

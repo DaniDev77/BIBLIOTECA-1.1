@@ -18,6 +18,7 @@ type
     F_genero: string;
     F_anoPublicacao: Integer;
     F_resumo: string;
+    F_editora: string;
   public
     constructor Create(aConexao: TFDConnection);
     destructor Destroy; override;
@@ -30,6 +31,7 @@ type
     property titulo: string          read F_titulo         write F_titulo;
     property autor: string           read F_autor          write F_autor;
     property genero: string          read F_genero         write F_genero;
+    property editora: string         read F_editora        write F_editora;
     property ano_publicacao: Integer read F_anoPublicacao  write F_anoPublicacao;
     property resumo: string          read F_resumo         write F_resumo;
   end;
@@ -89,13 +91,14 @@ begin
   try
     FDQ.Connection := dtmPrincipalDB;
     // FORÇANDO O BANCO BIBLIOTECA
-    FDQ.SQL.Add('UPDATE BIBLIOTECA.dbo.livros SET titulo = :titulo, autor = :autor, ');
+    FDQ.SQL.Add('UPDATE BIBLIOTECA.dbo.livros SET titulo = :titulo, autor = :autor, editora = :editora, ');
     FDQ.SQL.Add('genero = :genero, ano_de_publicacao = :ano, resumo = :resumo WHERE id = :id');
 
     FDQ.ParamByName('id').AsInteger      := F_livroId;
     FDQ.ParamByName('titulo').AsString   := F_titulo;
     FDQ.ParamByName('autor').AsString    := F_autor;
     FDQ.ParamByName('genero').AsString   := F_genero;
+    FDQ.ParamByName('editora').AsString   := F_editora;
     FDQ.ParamByName('ano').AsInteger     := F_anoPublicacao;
     FDQ.ParamByName('resumo').AsString   := F_resumo;
 
@@ -125,43 +128,38 @@ begin
   FDQ := TFDQuery.Create(nil);
   try
     FDQ.Connection := dtmPrincipalDB;
-
-    // 1. ADICIONADO ACENTOS EM [título] e [gênero]
-    // 2. ADICIONADO SELECT SCOPE_IDENTITY PARA O OPEN FUNCIONAR
-    FDQ.SQL.Add('INSERT INTO BIBLIOTECA.dbo.livros ([título], [autor], [gênero], [resumo], [ano_de_publicacao]) ');
-    FDQ.SQL.Add('VALUES (:titulo, :autor, :genero, :resumo, :ano);');
-    FDQ.SQL.Add('SELECT SCOPE_IDENTITY() AS ID_GERADO;');
+  FDQ.SQL.Add('INSERT INTO BIBLIOTECA.dbo.livros (id, titulo, autor, genero,editora,resumo, ano_de_publicacao) ');
+  FDQ.SQL.Add('VALUES ((SELECT ISNULL(MAX(id),0)+1 FROM BIBLIOTECA.dbo.livros), :titulo, :autor, :genero,:editora ,:resumo, :ano);');
+  FDQ.SQL.Add('SELECT SCOPE_IDENTITY() AS ID_GERADO;');
 
     FDQ.ParamByName('titulo').AsString := F_titulo;
     FDQ.ParamByName('autor').AsString  := F_autor;
     FDQ.ParamByName('genero').AsString := F_genero;
+    FDQ.ParamByName('editora').AsString := F_editora;
     FDQ.ParamByName('resumo').AsString := F_resumo;
     FDQ.ParamByName('ano').AsInteger   := F_anoPublicacao;
 
     try
       if not dtmPrincipalDB.InTransaction then dtmPrincipalDB.StartTransaction;
-
-      // Usamos Open porque o SQL agora retorna uma tabela com o ID_GERADO
       FDQ.Open;
-
       if not FDQ.IsEmpty then
         Self.F_livroId := FDQ.FieldByName('ID_GERADO').AsInteger;
-
       dtmPrincipalDB.Commit;
       Result := True;
     except
-      on E: Exception do begin
+      on E: Exception do
+      begin
         if dtmPrincipalDB.InTransaction then dtmPrincipalDB.Rollback;
-        //('ERRO AO GRAVAR: ' + E.Message);
-        Result := true;
+        ShowMessage('ERRO AO GRAVAR: ' + E.Message);
+        Result := False;
       end;
     end;
   finally
     FDQ.Free;
   end;
 end;
-
 {$ENDREGION}
+
 
 {$REGION 'Selecionar'}
 function TLivro.Selecionar(id: Integer): Boolean;
@@ -181,6 +179,7 @@ begin
       F_titulo        := FDQ.FieldByName('titulo').AsString;
       F_autor         := FDQ.FieldByName('autor').AsString;
       F_genero        := FDQ.FieldByName('genero').AsString;
+      F_editora       := FDQ.FieldByName('editora').AsString;
       F_anoPublicacao := FDQ.FieldByName('ano_de_publicacao').AsInteger;
       F_resumo        := FDQ.FieldByName('resumo').AsString;
     end;

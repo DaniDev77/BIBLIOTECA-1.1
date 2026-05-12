@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.ComCtrls,
-  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes, Vcl.Mask;
+  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes, Vcl.Mask, Vcl.Imaging.pngimage;
 
 type
   TfrmCadLivro = class(THeranca) // Certifique-se que o nome da classe pai está correto (THeranca ou TForm1)
@@ -21,14 +21,15 @@ type
     btnExportarCSV: TBitBtn;
     OpenDialog1: TOpenDialog;
     btnImportarXLSX: TBitBtn;
+    edtEditora: TLabeledEdit;
+    Image1: TImage;
     FDQListagemid: TIntegerField;
+    FDQListagemtitulo: TStringField;
     FDQListagemautor: TStringField;
     FDQListagemgenero: TStringField;
-    FDQListagemresumo: TMemoField;
-    FDQListagemano_de_publicacao: TIntegerField;
-    FDQListagemtitulo: TStringField;
     FDQListagemeditora: TStringField;
-    edtEditora: TLabeledEdit;
+    FDQListagemresumo: TMemoField;
+    FDQListagemano_publicacao: TIntegerField;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -36,6 +37,8 @@ type
     procedure btnFecharClick(Sender: TObject);
     procedure btnExportarCSVClick(Sender: TObject);
     procedure btnImportarXLSXClick(Sender: TObject);
+   
+   
   private
     { Private declarations }
     oLivro: TLivro;
@@ -162,6 +165,11 @@ begin
   inherited;
   edtTitulo.SetFocus;
 end;
+
+
+
+
+
 
 procedure TfrmCadLivro.btnAlterarClick(Sender: TObject);
 begin
@@ -363,6 +371,10 @@ begin
     QryConsulta.Free;
   end;
 end;
+
+
+
+
 // Botão de importar limpo, sem ShowMessage duplicado:
 procedure TfrmCadLivro.btnImportarXLSXClick(Sender: TObject);
 begin

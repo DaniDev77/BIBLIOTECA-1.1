@@ -1,20 +1,18 @@
 inherited frmCadLivro: TfrmCadLivro
   Caption = 'frmCadLivro'
-  ClientWidth = 989
+  ClientWidth = 823
   Position = poScreenCenter
-  ExplicitWidth = 1005
+  ExplicitWidth = 839
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
-    Width = 989
+    Width = 823
     ActivePage = TabListagem
     Font.Style = [fsBold]
     ExplicitWidth = 823
     inherited TabListagem: TTabSheet
-      ExplicitLeft = 4
-      ExplicitWidth = 815
       inherited grdListagem: TDBGrid
-        Width = 981
+        Width = 815
         Height = 151
         TitleFont.Style = [fsBold]
         Columns = <
@@ -26,48 +24,36 @@ inherited frmCadLivro: TfrmCadLivro
           item
             Expanded = False
             FieldName = 'titulo'
-            Title.Caption = 'T'#237'tulo'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'autor'
-            Title.Caption = 'Autor'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'genero'
-            Title.Caption = 'G'#234'nero'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'editora'
-            Title.Caption = 'Editora'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'resumo'
-            Title.Caption = 'Resumo'
-            Width = 200
             Visible = True
           end
           item
             Expanded = False
-            FieldName = 'ano_de_publicacao'
-            Title.Caption = 'Ano de Publica'#231#227'o'
-            Width = 100
+            FieldName = 'ano_publicacao'
             Visible = True
           end>
       end
       inherited Listagem: TPanel
-        Width = 981
+        Width = 815
         Color = 394831
         ParentBackground = False
         ExplicitWidth = 815
@@ -1721,11 +1707,11 @@ inherited frmCadLivro: TfrmCadLivro
           Left = 14
           Top = 41
           Width = 178
-          Height = 21
+          Height = 26
           ExplicitLeft = 14
           ExplicitTop = 41
           ExplicitWidth = 178
-          ExplicitHeight = 21
+          ExplicitHeight = 26
         end
         inherited btnPesquisar: TBitBtn
           Top = 33
@@ -1737,7 +1723,7 @@ inherited frmCadLivro: TfrmCadLivro
       Font.Height = -13
       Font.Style = [fsBold]
       ParentFont = False
-      ExplicitLeft = 4
+      ExplicitTop = 22
       ExplicitWidth = 815
       object edtLivroId: TLabeledEdit
         Tag = 1
@@ -1869,11 +1855,10 @@ inherited frmCadLivro: TfrmCadLivro
     end
   end
   inherited Rodape: TPanel
-    Width = 989
+    Width = 823
     ExplicitWidth = 823
   end
   inherited FDQListagem: TFDQuery
-    Active = True
     SQL.Strings = (
       ' SELECT '
       '  id,'
@@ -1882,11 +1867,51 @@ inherited frmCadLivro: TfrmCadLivro
       '  genero,'
       '  editora,'
       '  resumo, '
-      '  ano_de_publicacao'
-      'FROM BIBLIOTECA.dbo.livros'
+      '  ano_publicacao'
+      'FROM BIBLIOTECAteste.dbo.livros'
       ''
       'ORDER BY titulo')
     Top = 168
+    object FDQListagemid: TIntegerField
+      FieldName = 'id'
+      Origin = 'id'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object FDQListagemtitulo: TStringField
+      FieldName = 'titulo'
+      Origin = 'titulo'
+      Required = True
+      Size = 255
+    end
+    object FDQListagemautor: TStringField
+      FieldName = 'autor'
+      Origin = 'autor'
+      Required = True
+      Size = 255
+    end
+    object FDQListagemgenero: TStringField
+      FieldName = 'genero'
+      Origin = 'genero'
+      Required = True
+      Size = 100
+    end
+    object FDQListagemeditora: TStringField
+      FieldName = 'editora'
+      Origin = 'editora'
+      Required = True
+      Size = 255
+    end
+    object FDQListagemresumo: TMemoField
+      FieldName = 'resumo'
+      Origin = 'resumo'
+      BlobType = ftMemo
+    end
+    object FDQListagemano_publicacao: TIntegerField
+      FieldName = 'ano_publicacao'
+      Origin = 'ano_publicacao'
+      Required = True
+    end
   end
   object SaveDialog1: TSaveDialog
     Filter = '|*.csv'

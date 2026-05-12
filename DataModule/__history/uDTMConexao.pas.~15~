@@ -12,8 +12,8 @@ type
     dtmPrincipalDB: TFDConnection;
   private
     procedure DataModuleCreate(Sender: TObject);
-   // procedure ConfigurarConexaoDinamicamente;
-   // procedure ConfigurarBancoInicial;
+    procedure ConfigurarConexaoDinamicamente;
+    procedure ConfigurarBancoInicial;
     { Private declarations }
   public
     { Public declarations }
