@@ -37,6 +37,8 @@ type
     procedure btnFecharClick(Sender: TObject);
     procedure btnExportarCSVClick(Sender: TObject);
     procedure btnImportarXLSXClick(Sender: TObject);
+   
+   
   private
     { Private declarations }
     oLivro: TLivro;
@@ -163,6 +165,11 @@ begin
   inherited;
   edtTitulo.SetFocus;
 end;
+
+
+
+
+
 
 procedure TfrmCadLivro.btnAlterarClick(Sender: TObject);
 begin
@@ -364,6 +371,10 @@ begin
     QryConsulta.Free;
   end;
 end;
+
+
+
+
 // Botão de importar limpo, sem ShowMessage duplicado:
 procedure TfrmCadLivro.btnImportarXLSXClick(Sender: TObject);
 begin

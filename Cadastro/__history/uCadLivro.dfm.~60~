@@ -1749,6 +1749,7 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Height = 15
         EditLabel.Caption = 'T'#237'tulo:'
         TabOrder = 1
+        OnChange = edtTituloChange
       end
       object edtAutor: TLabeledEdit
         Left = 126
@@ -1779,6 +1780,7 @@ inherited frmCadLivro: TfrmCadLivro
         MaxLength = 100
         ParentFont = False
         TabOrder = 4
+        OnChange = edtGeneroChange
       end
       object edtAnoPub: TLabeledEdit
         Left = 551
@@ -1798,6 +1800,7 @@ inherited frmCadLivro: TfrmCadLivro
         NumbersOnly = True
         ParentFont = False
         TabOrder = 2
+        OnChange = edtAnoPubChange
       end
       object edtResumo: TLabeledEdit
         Left = 222

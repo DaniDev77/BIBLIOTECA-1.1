@@ -7,6 +7,7 @@ inherited frmCadLivro: TfrmCadLivro
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
     Width = 823
+    ActivePage = TabListagem
     Font.Style = [fsBold]
     ExplicitWidth = 823
     inherited TabListagem: TTabSheet
@@ -1740,8 +1741,8 @@ inherited frmCadLivro: TfrmCadLivro
         TabOrder = 0
       end
       object edtTitulo: TLabeledEdit
-        Left = 258
-        Top = 29
+        Left = 251
+        Top = 36
         Width = 272
         Height = 23
         Color = clMaroon
@@ -1771,13 +1772,7 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Width = 44
         EditLabel.Height = 15
         EditLabel.Caption = 'G'#234'nero:'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
-        Font.Height = -13
-        Font.Name = 'Times New Roman'
-        Font.Style = [fsBold]
         MaxLength = 100
-        ParentFont = False
         TabOrder = 4
       end
       object edtAnoPub: TLabeledEdit
@@ -1790,7 +1785,7 @@ inherited frmCadLivro: TfrmCadLivro
         EditLabel.Height = 15
         EditLabel.Caption = 'Ano de Publica'#231#227'o:'
         Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
+        Font.Color = clWindowText
         Font.Height = -13
         Font.Name = 'Times New Roman'
         Font.Style = [fsBold]
