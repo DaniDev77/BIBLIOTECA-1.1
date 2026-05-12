@@ -40,7 +40,7 @@ CREATE TABLE livros (
     titulo VARCHAR(255) NOT NULL,
     autor VARCHAR(255) NOT NULL,
     genero VARCHAR(100) NOT NULL,
-    ano_publicacao INTEGER NOT NULL,
+    ano_de_publicacao INTEGER NOT NULL,
     resumo TEXT,
     editora VARCHAR(255) NOT NULL,
     
