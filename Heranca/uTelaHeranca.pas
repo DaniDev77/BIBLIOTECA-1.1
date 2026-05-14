@@ -366,7 +366,7 @@ begin
     ControlarBotoes(btnNovo, btnAlterar, btnCancelar ,
             btnGravar, btnApagar,pgcPrincipal,True);
     ControlarIndiceTab( pgcPrincipal,0);
-
+    LimparEdits;
    FDQListagem.Refresh;
     end
     else    begin
@@ -405,6 +405,7 @@ try
                  btnGravar, btnApagar,pgcPrincipal,true);
   ControlarIndiceTab( pgcPrincipal,0);
    EstadoDoCadastro:=ecNenhum;
+   LimparEdits;
    FDQListagem.Refresh;
   end
   else begin

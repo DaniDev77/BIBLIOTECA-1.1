@@ -7,12 +7,11 @@ inherited frmCadLivro: TfrmCadLivro
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
     Width = 989
-    ActivePage = TabListagem
     Font.Style = [fsBold]
-    ExplicitWidth = 823
+    ExplicitWidth = 989
     inherited TabListagem: TTabSheet
       ExplicitLeft = 4
-      ExplicitWidth = 815
+      ExplicitWidth = 981
       inherited grdListagem: TDBGrid
         Width = 981
         Height = 151
@@ -70,7 +69,7 @@ inherited frmCadLivro: TfrmCadLivro
         Width = 981
         Color = 394831
         ParentBackground = False
-        ExplicitWidth = 815
+        ExplicitWidth = 981
         inherited lblIndice: TLabel
           Top = 8
           Width = 174
@@ -1738,139 +1737,189 @@ inherited frmCadLivro: TfrmCadLivro
       Font.Style = [fsBold]
       ParentFont = False
       ExplicitLeft = 4
-      ExplicitWidth = 815
-      object edtLivroId: TLabeledEdit
-        Tag = 1
-        Left = 126
-        Top = 36
-        Width = 72
-        Height = 23
+      ExplicitWidth = 981
+      object Panel1: TPanel
+        Left = 0
+        Top = 0
+        Width = 981
+        Height = 240
+        Align = alClient
         Color = clMaroon
-        EditLabel.Width = 42
-        EditLabel.Height = 15
-        EditLabel.Caption = 'C'#243'digo:'
-        Enabled = False
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
-        Font.Height = -13
-        Font.Name = 'Times New Roman'
-        Font.Style = [fsBold]
-        NumbersOnly = True
-        ParentFont = False
+        ParentBackground = False
         TabOrder = 0
-      end
-      object edtTitulo: TLabeledEdit
-        Left = 258
-        Top = 29
-        Width = 272
-        Height = 23
-        Color = clMaroon
-        EditLabel.Width = 37
-        EditLabel.Height = 15
-        EditLabel.Caption = 'T'#237'tulo:'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
-        Font.Height = -13
-        Font.Name = 'Times New Roman'
-        Font.Style = [fsBold]
-        ParentFont = False
-        TabOrder = 1
-      end
-      object edtAutor: TLabeledEdit
-        Left = 126
-        Top = 78
-        Width = 227
-        Height = 23
-        Color = clMaroon
-        EditLabel.Width = 36
-        EditLabel.Height = 15
-        EditLabel.Caption = 'Autor:'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
-        Font.Height = -13
-        Font.Name = 'Times New Roman'
-        Font.Style = [fsBold]
-        MaxLength = 255
-        ParentFont = False
-        TabOrder = 3
-      end
-      object edtGenero: TLabeledEdit
-        Left = 439
-        Top = 78
-        Width = 184
-        Height = 23
-        Color = clMaroon
-        EditLabel.Width = 44
-        EditLabel.Height = 15
-        EditLabel.Caption = 'G'#234'nero:'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
-        Font.Height = -13
-        Font.Name = 'Times New Roman'
-        Font.Style = [fsBold]
-        MaxLength = 100
-        ParentFont = False
-        TabOrder = 4
-      end
-      object edtAnoPub: TLabeledEdit
-        Left = 551
-        Top = 36
-        Width = 72
-        Height = 23
-        Color = clMaroon
-        EditLabel.Width = 103
-        EditLabel.Height = 15
-        EditLabel.Caption = 'Ano de Publica'#231#227'o:'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
-        Font.Height = -13
-        Font.Name = 'Times New Roman'
-        Font.Style = [fsBold]
-        MaxLength = 255
-        NumbersOnly = True
-        ParentFont = False
-        TabOrder = 2
-      end
-      object edtResumo: TLabeledEdit
-        Left = 222
-        Top = 159
-        Width = 322
-        Height = 23
-        Color = clMaroon
-        EditLabel.Width = 48
-        EditLabel.Height = 15
-        EditLabel.Caption = 'Resumo:'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
-        Font.Height = -13
-        Font.Name = 'Times New Roman'
-        Font.Style = [fsBold]
-        ParentFont = False
-        TabOrder = 6
-      end
-      object edtEditora: TLabeledEdit
-        Left = 303
-        Top = 121
-        Width = 184
-        Height = 23
-        Color = clMaroon
-        EditLabel.Width = 43
-        EditLabel.Height = 15
-        EditLabel.Caption = 'Editora:'
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWhite
-        Font.Height = -13
-        Font.Name = 'Times New Roman'
-        Font.Style = [fsBold]
-        MaxLength = 100
-        ParentFont = False
-        TabOrder = 5
+        ExplicitLeft = 248
+        ExplicitTop = 64
+        ExplicitWidth = 185
+        ExplicitHeight = 41
+        object edtLivroId: TLabeledEdit
+          Tag = 1
+          Left = 126
+          Top = 29
+          Width = 72
+          Height = 23
+          Color = clWhite
+          EditLabel.Width = 42
+          EditLabel.Height = 15
+          EditLabel.Caption = 'C'#243'digo:'
+          Enabled = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Times New Roman'
+          Font.Style = [fsBold]
+          NumbersOnly = True
+          ParentFont = False
+          TabOrder = 0
+        end
+        object edtTitulo: TLabeledEdit
+          Left = 258
+          Top = 29
+          Width = 272
+          Height = 23
+          Color = clWhite
+          EditLabel.Width = 37
+          EditLabel.Height = 15
+          EditLabel.Caption = 'T'#237'tulo:'
+          EditLabel.Font.Charset = ANSI_CHARSET
+          EditLabel.Font.Color = clWhite
+          EditLabel.Font.Height = -13
+          EditLabel.Font.Name = 'Times New Roman'
+          EditLabel.Font.Style = [fsBold]
+          EditLabel.ParentFont = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Times New Roman'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+        end
+        object edtAutor: TLabeledEdit
+          Left = 126
+          Top = 78
+          Width = 227
+          Height = 23
+          Color = clWhite
+          EditLabel.Width = 36
+          EditLabel.Height = 15
+          EditLabel.Caption = 'Autor:'
+          EditLabel.Font.Charset = ANSI_CHARSET
+          EditLabel.Font.Color = clWhite
+          EditLabel.Font.Height = -13
+          EditLabel.Font.Name = 'Times New Roman'
+          EditLabel.Font.Style = [fsBold]
+          EditLabel.ParentFont = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Times New Roman'
+          Font.Style = [fsBold]
+          MaxLength = 255
+          ParentFont = False
+          TabOrder = 2
+        end
+        object edtGenero: TLabeledEdit
+          Left = 439
+          Top = 78
+          Width = 184
+          Height = 23
+          Color = clWhite
+          EditLabel.Width = 44
+          EditLabel.Height = 15
+          EditLabel.Caption = 'G'#234'nero:'
+          EditLabel.Font.Charset = ANSI_CHARSET
+          EditLabel.Font.Color = clWhite
+          EditLabel.Font.Height = -13
+          EditLabel.Font.Name = 'Times New Roman'
+          EditLabel.Font.Style = [fsBold]
+          EditLabel.ParentFont = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Times New Roman'
+          Font.Style = [fsBold]
+          MaxLength = 100
+          ParentFont = False
+          TabOrder = 3
+        end
+        object edtAnoPub: TLabeledEdit
+          Left = 551
+          Top = 36
+          Width = 72
+          Height = 23
+          Color = clWhite
+          EditLabel.Width = 103
+          EditLabel.Height = 15
+          EditLabel.Caption = 'Ano de Publica'#231#227'o:'
+          EditLabel.Font.Charset = ANSI_CHARSET
+          EditLabel.Font.Color = clWhite
+          EditLabel.Font.Height = -13
+          EditLabel.Font.Name = 'Times New Roman'
+          EditLabel.Font.Style = [fsBold]
+          EditLabel.ParentFont = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Times New Roman'
+          Font.Style = [fsBold]
+          MaxLength = 255
+          NumbersOnly = True
+          ParentFont = False
+          TabOrder = 4
+        end
+        object edtResumo: TLabeledEdit
+          Left = 222
+          Top = 159
+          Width = 322
+          Height = 23
+          Color = clWhite
+          EditLabel.Width = 48
+          EditLabel.Height = 15
+          EditLabel.Caption = 'Resumo:'
+          EditLabel.Font.Charset = ANSI_CHARSET
+          EditLabel.Font.Color = clWhite
+          EditLabel.Font.Height = -13
+          EditLabel.Font.Name = 'Times New Roman'
+          EditLabel.Font.Style = [fsBold]
+          EditLabel.ParentFont = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Times New Roman'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 5
+        end
+        object edtEditora: TLabeledEdit
+          Left = 303
+          Top = 121
+          Width = 184
+          Height = 23
+          Color = clWhite
+          EditLabel.Width = 43
+          EditLabel.Height = 15
+          EditLabel.Caption = 'Editora:'
+          EditLabel.Font.Charset = ANSI_CHARSET
+          EditLabel.Font.Color = clWhite
+          EditLabel.Font.Height = -13
+          EditLabel.Font.Name = 'Times New Roman'
+          EditLabel.Font.Style = [fsBold]
+          EditLabel.ParentFont = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Times New Roman'
+          Font.Style = [fsBold]
+          MaxLength = 100
+          ParentFont = False
+          TabOrder = 6
+        end
       end
     end
   end
   inherited Rodape: TPanel
     Width = 989
-    ExplicitWidth = 823
+    ExplicitWidth = 989
   end
   inherited FDQListagem: TFDQuery
     Active = True

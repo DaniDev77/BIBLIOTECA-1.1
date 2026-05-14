@@ -10,19 +10,20 @@ uses
   cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes, Vcl.Mask, Vcl.Imaging.pngimage;
 
 type
-  TfrmCadLivro = class(THeranca) // Certifique-se que o nome da classe pai está correto (THeranca ou TForm1)
+  TfrmCadLivro = class(THeranca)
+    SaveDialog1: TSaveDialog;
+    btnExportarCSV: TBitBtn;
+    OpenDialog1: TOpenDialog;
+    btnImportarXLSX: TBitBtn;
+    Image1: TImage;
+    Panel1: TPanel;
     edtLivroId: TLabeledEdit;
     edtTitulo: TLabeledEdit;
     edtAutor: TLabeledEdit;
     edtGenero: TLabeledEdit;
     edtAnoPub: TLabeledEdit;
     edtResumo: TLabeledEdit;
-    SaveDialog1: TSaveDialog;
-    btnExportarCSV: TBitBtn;
-    OpenDialog1: TOpenDialog;
-    btnImportarXLSX: TBitBtn;
     edtEditora: TLabeledEdit;
-    Image1: TImage;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);

@@ -19,8 +19,8 @@ object Heranca: THeranca
   object Label1: TLabel
     Left = 93
     Top = 52
-    Width = 130
-    Height = 34
+    Width = 149
+    Height = 21
     Caption = 'Campo de Pesquisa'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -34,7 +34,7 @@ object Heranca: THeranca
     Top = 0
     Width = 761
     Height = 268
-    ActivePage = TabManutencao
+    ActivePage = TabListagem
     Align = alClient
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -45,9 +45,6 @@ object Heranca: THeranca
     TabOrder = 0
     object TabListagem: TTabSheet
       Caption = 'Listagem'
-      ExplicitTop = 24
-      ExplicitWidth = 645
-      ExplicitHeight = 240
       object grdListagem: TDBGrid
         Left = 0
         Top = 89
@@ -98,7 +95,7 @@ object Heranca: THeranca
           Left = 16
           Top = 30
           Width = 177
-          Height = 31
+          Height = 22
           TabOrder = 0
           Text = ''
           OnChange = mskPesquisarChange
@@ -123,9 +120,8 @@ object Heranca: THeranca
     object TabManutencao: TTabSheet
       Caption = 'Manuten'#231#227'o'
       ImageIndex = 1
-      ExplicitTop = 24
-      ExplicitWidth = 645
-      ExplicitHeight = 240
+      ExplicitLeft = -20
+      ExplicitTop = 23
     end
   end
   object Rodape: TPanel
@@ -135,7 +131,6 @@ object Heranca: THeranca
     Height = 61
     Align = alBottom
     TabOrder = 1
-    ExplicitWidth = 653
     object btnNovo: TBitBtn
       Left = 12
       Top = 19
