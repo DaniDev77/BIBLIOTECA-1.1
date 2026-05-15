@@ -32,9 +32,14 @@ O projeto implementa um **Sistema de Biblioteca de Livros** com importação de 
 
 ### 🚀 Passo 1: Preparar o Banco de Dados
 
-Execute o script SQL fornecido no caminho `ScriptSQL/Script SQL para criar tabela.txt`:
+1. Abra o **SQL Server Management Studio**
+2.Execute o script abaixo no contexto do banco `master` selecione um scrpt por vez e aperte F5 na ordem que esta abaixo  :
 
 ```sql
+create database BIBLIOTECA
+ 
+use BIBLIOTECA
+
 CREATE TABLE livros (
     id INTEGER PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
@@ -48,12 +53,6 @@ CREATE TABLE livros (
     CONSTRAINT uq_titulo_autor UNIQUE (titulo, autor)
 );
 ```
-
-**Passos:**
-1. Abra o **SQL Server Management Studio**
-2. Crie um novo banco de dados chamado `BIBLIOTECA`
-3. Execute o script acima no contexto do banco `BIBLIOTECA`
-
 ### 🔧 Passo 2: Configurar a Conexão
 
 Edite o arquivo `DataModule/uDTMConexao.pas`:
@@ -74,6 +73,15 @@ end;
 **Exemplo:**
 - Servidor local: `Server=localhost\SQLEXPRESS`
 - Rede corporativa: `Server=DC-TR-01-VM\SERVERCURSO`
+ Após fazer isso selecione  o **dtmPrincipalDB** e procure por **Params** no Object Inspector,clique nele duas vezes
+e preencha a area com :
+
+``
+Server=SEU_SERVIDOR
+Database=BIBLIOTECA
+OSAuthent=Yes
+DriverID=MSSQL
+ ```
 
 ### ▶️ Passo 3: Compilar e Executar
 
@@ -115,7 +123,7 @@ O arquivo deve conter uma planilha com:
 
 1. Abra a aplicação e clique em **CADASTRO** → **LIVROS**
 2. Clique no botão **Importar XLSX**
-3. Selecione o arquivo `.xlsx` desejado
+3. Selecione o arquivo `ArquivoParaTeste.xlsx` 
 4. O sistema validará e importará automaticamente:
    - ✅ Verifica campos obrigatórios
    - ✅ Evita duplicidades (título + autor)
