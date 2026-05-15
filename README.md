@@ -207,6 +207,17 @@ ID;Titulo;Autor;Genero;Ano;Resumo;Editora
   - Ano de Publicação *
   - Resumo (texto longo)
 
+#### ℹ️ Campo "Memo" - Coluna de Resumo
+O campo **Resumo** é exibido como uma coluna rotulada **"Memo"** na grade de livros (DBGrid). Este é um termo técnico do Delphi/VCL que significa:
+
+- **Memo** = Campo de **texto longo** (do tipo TEXT no banco de dados)
+- Na tela de listagem, aparece truncado (apenas os primeiros caracteres visíveis)
+- Ao editar um livro, o resumo completo fica disponível em um componente especial de múltiplas linhas
+- É um campo **opcional** - você pode deixá-lo em branco se desejar
+- Aceita qualquer quantidade de texto (quebras de linha, acentuação, caracteres especiais)
+
+Se o nome "Memo" parecer estranho, é simplesmente a nomenclatura nativa do Delphi para campos de texto longo. Funciona normalmente sem nenhuma particularidade especial.
+
 #### 3. Operações CRUD Completas
 ```
 CREATE → Novo (inserir registro)
