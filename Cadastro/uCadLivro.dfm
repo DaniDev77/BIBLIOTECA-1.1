@@ -7,7 +7,6 @@ inherited frmCadLivro: TfrmCadLivro
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
     Width = 989
-    ActivePage = TabListagem
     Font.Style = [fsBold]
     ExplicitWidth = 989
     inherited TabListagem: TTabSheet
