@@ -15,29 +15,29 @@ File_12=TSourceModule,'C:\Users\devmv\Desktop\ProjetoDelphi\heranca\uFuncaoCript
 File_13=TSourceModule,'C:\Users\devmv\Desktop\ProjetoDelphi\heranca\uTelaHerancaConsulta.pas',0,1,61,1,1,0,0,,
 
 [Modules]
-Module0=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas
-Module1=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Cadastro\uCadLivro.pas
-Module2=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecao.pas
-Module3=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecas.dproj
-Module4=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\DataModule\uDTMConexao.pas
+Module0=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Cadastro\uCadLivro.pas
+Module1=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas
+Module2=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecas.dproj
+Module3=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\DataModule\uDTMConexao.pas
+Module4=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecao.pas
 Module5=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uEnum.pas
 Module6=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Classes\cCadLivro.pas
 Count=7
 EditWindowCount=1
 
-[C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas]
-ModuleType=TSourceModule
-
 [C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Cadastro\uCadLivro.pas]
 ModuleType=TSourceModule
 
-[C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecao.pas]
+[C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas]
 ModuleType=TSourceModule
 
 [C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecas.dproj]
 ModuleType=TBaseProject
 
 [C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\DataModule\uDTMConexao.pas]
+ModuleType=TSourceModule
+
+[C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecao.pas]
 ModuleType=TSourceModule
 
 [C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uEnum.pas]
@@ -48,7 +48,7 @@ ModuleType=TSourceModule
 
 [EditWindow0]
 ViewCount=7
-CurrentEditView=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas
+CurrentEditView=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Cadastro\uCadLivro.pas
 View0=0
 View1=1
 View2=2
@@ -94,7 +94,7 @@ TopLine=63
 LeftCol=1
 Elisions={{76,0},{90,11},{' PROCEDIMENTO DE CONTROLE DE TELA'}}{{92,0},{110,11},{' METOODOS VIRTUAIS'}}{{112,0},{178,11},{' FUNÇAO PARA RETORNAR CAMPO'}}{{180,0},{326,11},{' PESQUISAR'}}{{328,0},{337,11},{' INDICETAB'}}{{339,0},{348,11},{' BOTAO NOVO'}}{{350,0},{359,11},{' BOTAO ALTERAR'}}{{361,0},{380,11},{' BOTAO APAGAR'}}{{382,0},{397,11},{' BOTAO CANCELAR'}}{{399,0},{417,12},{' BOTAO GRAVAR'}}{{419,1},{426,12},{' Bloqueia CTRL_DEL  '}}{{428,1},{458,26},{'FORMS'}}{{446,46},{457,3},{''}}{{460,0},{478,14},{' AREA DO FILDNAME e gride'}}{{461,56},{464,3},{''}}
 Bookmarks=
-EditViewName=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas
+EditViewName=Borland.FormDesignerView
 
 [View1]
 CustomEditViewType=TEditView
@@ -110,13 +110,13 @@ EditViewName=Borland.FormDesignerView
 [View2]
 CustomEditViewType=TEditView
 Module=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Cadastro\uCadLivro.pas
-CursorX=59
-CursorY=310
-TopLine=40
+CursorX=13
+CursorY=408
+TopLine=392
 LeftCol=1
-Elisions={{126,0},{153,11},{' Form'}}
+Elisions={{134,0},{161,11},{' Form'}}{{204,0},{267,11},{'Exporta'}}
 Bookmarks=
-EditViewName=Borland.FormDesignerView
+EditViewName=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Cadastro\uCadLivro.pas
 
 [View3]
 CustomEditViewType=TEditView
@@ -298,14 +298,14 @@ Docked=0
 State=0
 Left=0
 Top=0
-Width=2767
-Height=6153
+Width=1786
+Height=6111
 MaxLeft=-7
 MaxTop=-14
-ClientWidth=2650
+ClientWidth=1698
 ClientHeight=5611
-TBDockHeight=6153
-LRDockWidth=2767
+TBDockHeight=6111
+LRDockWidth=1786
 Dockable=1
 StayOnTop=0
 
@@ -318,12 +318,12 @@ State=0
 Left=0
 Top=0
 Width=1933
-Height=7125
+Height=7028
 MaxLeft=-7
 MaxTop=-14
 ClientWidth=1816
-ClientHeight=6583
-TBDockHeight=7125
+ClientHeight=6486
+TBDockHeight=7028
 LRDockWidth=1933
 Dockable=1
 StayOnTop=0
@@ -342,7 +342,7 @@ MaxLeft=-1
 MaxTop=-1
 ClientWidth=1896
 ClientHeight=3000
-TBDockHeight=9014
+TBDockHeight=8639
 LRDockWidth=1896
 Dockable=1
 StayOnTop=0
@@ -350,8 +350,8 @@ SplitPos=111
 
 [PropInspDesignerSelection]
 ArrangeBy=Name
-SelectedItem=Name,OnEndDrag
-ExpandedItems=Anchors=0,BorderIcons=0,EditLabel=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,StyleElements=0,Touch=0,BevelEdges=0,Constraints=0,EditLabel.Font=0,Padding=0,Options=0,DataSource=0
+SelectedItem=Name,
+ExpandedItems=Anchors=0,BorderIcons=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,StyleElements=0,Padding=0,ResourceOptions=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -846,7 +846,7 @@ MaxLeft=-1
 MaxTop=-1
 ClientWidth=1896
 ClientHeight=3611
-TBDockHeight=9014
+TBDockHeight=8639
 LRDockWidth=1896
 Dockable=1
 StayOnTop=0
