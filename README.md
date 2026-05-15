@@ -248,58 +248,6 @@ CONSTRAINT uq_titulo_autor UNIQUE (titulo, autor)
 - ✅ Protege contra duplicidades
 - ✅ Validada no banco e na aplicação
 
----
-
-## Decisões Técnicas
-
-### 1. Por que Delphi/VCL?
-
-- Compatibilidade com SQL Server via FireDAC
-- Interface gráfica moderna e responsiva
-- Suporte nativo a OLE Automation (Excel)
-- Compilação para executável standalone (.exe)
-
-### 2. Por que SQL Server?
-
-- Suporte robusto a transactions
-- Constraint UNIQUE para garantir integridade
-- Melhor performance em leitura e escrita
-- Suporte a TEXT para resumos longos
-
-### 3. Por que FireDAC?
-
-- ORM moderno e eficiente
-- Suporte a múltiplos bancos de dados
-- Cache automático de dados
-- Transaction control integrado
-
-### 4. Por que COM Automation para Excel?
-
-- Leitura nativa de .xlsx
-- Não requer biblioteca externa
-- Integração com Excel instalado no SO
-- Tratamento automático de tipos
-
-### 5. Importação com Validações
-
-```pascal
-- Validação de campos obrigatórios
-- Verificação de duplicidade (titulo + autor)
-- Rollback automático em caso de erro
-- Feedback visual do usuário
-```
-
-### 6. Exportação Respeitando Filtros
-
-```pascal
-- Export consome o DataSet atual (filtrado)
-- Ordena conforme seleção do usuário
-- Formato CSV com separador ; (Excel-friendly)
-- Codificação UTF-8 para acentos
-```
-
----
-
 ## Tratamento de Erros
 
 ### Validações Implementadas
@@ -328,23 +276,6 @@ CONSTRAINT uq_titulo_autor UNIQUE (titulo, autor)
 - Falha ao atualizar (registro não existe)
 - Falha ao excluir (integridade referencial)
 - Mensagens descritivas para cada caso
-
-#### ✅ Tratamento de Exceções
-
-```pascal
-try
-  // Operação
-  FDQ.ExecSQL;
-  dtmPrincipalDB.Commit;
-  Result := True;
-except
-  on E: Exception do begin
-    dtmPrincipalDB.Rollback;
-    ShowMessage('Erro: ' + E.Message);
-    Result := False;
-  end;
-end;
-```
 
 ---
 
@@ -446,7 +377,7 @@ SQL Server (BIBLIOTECA)
 
 ---
 
-## Troubleshooting
+## Solução de problemas
 
 ### Erro: "FireDAC Comp Clnt 512"
 **Causa:** Conexão com banco não inicializada
@@ -470,19 +401,6 @@ SQL Server (BIBLIOTECA)
 - SQL Server está rodando (Services)
 - Endereço do servidor em `uDTMConexao.pas`
 - Firewall está bloqueando?
-
----
-
-## Cronograma de Desenvolvimento
-
-| Data | Etapa |
-|------|-------|
-| 04-15 mai | Desenvolvimento |
-| 18 mai | **Data limite de entrega** |
-| 18-22 mai | Preparativos para apresentação |
-| 25-27 mai | Apresentação dos projetos |
-| 28-29 mai | Resultado final |
-
 ---
 
 ## Critérios de Avaliação
@@ -522,4 +440,4 @@ Para dúvidas sobre o projeto:
 
 ---
 
-**Última atualização:** 11 de maio de 2026
+**Última atualização:** 15 de maio de 2026
