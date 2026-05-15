@@ -15,21 +15,27 @@ File_12=TSourceModule,'C:\Users\devmv\Desktop\ProjetoDelphi\heranca\uFuncaoCript
 File_13=TSourceModule,'C:\Users\devmv\Desktop\ProjetoDelphi\heranca\uTelaHerancaConsulta.pas',0,1,61,1,1,0,0,,
 
 [Modules]
-Module0=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecao.pas
+Module0=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas
 Module1=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Cadastro\uCadLivro.pas
-Module2=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\DataModule\uDTMConexao.pas
-Module3=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uEnum.pas
-Module4=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Classes\cCadLivro.pas
-Module5=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas
-Module6=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecas.dproj
+Module2=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecao.pas
+Module3=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecas.dproj
+Module4=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\DataModule\uDTMConexao.pas
+Module5=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uEnum.pas
+Module6=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Classes\cCadLivro.pas
 Count=7
 EditWindowCount=1
 
-[C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecao.pas]
+[C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas]
 ModuleType=TSourceModule
 
 [C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Cadastro\uCadLivro.pas]
 ModuleType=TSourceModule
+
+[C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecao.pas]
+ModuleType=TSourceModule
+
+[C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecas.dproj]
+ModuleType=TBaseProject
 
 [C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\DataModule\uDTMConexao.pas]
 ModuleType=TSourceModule
@@ -40,15 +46,9 @@ ModuleType=TSourceModule
 [C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Classes\cCadLivro.pas]
 ModuleType=TSourceModule
 
-[C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas]
-ModuleType=TSourceModule
-
-[C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecas.dproj]
-ModuleType=TBaseProject
-
 [EditWindow0]
 ViewCount=7
-CurrentEditView=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecao.pas
+CurrentEditView=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas
 View0=0
 View1=1
 View2=2
@@ -72,12 +72,12 @@ ClientHeight=8889
 DockedToMainForm=1
 BorlandEditorCodeExplorer=BorlandEditorCodeExplorer@EditWindow0
 TopPanelSize=0
-LeftPanelSize=1208
+LeftPanelSize=1896
 LeftPanelClients=PropertyInspector,DockSite3
-LeftPanelData=00000800010100000000C10E00000000000001B8040000000000000100000000580E000009000000446F636B536974653301000000003F1A00001100000050726F7065727479496E73706563746F72FFFFFFFF
-RightPanelSize=1435
+LeftPanelData=00000800010100000000C10E0000000000000168070000000000000100000000580E000009000000446F636B536974653301000000003F1A00001100000050726F7065727479496E73706563746F72FFFFFFFF
+RightPanelSize=1999
 RightPanelClients=DockSite2,DockSite4
-RightPanelData=00000800010100000000C10E000000000000019B0500000000000001000000004212000009000000446F636B536974653201000000003F1A000009000000446F636B5369746534FFFFFFFF
+RightPanelData=00000800010100000000C10E00000000000001CF0700000000000001000000004212000009000000446F636B536974653201000000003F1A000009000000446F636B5369746534FFFFFFFF
 BottomPanelSize=1536
 BottomPanelClients=DockSite1,MessageView
 BottomPanelData=0000080001020100000009000000446F636B5369746531AF450000000000000200060000000000000100000000AF4500000F0000004D65737361676556696577466F726DFFFFFFFF
@@ -88,11 +88,11 @@ BottomMiddelPanelData=0000080001020200000009000000446F636B5369746530100000004772
 [View0]
 CustomEditViewType=TEditView
 Module=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas
-CursorX=2
-CursorY=418
-TopLine=361
+CursorX=8
+CursorY=73
+TopLine=63
 LeftCol=1
-Elisions={{76,0},{90,11},{' PROCEDIMENTO DE CONTROLE DE TELA'}}{{92,0},{110,11},{' METOODOS VIRTUAIS'}}{{112,0},{178,11},{' FUNÇAO PARA RETORNAR CAMPO'}}{{180,0},{326,11},{'PESQUISAR'}}{{328,0},{337,11},{' INDICETAB'}}{{339,0},{348,11},{' BOTAO NOVO'}}{{350,0},{359,11},{' BOTAO ALTERAR'}}{{361,0},{380,11},{' BOTAO APAGAR'}}{{382,0},{397,11},{' BOTAO CANCELAR'}}{{399,0},{416,12},{' BOTAO GRAVAR'}}{{418,1},{425,12},{' Bloqueia CTRL_DEL  '}}{{445,46},{456,3},{''}}{{459,0},{477,14},{' AREA DO FILDNAME e gride'}}{{460,56},{463,3},{''}}
+Elisions={{76,0},{90,11},{' PROCEDIMENTO DE CONTROLE DE TELA'}}{{92,0},{110,11},{' METOODOS VIRTUAIS'}}{{112,0},{178,11},{' FUNÇAO PARA RETORNAR CAMPO'}}{{180,0},{326,11},{' PESQUISAR'}}{{328,0},{337,11},{' INDICETAB'}}{{339,0},{348,11},{' BOTAO NOVO'}}{{350,0},{359,11},{' BOTAO ALTERAR'}}{{361,0},{380,11},{' BOTAO APAGAR'}}{{382,0},{397,11},{' BOTAO CANCELAR'}}{{399,0},{417,12},{' BOTAO GRAVAR'}}{{419,1},{426,12},{' Bloqueia CTRL_DEL  '}}{{428,1},{458,26},{'FORMS'}}{{446,46},{457,3},{''}}{{460,0},{478,14},{' AREA DO FILDNAME e gride'}}{{461,56},{464,3},{''}}
 Bookmarks=
 EditViewName=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Heranca\uTelaHeranca.pas
 
@@ -101,20 +101,20 @@ CustomEditViewType=TEditView
 Module=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecao.pas
 CursorX=20
 CursorY=78
-TopLine=29
+TopLine=23
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Bibliotecao.pas
+EditViewName=Borland.FormDesignerView
 
 [View2]
 CustomEditViewType=TEditView
 Module=C:\Users\devmv\Desktop\Projeto Biblioteca 1.1\Cadastro\uCadLivro.pas
 CursorX=59
-CursorY=309
-TopLine=39
+CursorY=310
+TopLine=40
 LeftCol=1
-Elisions={{125,0},{152,11},{' Form'}}
+Elisions={{126,0},{153,11},{' Form'}}
 Bookmarks=
 EditViewName=Borland.FormDesignerView
 
@@ -241,11 +241,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1435
+Width=1999
 Height=4333
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1435
+ClientWidth=1999
 ClientHeight=4333
 TBDockHeight=5903
 LRDockWidth=2350
@@ -279,11 +279,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1435
+Width=1999
 Height=1931
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1435
+ClientWidth=1999
 ClientHeight=1931
 TBDockHeight=7153
 LRDockWidth=1999
@@ -336,22 +336,22 @@ Docked=1
 State=0
 Left=0
 Top=300
-Width=1208
+Width=1896
 Height=3000
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1208
+ClientWidth=1896
 ClientHeight=3000
 TBDockHeight=9014
-LRDockWidth=1208
+LRDockWidth=1896
 Dockable=1
 StayOnTop=0
-SplitPos=63
+SplitPos=111
 
 [PropInspDesignerSelection]
 ArrangeBy=Name
-SelectedItem=Align,
-ExpandedItems=ConnectedStoredUsage=0,FetchOptions=0,FormatOptions=0,"LiveBindings Designer=0",Params=0,ResourceOptions=0,TxOptions=0,UpdateOptions=0,Anchors=0,ActiveStoredUsage=0,Connection=0,FieldOptions=0,FilterChanges=0,FilterOptions=0,LiveBindings=0,Margins=0,Options=0,Font=0,Title=1,Title.Font=0
+SelectedItem=Name,OnEndDrag
+ExpandedItems=Anchors=0,BorderIcons=0,EditLabel=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=0,StyleElements=0,Touch=0,BevelEdges=0,Constraints=0,EditLabel.Font=0,Padding=0,Options=0,DataSource=0
 
 [ClassBrowserTool]
 PercentageSizes=1
@@ -418,11 +418,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1464
+Width=1999
 Height=6153
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1464
+ClientWidth=1999
 ClientHeight=6153
 TBDockHeight=5958
 LRDockWidth=2511
@@ -435,7 +435,7 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=-1089
+Left=-1012
 Top=-39
 Width=2848
 Height=6208
@@ -454,7 +454,7 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=-1172
+Left=-1095
 Top=156
 Width=278
 Height=361
@@ -642,11 +642,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1406
+Width=1999
 Height=6153
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1406
+ClientWidth=1999
 ClientHeight=6153
 TBDockHeight=4889
 LRDockWidth=7152
@@ -706,11 +706,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1208
+Width=1896
 Height=3611
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1208
+ClientWidth=1896
 ClientHeight=3611
 TBDockHeight=3681
 LRDockWidth=1896
@@ -725,11 +725,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1435
+Width=1999
 Height=6153
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1435
+ClientWidth=1999
 ClientHeight=6153
 TBDockHeight=4889
 LRDockWidth=5307
@@ -816,14 +816,14 @@ Docked=1
 State=0
 Left=0
 Top=18
-Width=1435
+Width=1999
 Height=4681
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1435
+ClientWidth=1999
 ClientHeight=4681
 TBDockHeight=9014
-LRDockWidth=1435
+LRDockWidth=1999
 Dockable=1
 StayOnTop=0
 TabPosition=1
@@ -840,14 +840,14 @@ Docked=1
 State=0
 Left=0
 Top=18
-Width=1208
+Width=1896
 Height=3611
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1208
+ClientWidth=1896
 ClientHeight=3611
 TBDockHeight=9014
-LRDockWidth=1208
+LRDockWidth=1896
 Dockable=1
 StayOnTop=0
 TabPosition=1
@@ -864,14 +864,14 @@ Docked=1
 State=0
 Left=0
 Top=377
-Width=1435
+Width=1999
 Height=1931
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1435
+ClientWidth=1999
 ClientHeight=1931
 TBDockHeight=9014
-LRDockWidth=1435
+LRDockWidth=1999
 Dockable=1
 StayOnTop=0
 TabPosition=1

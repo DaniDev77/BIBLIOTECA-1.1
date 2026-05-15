@@ -177,7 +177,7 @@ begin
 
 {$ENDREGION}
 
-{$REGION 'PESQUISAR'}
+{$REGION ' PESQUISAR'}
 procedure THeranca.btnPesquisarClick(Sender: TObject);
 var
   I: Integer;

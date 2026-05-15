@@ -34,7 +34,7 @@ object Heranca: THeranca
     Top = 0
     Width = 761
     Height = 268
-    ActivePage = TabListagem
+    ActivePage = TabManutencao
     Align = alClient
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -120,8 +120,6 @@ object Heranca: THeranca
     object TabManutencao: TTabSheet
       Caption = 'Manuten'#231#227'o'
       ImageIndex = 1
-      ExplicitLeft = -20
-      ExplicitTop = 23
     end
   end
   object Rodape: TPanel

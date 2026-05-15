@@ -7,11 +7,13 @@ inherited frmCadLivro: TfrmCadLivro
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
     Width = 989
+    ActivePage = TabListagem
     Font.Style = [fsBold]
     ExplicitWidth = 989
     inherited TabListagem: TTabSheet
-      ExplicitLeft = 4
+      ExplicitTop = 24
       ExplicitWidth = 981
+      ExplicitHeight = 240
       inherited grdListagem: TDBGrid
         Width = 981
         Height = 151
@@ -1687,7 +1689,7 @@ inherited frmCadLivro: TfrmCadLivro
           Stretch = True
         end
         object btnExportarCSV: TBitBtn [2]
-          Left = 357
+          Left = 439
           Top = 33
           Width = 90
           Height = 39
@@ -1698,11 +1700,11 @@ inherited frmCadLivro: TfrmCadLivro
           Font.Name = 'Times New Roman'
           Font.Style = []
           ParentFont = False
-          TabOrder = 2
+          TabOrder = 3
           OnClick = btnExportarCSVClick
         end
         object btnImportarXLSX: TBitBtn [3]
-          Left = 488
+          Left = 334
           Top = 33
           Width = 90
           Height = 39
@@ -1713,7 +1715,7 @@ inherited frmCadLivro: TfrmCadLivro
           Font.Name = 'Times New Roman'
           Font.Style = []
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 2
           OnClick = btnImportarXLSXClick
         end
         inherited mskPesquisar: TMaskEdit
@@ -1736,8 +1738,9 @@ inherited frmCadLivro: TfrmCadLivro
       Font.Height = -13
       Font.Style = [fsBold]
       ParentFont = False
-      ExplicitLeft = 4
+      ExplicitTop = 24
       ExplicitWidth = 981
+      ExplicitHeight = 240
       object Panel1: TPanel
         Left = 0
         Top = 0
@@ -1747,10 +1750,6 @@ inherited frmCadLivro: TfrmCadLivro
         Color = clMaroon
         ParentBackground = False
         TabOrder = 0
-        ExplicitLeft = 248
-        ExplicitTop = 64
-        ExplicitWidth = 185
-        ExplicitHeight = 41
         object edtLivroId: TLabeledEdit
           Tag = 1
           Left = 126
@@ -1816,7 +1815,7 @@ inherited frmCadLivro: TfrmCadLivro
           Font.Style = [fsBold]
           MaxLength = 255
           ParentFont = False
-          TabOrder = 2
+          TabOrder = 3
         end
         object edtGenero: TLabeledEdit
           Left = 439
@@ -1840,11 +1839,11 @@ inherited frmCadLivro: TfrmCadLivro
           Font.Style = [fsBold]
           MaxLength = 100
           ParentFont = False
-          TabOrder = 3
+          TabOrder = 4
         end
         object edtAnoPub: TLabeledEdit
-          Left = 551
-          Top = 36
+          Left = 559
+          Top = 29
           Width = 72
           Height = 23
           Color = clWhite
@@ -1865,7 +1864,7 @@ inherited frmCadLivro: TfrmCadLivro
           MaxLength = 255
           NumbersOnly = True
           ParentFont = False
-          TabOrder = 4
+          TabOrder = 2
         end
         object edtResumo: TLabeledEdit
           Left = 222
@@ -1888,7 +1887,7 @@ inherited frmCadLivro: TfrmCadLivro
           Font.Name = 'Times New Roman'
           Font.Style = [fsBold]
           ParentFont = False
-          TabOrder = 5
+          TabOrder = 6
         end
         object edtEditora: TLabeledEdit
           Left = 303
@@ -1912,7 +1911,7 @@ inherited frmCadLivro: TfrmCadLivro
           Font.Style = [fsBold]
           MaxLength = 100
           ParentFont = False
-          TabOrder = 6
+          TabOrder = 5
         end
       end
     end

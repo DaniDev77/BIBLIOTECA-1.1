@@ -25,9 +25,10 @@ type
     btnFechar: TBitBtn;
     FDQListagem: TFDQuery;
     dtslistagem: TDataSource;
+    lblIndice: TLabel;
+    Label1: TLabel;
     mskPesquisar: TMaskEdit;
     btnPesquisar: TBitBtn;
-    lblIndice: TLabel;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure btnApagarClick(Sender: TObject);
@@ -39,6 +40,9 @@ type
     procedure btnFecharClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure mskPesquisarChange(Sender: TObject);
+    procedure grdListagemTitleClick(Column: TColumn);
+    procedure grdListagemKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure grdListagemDblClick(Sender: TObject);
 
   private
   SelectOriginal:string;
@@ -50,6 +54,7 @@ type
     function ExisteCampoObrigatorio: Boolean;
     procedure LimparEdits;
     function RetornarCampoTraduzido(Campo: string): string;
+    procedure BloqueiaCTRL_DEL_DBGrid(var Key: Word; Shift: TShiftState);
 
     { Private declarations }
   public
@@ -99,6 +104,8 @@ begin
      Result := True;
 
 end;
+
+
 
 {$ENDREGION}
 
@@ -287,7 +294,6 @@ begin
   mskPesquisar.Clear;
   mskPesquisar.SetFocus;
 end;
-
 procedure THeranca.mskPesquisarChange(Sender: TObject);
 var
   Date: TDateTime;
@@ -360,7 +366,7 @@ begin
     ControlarBotoes(btnNovo, btnAlterar, btnCancelar ,
             btnGravar, btnApagar,pgcPrincipal,True);
     ControlarIndiceTab( pgcPrincipal,0);
-
+    LimparEdits;
    FDQListagem.Refresh;
     end
     else    begin
@@ -399,6 +405,7 @@ try
                  btnGravar, btnApagar,pgcPrincipal,true);
   ControlarIndiceTab( pgcPrincipal,0);
    EstadoDoCadastro:=ecNenhum;
+   LimparEdits;
    FDQListagem.Refresh;
   end
   else begin
@@ -408,6 +415,15 @@ try
   end;
 end;
  {$ENDREGION}
+
+ {$REGION ' Bloqueia CTRL_DEL  '}
+procedure THeranca.BloqueiaCTRL_DEL_DBGrid(var Key: Word; Shift: TShiftState);
+begin
+  //BLQUEIA O CTRL DELETE
+  if (Shift = [ssCtrl]) and (Key = 46) then
+     key := 0;
+end;
+ {$endregion}
 
  {$REGION 'FORMS'}
 procedure THeranca.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -440,5 +456,28 @@ begin
                     btnGravar, btnApagar,pgcPrincipal,True);
 end;
                {$ENDREGION}
+
+{$REGION ' AREA DO FILDNAME e gride'}
+procedure THeranca.grdListagemDblClick(Sender: TObject);
+begin
+btnAlterar.Click;
+end;
+
+procedure THeranca.grdListagemKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+ BloqueiaCTRL_DEL_DBGrid(Key,Shift);
+end;
+
+procedure THeranca.grdListagemTitleClick(Column: TColumn);
+begin
+    IndiceAtual:= Column.FieldName;
+    FDQListagem.IndexFieldNames:=IndiceAtual;
+    ExibirLabelIndice(IndiceAtual,lblIndice);
+end;
+
+   {$ENDREGION}
+
+
+
 
                end.
