@@ -32,8 +32,8 @@ O projeto implementa um **Sistema de Biblioteca de Livros** com importação de 
 
 ### 🚀 Passo 1: Preparar o Banco de Dados
 
-1. Abra o **SQL Server Management Studio**
-2.Execute o script abaixo no contexto do banco `master` selecione um scrpt por vez e aperte F5 na ordem que esta abaixo  :
+1. Abra o **SQL Server Management Studio**.
+2. Execute o script abaixo no contexto do banco `master`. Selecione um script por vez e aperte F5 seguindo a ordem que está abaixo:
 
 ```sql
 create database BIBLIOTECA
@@ -53,6 +53,7 @@ CREATE TABLE livros (
     CONSTRAINT uq_titulo_autor UNIQUE (titulo, autor)
 );
 ```
+
 ### 🔧 Passo 2: Configurar a Conexão
 
 Edite o arquivo `DataModule/uDTMConexao.pas`:
@@ -73,15 +74,15 @@ end;
 **Exemplo:**
 - Servidor local: `Server=localhost\SQLEXPRESS`
 - Rede corporativa: `Server=DC-TR-01-VM\SERVERCURSO`
- Após fazer isso selecione  o **dtmPrincipalDB** e procure por **Params** no Object Inspector,clique nele duas vezes
-e preencha a area com :
 
-``
+Após fazer isso, selecione o **dtmPrincipalDB** e procure por **Params** no Object Inspector. Clique nele duas vezes e preencha a área com:
+
+```pascal
 Server=SEU_SERVIDOR
 Database=BIBLIOTECA
 OSAuthent=Yes
 DriverID=MSSQL
- ```
+```
 
 ### ▶️ Passo 3: Compilar e Executar
 
@@ -111,13 +112,11 @@ O arquivo deve conter uma planilha com:
 
 **Exemplo de Arquivo XLSX:**
 
-```
 | Título                    | Autor              | Gênero        | Resumo                          | Ano  | Editora    |
 |---------------------------|--------------------|---------------|---------------------------------|------|------------|
 | Dom Casmurro              | Machado de Assis   | Romance       | Uma história de amor e obsessão | 1900 | Companhia  |
 | Grande Sertão: Veredas    | Guimarães Rosa     | Romance       | Narrativa do sertão brasileiro  | 1956 | Globo      |
 | O Cortiço                 | Aluísio Azevedo    | Romance       | Retrato social do Rio de Janeiro| 1890 | Editora A  |
-```
 
 #### Passos para Importar
 
@@ -409,6 +408,7 @@ SQL Server (BIBLIOTECA)
 - SQL Server está rodando (Services)
 - Endereço do servidor em `uDTMConexao.pas`
 - Firewall está bloqueando?
+
 ---
 
 ## Critérios de Avaliação
