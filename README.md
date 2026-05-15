@@ -363,10 +363,9 @@ SQL Server (BIBLIOTECA)
 
 ### 🧪 Teste 2: Importar XLSX
 
-1. Crie um arquivo `exemplo.xlsx` seguindo o formato documentado acima
-2. Clique em **Importar XLSX**
-3. Selecione o arquivo
-4. Verifique se os registros aparecem na tela
+1.  Clique em **Importar XLSX**
+2.  Selecione o arquivo **ArquivoParaTeste.xlsx**
+3. Verifique se os registros aparecem na tela
 
 ### 🧪 Teste 3: Exportar CSV
 
