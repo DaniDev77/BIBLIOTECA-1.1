@@ -1,22 +1,25 @@
 inherited frmCadLivro: TfrmCadLivro
   Caption = 'frmCadLivro'
+  ClientHeight = 559
   ClientWidth = 989
   Position = poScreenCenter
   ExplicitWidth = 1005
+  ExplicitHeight = 598
   PixelsPerInch = 96
   TextHeight = 13
   inherited pgcPrincipal: TPageControl
     Width = 989
-    ActivePage = TabListagem
+    Height = 498
     Font.Style = [fsBold]
     ExplicitWidth = 989
     inherited TabListagem: TTabSheet
+      ExplicitLeft = 4
       ExplicitTop = 24
       ExplicitWidth = 981
       ExplicitHeight = 240
       inherited grdListagem: TDBGrid
         Width = 981
-        Height = 151
+        Height = 381
         TitleFont.Style = [fsBold]
         Columns = <
           item
@@ -1738,6 +1741,7 @@ inherited frmCadLivro: TfrmCadLivro
       Font.Height = -13
       Font.Style = [fsBold]
       ParentFont = False
+      ExplicitLeft = 4
       ExplicitTop = 24
       ExplicitWidth = 981
       ExplicitHeight = 240
@@ -1745,15 +1749,16 @@ inherited frmCadLivro: TfrmCadLivro
         Left = 0
         Top = 0
         Width = 981
-        Height = 240
+        Height = 470
         Align = alClient
         Color = clMaroon
         ParentBackground = False
         TabOrder = 0
+        ExplicitHeight = 240
         object edtLivroId: TLabeledEdit
           Tag = 1
-          Left = 126
-          Top = 29
+          Left = 309
+          Top = 103
           Width = 72
           Height = 23
           Color = clWhite
@@ -1771,8 +1776,8 @@ inherited frmCadLivro: TfrmCadLivro
           TabOrder = 0
         end
         object edtTitulo: TLabeledEdit
-          Left = 258
-          Top = 29
+          Left = 441
+          Top = 103
           Width = 272
           Height = 23
           Color = clWhite
@@ -1794,8 +1799,8 @@ inherited frmCadLivro: TfrmCadLivro
           TabOrder = 1
         end
         object edtAutor: TLabeledEdit
-          Left = 126
-          Top = 78
+          Left = 309
+          Top = 152
           Width = 227
           Height = 23
           Color = clWhite
@@ -1818,8 +1823,8 @@ inherited frmCadLivro: TfrmCadLivro
           TabOrder = 3
         end
         object edtGenero: TLabeledEdit
-          Left = 439
-          Top = 78
+          Left = 622
+          Top = 152
           Width = 184
           Height = 23
           Color = clWhite
@@ -1842,8 +1847,8 @@ inherited frmCadLivro: TfrmCadLivro
           TabOrder = 4
         end
         object edtAnoPub: TLabeledEdit
-          Left = 559
-          Top = 29
+          Left = 742
+          Top = 103
           Width = 72
           Height = 23
           Color = clWhite
@@ -1867,10 +1872,10 @@ inherited frmCadLivro: TfrmCadLivro
           TabOrder = 2
         end
         object edtResumo: TLabeledEdit
-          Left = 222
-          Top = 159
+          Left = 405
+          Top = 233
           Width = 322
-          Height = 23
+          Height = 79
           Color = clWhite
           EditLabel.Width = 48
           EditLabel.Height = 15
@@ -1890,8 +1895,8 @@ inherited frmCadLivro: TfrmCadLivro
           TabOrder = 6
         end
         object edtEditora: TLabeledEdit
-          Left = 303
-          Top = 121
+          Left = 486
+          Top = 195
           Width = 184
           Height = 23
           Color = clWhite
@@ -1917,6 +1922,7 @@ inherited frmCadLivro: TfrmCadLivro
     end
   end
   inherited Rodape: TPanel
+    Top = 498
     Width = 989
     ExplicitWidth = 989
   end
@@ -1935,6 +1941,45 @@ inherited frmCadLivro: TfrmCadLivro
       ''
       'ORDER BY titulo')
     Top = 168
+    object FDQListagemid: TIntegerField
+      FieldName = 'id'
+      Origin = 'id'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object FDQListagemtitulo: TStringField
+      FieldName = 'titulo'
+      Origin = 'titulo'
+      Required = True
+      Size = 255
+    end
+    object FDQListagemautor: TStringField
+      FieldName = 'autor'
+      Origin = 'autor'
+      Required = True
+      Size = 255
+    end
+    object FDQListagemgenero: TStringField
+      FieldName = 'genero'
+      Origin = 'genero'
+      Required = True
+      Size = 100
+    end
+    object FDQListagemeditora: TStringField
+      FieldName = 'editora'
+      Origin = 'editora'
+      Size = 255
+    end
+    object FDQListagemresumo: TMemoField
+      FieldName = 'resumo'
+      Origin = 'resumo'
+      BlobType = ftMemo
+    end
+    object FDQListagemano_de_publicacao: TIntegerField
+      FieldName = 'ano_de_publicacao'
+      Origin = 'ano_de_publicacao'
+      Required = True
+    end
   end
   object SaveDialog1: TSaveDialog
     Filter = '|*.csv'
