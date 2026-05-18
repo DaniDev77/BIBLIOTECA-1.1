@@ -32,9 +32,14 @@ O projeto implementa um **Sistema de Biblioteca de Livros** com importação de 
 
 ### 🚀 Passo 1: Preparar o Banco de Dados
 
-Execute o script SQL fornecido no caminho `ScriptSQL/Script SQL para criar tabela.txt`:
+1. Abra o **SQL Server Management Studio**.
+2. Execute o script abaixo no contexto do banco `master`. Selecione um script por vez e aperte F5 seguindo a ordem que está abaixo:
 
 ```sql
+create database BIBLIOTECA
+ 
+use BIBLIOTECA
+
 CREATE TABLE livros (
     id INTEGER PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
@@ -48,11 +53,6 @@ CREATE TABLE livros (
     CONSTRAINT uq_titulo_autor UNIQUE (titulo, autor)
 );
 ```
-
-**Passos:**
-1. Abra o **SQL Server Management Studio**
-2. Crie um novo banco de dados chamado `BIBLIOTECA`
-3. Execute o script acima no contexto do banco `BIBLIOTECA`
 
 ### 🔧 Passo 2: Configurar a Conexão
 
@@ -74,6 +74,15 @@ end;
 **Exemplo:**
 - Servidor local: `Server=localhost\SQLEXPRESS`
 - Rede corporativa: `Server=DC-TR-01-VM\SERVERCURSO`
+
+Após fazer isso, selecione o **dtmPrincipalDB** e procure por **Params** no Object Inspector. Clique nele duas vezes e preencha a área com:
+
+```pascal
+Server=SEU_SERVIDOR
+Database=BIBLIOTECA
+OSAuthent=Yes
+DriverID=MSSQL
+```
 
 ### ▶️ Passo 3: Compilar e Executar
 
@@ -103,19 +112,17 @@ O arquivo deve conter uma planilha com:
 
 **Exemplo de Arquivo XLSX:**
 
-```
 | Título                    | Autor              | Gênero        | Resumo                          | Ano  | Editora    |
 |---------------------------|--------------------|---------------|---------------------------------|------|------------|
 | Dom Casmurro              | Machado de Assis   | Romance       | Uma história de amor e obsessão | 1900 | Companhia  |
 | Grande Sertão: Veredas    | Guimarães Rosa     | Romance       | Narrativa do sertão brasileiro  | 1956 | Globo      |
 | O Cortiço                 | Aluísio Azevedo    | Romance       | Retrato social do Rio de Janeiro| 1890 | Editora A  |
-```
 
 #### Passos para Importar
 
 1. Abra a aplicação e clique em **CADASTRO** → **LIVROS**
 2. Clique no botão **Importar XLSX**
-3. Selecione o arquivo `.xlsx` desejado
+3. Selecione o arquivo `ArquivoParaTeste.xlsx` 
 4. O sistema validará e importará automaticamente:
    - ✅ Verifica campos obrigatórios
    - ✅ Evita duplicidades (título + autor)
@@ -199,6 +206,17 @@ ID;Titulo;Autor;Genero;Ano;Resumo;Editora
   - Editora *
   - Ano de Publicação *
   - Resumo (texto longo)
+
+#### ℹ️ Campo "Memo" - Coluna de Resumo
+O campo **Resumo** é exibido como uma coluna rotulada **"Memo"** na grade de livros (DBGrid). Este é um termo técnico do Delphi/VCL que significa:
+
+- **Memo** = Campo de **texto longo** (do tipo TEXT no banco de dados)
+- Na tela de listagem, aparece truncado (apenas os primeiros caracteres visíveis)
+- Ao editar um livro, o resumo completo fica disponível em um componente especial de múltiplas linhas
+- É um campo **opcional** - você pode deixá-lo em branco se desejar
+- Aceita qualquer quantidade de texto (quebras de linha, acentuação, caracteres especiais)
+
+Se o nome "Memo" parecer estranho, é simplesmente a nomenclatura nativa do Delphi para campos de texto longo. Funciona normalmente sem nenhuma particularidade especial.
 
 #### 3. Operações CRUD Completas
 ```
@@ -356,10 +374,9 @@ SQL Server (BIBLIOTECA)
 
 ### 🧪 Teste 2: Importar XLSX
 
-1. Crie um arquivo `exemplo.xlsx` seguindo o formato documentado acima
-2. Clique em **Importar XLSX**
-3. Selecione o arquivo
-4. Verifique se os registros aparecem na tela
+1.  Clique em **Importar XLSX**
+2.  Selecione o arquivo **ArquivoParaTeste.xlsx**
+3. Verifique se os registros aparecem na tela
 
 ### 🧪 Teste 3: Exportar CSV
 
@@ -401,6 +418,7 @@ SQL Server (BIBLIOTECA)
 - SQL Server está rodando (Services)
 - Endereço do servidor em `uDTMConexao.pas`
 - Firewall está bloqueando?
+
 ---
 
 ## Critérios de Avaliação
