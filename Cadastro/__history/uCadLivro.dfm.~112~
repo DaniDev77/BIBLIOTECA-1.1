@@ -5,7 +5,7 @@ inherited frmCadLivro: TfrmCadLivro
   ClientWidth = 1200
   Position = poScreenCenter
   ExplicitLeft = -152
-  ExplicitTop = -110
+  ExplicitTop = -19
   ExplicitWidth = 1216
   ExplicitHeight = 598
   PixelsPerInch = 96

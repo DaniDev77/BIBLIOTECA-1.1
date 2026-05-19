@@ -44,10 +44,10 @@ type
     { Private declarations }
     oLivro: TLivro;
     procedure ExportarCSV(ADataset: TDataSet);
-    procedure ImportarExcel(AFileName: string); // Inst√¢ncia da nossa classe de neg√≥cio
+    procedure ImportarExcel(AFileName: string); // Inst‚ncia da nossa classe de negÛcio
   public
     { Public declarations }
-    // Sobrescrevendo os m√©todos da tela de heran√ßa
+    // Sobrescrevendo os mÈtodos da tela de heranÁa
     function Apagar: Boolean; override;
     function Gravar(EstadoDoCadastro: TEstadoCadastro): Boolean; override;
   end;
@@ -88,34 +88,34 @@ begin
   oLivro.resumo         := edtResumo.Text;
   oLivro.ano_publicacao := StrToIntDef(edtAnoPub.Text, 0);
 
-  // 2. Valida√ß√µes de Campos Obrigat√≥rios
+  // 2. ValidaÁıes de Campos ObrigatÛrios
   if Trim(oLivro.titulo) = '' then
   begin
-    MessageDlg('O t√≠tulo do livro √© obrigat√≥rio!', mtWarning, [mbOK], 0);
+    MessageDlg('O tÌtulo do livro È obrigatÛrio!', mtWarning, [mbOK], 0);
     edtTitulo.SetFocus;
     Abort;
   end
   else if Trim(oLivro.autor) = '' then
   begin
-    MessageDlg('O nome do autor √© obrigat√≥rio!', mtWarning, [mbOK], 0);
+    MessageDlg('O nome do autor È obrigatÛrio!', mtWarning, [mbOK], 0);
     edtAutor.SetFocus;
     Abort;
   end
   else if Trim(oLivro.genero) = '' then
   begin
-    MessageDlg('O g√™nero do livro √© obrigat√≥rio!', mtWarning, [mbOK], 0);
+    MessageDlg('O gÍnero do livro È obrigatÛrio!', mtWarning, [mbOK], 0);
     edtGenero.SetFocus;
     Abort;
   end
    else if Trim(oLivro.editora) = '' then
   begin
-    MessageDlg('A editora do livro √© obrigat√≥ria!', mtWarning, [mbOK], 0);
+    MessageDlg('A editora do livro È obrigatÛria!', mtWarning, [mbOK], 0);
     edtEditora.SetFocus;
     Abort;
   end
   else if (oLivro.ano_publicacao <= 0) or (oLivro.ano_publicacao > 2100) then
   begin
-    MessageDlg('Por favor, informe um ano de publica√ß√£o v√°lido!', mtWarning, [mbOK], 0);
+    MessageDlg('Por favor, informe um ano de publicaÁ„o v·lido!', mtWarning, [mbOK], 0);
     edtAnoPub.SetFocus;
     Abort;
   end;
@@ -135,18 +135,18 @@ end;
 
 procedure TfrmCadLivro.FormCreate(Sender: TObject);
 begin
-  // 1. Primeiro, dizemos para a Query qual √© a conex√£o dela
+  // 1. Primeiro, dizemos para a Query qual È a conex„o dela
   // Isso resolve o erro [FireDAC][Comp][Clnt]-512
   FDQListagem.Connection := dtmPrincipal.dtmPrincipalDB;
 
   // 2. Depois, criamos o objeto oLivro
-  // Agora que o dtmPrincipal est√° no topo da lista (Passo 1), n√£o dar√° mais Access Violation
+  // Agora que o dtmPrincipal est· no topo da lista (Passo 1), n„o dar· mais Access Violation
   oLivro := TLivro.Create(dtmPrincipal.dtmPrincipalDB);
 
-  // 3. Agora podemos abrir a busca com seguran√ßa
+  // 3. Agora podemos abrir a busca com seguranÁa
   FDQListagem.Open;
 
-  IndiceAtual := 'titulo'; // Define o √≠ndice padr√£o para busca/exporta√ß√£o
+  IndiceAtual := 'titulo'; // Define o Ìndice padr„o para busca/exportaÁ„o
 
   inherited;
 end;
@@ -160,7 +160,7 @@ end;
 
 {$ENDREGION}
 
-{$REGION 'Botoes de A√ß√£o'}
+{$REGION 'Botoes de AÁ„o'}
 
 procedure TfrmCadLivro.btnNovoClick(Sender: TObject);
 begin
@@ -240,7 +240,7 @@ begin
     if SaveDialog1.Execute then
     begin
       TFile.WriteAllText(SaveDialog1.FileName, Lista.Text, TEncoding.UTF8);
-      ShowMessage('Exporta√ß√£o conclu√≠da! ' +
+      ShowMessage('ExportaÁ„o concluÌda! ' +
                   IntToStr(Lista.Count - 2) + ' registro(s) exportado(s).');
     end;
   finally
@@ -250,13 +250,13 @@ end;
 
 procedure TfrmCadLivro.btnExportarCSVClick(Sender: TObject);
 begin
-  // Recarrega o dataset para garantir que n√£o est√° em EOF
+  // Recarrega o dataset para garantir que n„o est· em EOF
   FDQListagem.Close;
   FDQListagem.Open;
 
   if FDQListagem.IsEmpty then
   begin
-    ShowMessage('N√£o h√° dados para exportar o arquivo.');
+    ShowMessage('N„o h· dados para exportar o arquivo.');
     Exit;
   end;
 
@@ -306,40 +306,40 @@ begin
       Editora := Trim(VarToStr(Planilha.Cells[Linha, 6].Value));
 
       // ============================================================
-      // BARRAMENTO DE VALIDA√á√ïES
+      // BARRAMENTO DE VALIDA«’ES
       // ============================================================
 
-      // 1. T√≠tulo obrigat√≥rio
+      // 1. TÌtulo obrigatÛrio
       if Titulo = '' then
       begin
-        Erros.Add('Linha ' + IntToStr(Linha) + ': T√≠tulo vazio ‚Äî linha ignorada.');
+        Erros.Add('Linha ' + IntToStr(Linha) + ': TÌtulo vazio ó linha ignorada.');
         Inc(Ignorados);
         Linha := Linha + 1;
         Continue;
       end;
 
-      // 2. T√≠tulo muito curto
+      // 2. TÌtulo muito curto
       if Length(Titulo) < 2 then
       begin
-        Erros.Add('Linha ' + IntToStr(Linha) + ': T√≠tulo "' + Titulo + '" muito curto ‚Äî ignorado.');
+        Erros.Add('Linha ' + IntToStr(Linha) + ': TÌtulo "' + Titulo + '" muito curto ó ignorado.');
         Inc(Ignorados);
         Linha := Linha + 1;
         Continue;
       end;
 
-      // 3. T√≠tulo muito longo (banco √© varchar(255))
+      // 3. TÌtulo muito longo (banco È varchar(255))
       if Length(Titulo) > 255 then
       begin
-        Erros.Add('Linha ' + IntToStr(Linha) + ': T√≠tulo muito longo (m√°x 255 caracteres) ‚Äî ignorado.');
+        Erros.Add('Linha ' + IntToStr(Linha) + ': TÌtulo muito longo (m·x 255 caracteres) ó ignorado.');
         Inc(Ignorados);
         Linha := Linha + 1;
         Continue;
       end;
 
-      // 4. Autor obrigat√≥rio
+      // 4. Autor obrigatÛrio
       if Autor = '' then
       begin
-        Erros.Add('Linha ' + IntToStr(Linha) + ': Autor vazio para "' + Titulo + '" ‚Äî ignorado.');
+        Erros.Add('Linha ' + IntToStr(Linha) + ': Autor vazio para "' + Titulo + '" ó ignorado.');
         Inc(Ignorados);
         Linha := Linha + 1;
         Continue;
@@ -348,34 +348,34 @@ begin
       // 5. Autor muito longo (varchar(255))
       if Length(Autor) > 255 then
       begin
-        Erros.Add('Linha ' + IntToStr(Linha) + ': Autor muito longo para "' + Titulo + '" ‚Äî ignorado.');
+        Erros.Add('Linha ' + IntToStr(Linha) + ': Autor muito longo para "' + Titulo + '" ó ignorado.');
         Inc(Ignorados);
         Linha := Linha + 1;
         Continue;
       end;
 
-      // 6. G√™nero obrigat√≥rio
+      // 6. GÍnero obrigatÛrio
       if Genero = '' then
       begin
-        Erros.Add('Linha ' + IntToStr(Linha) + ': G√™nero vazio para "' + Titulo + '" ‚Äî ignorado.');
+        Erros.Add('Linha ' + IntToStr(Linha) + ': GÍnero vazio para "' + Titulo + '" ó ignorado.');
         Inc(Ignorados);
         Linha := Linha + 1;
         Continue;
       end;
 
-      // 7. G√™nero muito longo (varchar(100))
+      // 7. GÍnero muito longo (varchar(100))
       if Length(Genero) > 100 then
       begin
-        Erros.Add('Linha ' + IntToStr(Linha) + ': G√™nero muito longo para "' + Titulo + '" ‚Äî ignorado.');
+        Erros.Add('Linha ' + IntToStr(Linha) + ': GÍnero muito longo para "' + Titulo + '" ó ignorado.');
         Inc(Ignorados);
         Linha := Linha + 1;
         Continue;
       end;
 
-     // 8. Editora obrigat√≥ria
+     // 8. Editora obrigatÛria
     if Editora = '' then
       begin
-      Erros.Add('Linha ' + IntToStr(Linha) + ': Editora vazia para "' + Titulo + '" ‚Äî ignorado.');
+      Erros.Add('Linha ' + IntToStr(Linha) + ': Editora vazia para "' + Titulo + '" ó ignorado.');
       Inc(Ignorados);
       Linha := Linha + 1;
       Continue;
@@ -384,17 +384,17 @@ begin
      // 9. Editora muito longa (varchar(255))
     if Length(Editora) > 255 then
       begin
-      Erros.Add('Linha ' + IntToStr(Linha) + ': Editora muito longa para "' + Titulo + '" ‚Äî ignorado.');
+      Erros.Add('Linha ' + IntToStr(Linha) + ': Editora muito longa para "' + Titulo + '" ó ignorado.');
       Inc(Ignorados);
       Linha := Linha + 1;
       Continue;
       end;
 
-     // 10. Ano inv√°lido (entre 1000 e ano atual)
+     // 10. Ano inv·lido (entre 1000 e ano atual)
     if (Ano < 1000) or (Ano > YearOf(Now)) then
       begin
       Erros.Add('Linha ' + IntToStr(Linha) + ': Ano ' + IntToStr(Ano) +
-                ' inv√°lido para "' + Titulo + '" ‚Äî ignorado.');
+                ' inv·lido para "' + Titulo + '" ó ignorado.');
       Inc(Ignorados);
       Linha := Linha + 1;
       Continue;
@@ -410,7 +410,7 @@ begin
 
       if not QryConsulta.IsEmpty then
       begin
-        Erros.Add('Linha ' + IntToStr(Linha) + ': "' + Titulo + '" j√° existe no banco ‚Äî ignorado.');
+        Erros.Add('Linha ' + IntToStr(Linha) + ': "' + Titulo + '" j· existe no banco ó ignorado.');
         Inc(Ignorados);
         Linha := Linha + 1;
         Continue;
@@ -436,12 +436,12 @@ begin
     end;
 
     // ============================================================
-    // RELAT√ìRIO FINAL
+    // RELAT”RIO FINAL
     // ============================================================
     if Erros.Count > 0 then
-      ShowMessage('Importa√ß√£o conclu√≠da com avisos:' + #13#13 + Erros.Text);
+      ShowMessage('ImportaÁ„o concluÌda com avisos:' + #13#13 + Erros.Text);
 
-    ShowMessage('Resultado da importa√ß√£o:' + #13 +
+    ShowMessage('Resultado da importaÁ„o:' + #13 +
                 '? Gravados: '  + IntToStr(Contador)  + #13 +
                 '? Ignorados: ' + IntToStr(Ignorados) + #13 +
                 '?? Total lido: ' + IntToStr(Contador + Ignorados));
@@ -470,7 +470,7 @@ begin
   begin
     if not SameText(ExtractFileExt(OpenDialog1.FileName), '.xlsx') then
     begin
-      ShowMessage('Arquivo inv√°lido! Selecione apenas arquivos .xlsx');
+      ShowMessage('Arquivo inv·lido! Selecione apenas arquivos .xlsx');
       Exit;
     end;
 

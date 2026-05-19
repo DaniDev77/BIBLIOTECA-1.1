@@ -5,7 +5,7 @@ inherited frmCadLivro: TfrmCadLivro
   ClientWidth = 1200
   Position = poScreenCenter
   ExplicitLeft = -152
-  ExplicitTop = -110
+  ExplicitTop = -19
   ExplicitWidth = 1216
   ExplicitHeight = 598
   PixelsPerInch = 96
@@ -3377,8 +3377,8 @@ inherited frmCadLivro: TfrmCadLivro
             Stretch = True
           end
           object Label2: TLabel
-            Left = 340
-            Top = 315
+            Left = 477
+            Top = 312
             Width = 60
             Height = 19
             Caption = 'Resumo:'

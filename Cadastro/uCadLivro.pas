@@ -17,13 +17,6 @@ type
     btnImportarXLSX: TBitBtn;
     Image1: TImage;
     Panel1: TPanel;
-    edtLivroId: TLabeledEdit;
-    edtTitulo: TLabeledEdit;
-    edtAutor: TLabeledEdit;
-    edtGenero: TLabeledEdit;
-    edtAnoPub: TLabeledEdit;
-    edtResumo: TLabeledEdit;
-    edtEditora: TLabeledEdit;
     FDQListagemid: TIntegerField;
     FDQListagemtitulo: TStringField;
     FDQListagemautor: TStringField;
@@ -31,6 +24,16 @@ type
     FDQListagemeditora: TStringField;
     FDQListagemresumo: TMemoField;
     FDQListagemano_de_publicacao: TIntegerField;
+    Panel2: TPanel;
+    edtLivroId: TLabeledEdit;
+    edtTitulo: TLabeledEdit;
+    edtAutor: TLabeledEdit;
+    edtGenero: TLabeledEdit;
+    edtAnoPub: TLabeledEdit;
+    edtEditora: TLabeledEdit;
+    memResumo: TMemo;
+    Image2: TImage;
+    Label2: TLabel;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -74,21 +77,50 @@ begin
 end;
 
 function TfrmCadLivro.Gravar(EstadoDoCadastro: TEstadoCadastro): Boolean;
+var
+  ResumoLimpo: string;
 begin
-  // 1. Passa os dados da tela para o objeto oLivro
   if edtLivroId.Text <> EmptyStr then
     oLivro.id := StrToInt(edtLivroId.Text)
   else
     oLivro.id := 0;
 
+  // ============================================================
+  // LIMPEZA DOS CAMPOS DE TEXTO — remove espaços nas bordas
+  // ============================================================
+  edtTitulo.Text  := Trim(edtTitulo.Text);
+  edtAutor.Text   := Trim(edtAutor.Text);
+  edtGenero.Text  := Trim(edtGenero.Text);
+  edtEditora.Text := Trim(edtEditora.Text);
+
+  // ============================================================
+  // LIMPEZA DO RESUMO — remove enters e espaços extras
+  // ============================================================
+  ResumoLimpo := memResumo.Text;
+
+  ResumoLimpo := StringReplace(ResumoLimpo, #13#10, ' ', [rfReplaceAll]);
+  ResumoLimpo := StringReplace(ResumoLimpo, #13,    ' ', [rfReplaceAll]);
+  ResumoLimpo := StringReplace(ResumoLimpo, #10,    ' ', [rfReplaceAll]);
+
+  while Pos('  ', ResumoLimpo) > 0 do
+    ResumoLimpo := StringReplace(ResumoLimpo, '  ', ' ', [rfReplaceAll]);
+
+  ResumoLimpo    := Trim(ResumoLimpo);
+  memResumo.Text := ResumoLimpo; // devolve limpo para o memo
+
+  // ============================================================
+  // PASSA OS DADOS LIMPOS PARA O OBJETO
+  // ============================================================
   oLivro.titulo         := edtTitulo.Text;
   oLivro.autor          := edtAutor.Text;
   oLivro.genero         := edtGenero.Text;
   oLivro.editora        := edtEditora.Text;
-  oLivro.resumo         := edtResumo.Text;
+  oLivro.resumo         := ResumoLimpo;
   oLivro.ano_publicacao := StrToIntDef(edtAnoPub.Text, 0);
 
-  // 2. Validações de Campos Obrigatórios
+  // ============================================================
+  // VALIDAÇÕES
+  // ============================================================
   if Trim(oLivro.titulo) = '' then
   begin
     MessageDlg('O título do livro é obrigatório!', mtWarning, [mbOK], 0);
@@ -107,7 +139,7 @@ begin
     edtGenero.SetFocus;
     Abort;
   end
-   else if Trim(oLivro.editora) = '' then
+  else if Trim(oLivro.editora) = '' then
   begin
     MessageDlg('A editora do livro é obrigatória!', mtWarning, [mbOK], 0);
     edtEditora.SetFocus;
@@ -118,11 +150,28 @@ begin
     MessageDlg('Por favor, informe um ano de publicação válido!', mtWarning, [mbOK], 0);
     edtAnoPub.SetFocus;
     Abort;
+  end
+  else if Trim(oLivro.resumo) = '' then
+  begin
+    MessageDlg('O resumo do livro é obrigatório!', mtWarning, [mbOK], 0);
+    memResumo.SetFocus;
+    Abort;
+  end
+  else if Length(oLivro.resumo) > 500 then
+  begin
+    MessageDlg(
+      'O resumo é muito longo!' + #13 +
+      'Máximo permitido: 500 caracteres.' + #13 +
+      'Atual: ' + IntToStr(Length(oLivro.resumo)) + ' caracteres.',
+      mtWarning, [mbOK], 0
+    );
+    memResumo.SetFocus;
+    Abort;
   end;
 
-
-
-  // 3. Decide se Insere ou Atualiza
+  // ============================================================
+  // GRAVA
+  // ============================================================
   if (EstadoDoCadastro = ecInserir) then
     Result := oLivro.Inserir
   else if (EstadoDoCadastro = ecAlterar) then
@@ -180,7 +229,7 @@ begin
     edtGenero.Text  := oLivro.genero;
     edtEditora.Text := oLivro.editora;
     edtAnoPub.Text  := IntToStr(oLivro.ano_publicacao);
-    edtResumo.Text  := oLivro.resumo;
+    memResumo.Text  := oLivro.resumo;
   end
   else
   begin
@@ -209,7 +258,7 @@ var
 begin
   Lista := TStringList.Create;
   try
-    Lista.Add('sep=;');  // <- faz o Excel/WPS abrir corretamente
+    Lista.Add('sep=;');
     Lista.Add('ID;Titulo;Autor;Genero;Ano;Resumo;Editora');
 
     ADataset.DisableControls;
@@ -218,13 +267,13 @@ begin
       while not ADataset.Eof do
       begin
         Linha :=
-          ADataset.FieldByName('id').AsString                + ';' +
-          '"' + ADataset.FieldByName('titulo').AsString      + '";' +
-          '"' + ADataset.FieldByName('autor').AsString       + '";' +
-          '"' + ADataset.FieldByName('genero').AsString      + '";' +
-          ADataset.FieldByName('ano_de_publicacao').AsString + ';' +
-          '"' + ADataset.FieldByName('resumo').AsString      + '"'+
-           '"' + ADataset.FieldByName('editora').AsString      + '";' ;
+          ADataset.FieldByName('id').AsString                  + ';' +
+          '"' + ADataset.FieldByName('titulo').AsString        + '";' +
+          '"' + ADataset.FieldByName('autor').AsString         + '";' +
+          '"' + ADataset.FieldByName('genero').AsString        + '";' +
+          ADataset.FieldByName('ano_de_publicacao').AsString   + ';' +
+          '"' + ADataset.FieldByName('resumo').AsString        + '";' + // <- faltava o ; aqui
+          '"' + ADataset.FieldByName('editora').AsString       + '"';   // <- sem ; no final
 
         Lista.Add(Linha);
         ADataset.Next;
@@ -442,9 +491,9 @@ begin
       ShowMessage('Importação concluída com avisos:' + #13#13 + Erros.Text);
 
     ShowMessage('Resultado da importação:' + #13 +
-                '? Gravados: '  + IntToStr(Contador)  + #13 +
-                '? Ignorados: ' + IntToStr(Ignorados) + #13 +
-                '?? Total lido: ' + IntToStr(Contador + Ignorados));
+                ' Gravados: '  + IntToStr(Contador)  + #13 +
+                ' Ignorados: ' + IntToStr(Ignorados) + #13 +
+                ' Total lido: ' + IntToStr(Contador + Ignorados));
 
     FDQListagem.Refresh;
 

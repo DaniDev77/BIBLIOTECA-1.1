@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
   FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.Buttons, Vcl.Grids, Vcl.DBGrids, Vcl.ExtCtrls, Vcl.ComCtrls,
-  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes, Vcl.Mask, Vcl.Imaging.pngimage;
+  cCadLivro, uEnum, uDTMConexao,System.IOUtils, ComObj, System.UITypes, Vcl.Mask, Vcl.Imaging.pngimage,DateUtils;
 
 type
   TfrmCadLivro = class(THeranca)
@@ -24,6 +24,14 @@ type
     edtAnoPub: TLabeledEdit;
     edtResumo: TLabeledEdit;
     edtEditora: TLabeledEdit;
+    FDQListagemid: TIntegerField;
+    FDQListagemtitulo: TStringField;
+    FDQListagemautor: TStringField;
+    FDQListagemgenero: TStringField;
+    FDQListagemeditora: TStringField;
+    FDQListagemresumo: TMemoField;
+    FDQListagemano_de_publicacao: TIntegerField;
+    memResumo: TMemo;
     procedure btnNovoClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -78,7 +86,7 @@ begin
   oLivro.autor          := edtAutor.Text;
   oLivro.genero         := edtGenero.Text;
   oLivro.editora        := edtEditora.Text;
-  oLivro.resumo         := edtResumo.Text;
+  oLivro.resumo         := memResumo.Text;
   oLivro.ano_publicacao := StrToIntDef(edtAnoPub.Text, 0);
 
   // 2. Validações de Campos Obrigatórios
@@ -161,11 +169,6 @@ begin
   edtTitulo.SetFocus;
 end;
 
-
-
-
-
-
 procedure TfrmCadLivro.btnAlterarClick(Sender: TObject);
 begin
   inherited;
@@ -178,7 +181,7 @@ begin
     edtGenero.Text  := oLivro.genero;
     edtEditora.Text := oLivro.editora;
     edtAnoPub.Text  := IntToStr(oLivro.ano_publicacao);
-    edtResumo.Text  := oLivro.resumo;
+    memResumo.Text  := oLivro.resumo;
   end
   else
   begin
@@ -264,44 +267,36 @@ end;
 
 {$ENDREGION}
 
-{$REGION 'Impotar'}
+{$REGION 'Importar'}
 procedure TfrmCadLivro.ImportarExcel(AFileName: string);
 var
   Excel, Planilha: Variant;
   Linha: Integer;
-  Titulo, Autor, Genero,Editora ,Resumo: string;
+  Titulo, Autor, Genero, Editora, Resumo: string;
   Ano: Integer;
   QryConsulta: TFDQuery;
   CelVal: string;
-  Contador: Integer;
+  Contador, Ignorados: Integer;
+  Erros: TStringList;
 begin
   Contador := 0;
+  Ignorados := 0;
+  Erros := TStringList.Create;
   QryConsulta := TFDQuery.Create(nil);
   QryConsulta.Connection := dtmPrincipal.dtmPrincipalDB;
 
   try
-    // DEBUG 1 - chegou aqui?
-    ShowMessage('Passo 1: Abrindo arquivo: ' + AFileName);
-
     Excel := CreateOleObject('Excel.Application');
     Excel.Visible       := False;
     Excel.DisplayAlerts := False;
     Excel.Workbooks.Open(AFileName);
     Planilha := Excel.Workbooks[1].Sheets[1];
 
-    // DEBUG 2 - Excel abriu?
-    ShowMessage('Passo 2: Excel aberto. Lendo linha 2...' + #13 +
-                'Cel[2,1] = ' + VarToStr(Planilha.Cells[2, 1].Value));
-
     Linha := 2;
 
     while True do
     begin
       CelVal := Trim(VarToStr(Planilha.Cells[Linha, 1].Value));
-
-      // DEBUG 3 - o que está lendo?
-      ShowMessage('Passo 3 - Linha ' + IntToStr(Linha) + ': [' + CelVal + ']');
-
       if CelVal = '' then Break;
 
       Titulo  := Trim(VarToStr(Planilha.Cells[Linha, 1].Value));
@@ -311,49 +306,147 @@ begin
       Ano     := StrToIntDef(VarToStr(Planilha.Cells[Linha, 5].Value), 0);
       Editora := Trim(VarToStr(Planilha.Cells[Linha, 6].Value));
 
-      // DEBUG 4 - dados lidos corretamente?
-      ShowMessage('Passo 4 - Dados:' + #13 +
-                  'Titulo: ' + Titulo + #13 +
-                  'Autor: '  + Autor  + #13 +
-                  'Genero: ' + Genero + #13 +
-                  'Editora: ' + Editora + #13 +
-                  'Ano: '    + IntToStr(Ano));
+      // ============================================================
+      // BARRAMENTO DE VALIDAÇÕES
+      // ============================================================
 
-      if Titulo <> '' then
+      // 1. Título obrigatório
+      if Titulo = '' then
       begin
-        QryConsulta.Close;
-        QryConsulta.SQL.Text := 'SELECT id FROM BIBLIOTECA.dbo.livros WHERE titulo = :t';
-        QryConsulta.ParamByName('t').AsString := Titulo;
-        QryConsulta.Open;
-
-        // DEBUG 5 - já existe no banco?
-        ShowMessage('Passo 5 - Título "' + Titulo + '" já existe? ' +
-                    BoolToStr(not QryConsulta.IsEmpty, True));
-
-        if QryConsulta.IsEmpty then
-        begin
-          oLivro.id             := 0;
-          oLivro.titulo         := Titulo;
-          oLivro.autor          := Autor;
-          oLivro.genero         := Genero;
-          oLivro.resumo         := Resumo;
-          oLivro.ano_publicacao := Ano;
-          oLivro.editora        := Editora;
-
-          if oLivro.Inserir then
-          begin
-            Inc(Contador);
-            ShowMessage('Passo 6 - GRAVOU "' + Titulo + '" com sucesso!');
-          end
-          else
-            ShowMessage('ERRO: Falhou ao gravar "' + Titulo + '"!');
-        end;
+        Erros.Add('Linha ' + IntToStr(Linha) + ': Título vazio — linha ignorada.');
+        Inc(Ignorados);
+        Linha := Linha + 1;
+        Continue;
       end;
+
+      // 2. Título muito curto
+      if Length(Titulo) < 2 then
+      begin
+        Erros.Add('Linha ' + IntToStr(Linha) + ': Título "' + Titulo + '" muito curto — ignorado.');
+        Inc(Ignorados);
+        Linha := Linha + 1;
+        Continue;
+      end;
+
+      // 3. Título muito longo (banco é varchar(255))
+      if Length(Titulo) > 255 then
+      begin
+        Erros.Add('Linha ' + IntToStr(Linha) + ': Título muito longo (máx 255 caracteres) — ignorado.');
+        Inc(Ignorados);
+        Linha := Linha + 1;
+        Continue;
+      end;
+
+      // 4. Autor obrigatório
+      if Autor = '' then
+      begin
+        Erros.Add('Linha ' + IntToStr(Linha) + ': Autor vazio para "' + Titulo + '" — ignorado.');
+        Inc(Ignorados);
+        Linha := Linha + 1;
+        Continue;
+      end;
+
+      // 5. Autor muito longo (varchar(255))
+      if Length(Autor) > 255 then
+      begin
+        Erros.Add('Linha ' + IntToStr(Linha) + ': Autor muito longo para "' + Titulo + '" — ignorado.');
+        Inc(Ignorados);
+        Linha := Linha + 1;
+        Continue;
+      end;
+
+      // 6. Gênero obrigatório
+      if Genero = '' then
+      begin
+        Erros.Add('Linha ' + IntToStr(Linha) + ': Gênero vazio para "' + Titulo + '" — ignorado.');
+        Inc(Ignorados);
+        Linha := Linha + 1;
+        Continue;
+      end;
+
+      // 7. Gênero muito longo (varchar(100))
+      if Length(Genero) > 100 then
+      begin
+        Erros.Add('Linha ' + IntToStr(Linha) + ': Gênero muito longo para "' + Titulo + '" — ignorado.');
+        Inc(Ignorados);
+        Linha := Linha + 1;
+        Continue;
+      end;
+
+     // 8. Editora obrigatória
+    if Editora = '' then
+      begin
+      Erros.Add('Linha ' + IntToStr(Linha) + ': Editora vazia para "' + Titulo + '" — ignorado.');
+      Inc(Ignorados);
+      Linha := Linha + 1;
+      Continue;
+     end;
+
+     // 9. Editora muito longa (varchar(255))
+    if Length(Editora) > 255 then
+      begin
+      Erros.Add('Linha ' + IntToStr(Linha) + ': Editora muito longa para "' + Titulo + '" — ignorado.');
+      Inc(Ignorados);
+      Linha := Linha + 1;
+      Continue;
+      end;
+
+     // 10. Ano inválido (entre 1000 e ano atual)
+    if (Ano < 1000) or (Ano > YearOf(Now)) then
+      begin
+      Erros.Add('Linha ' + IntToStr(Linha) + ': Ano ' + IntToStr(Ano) +
+                ' inválido para "' + Titulo + '" — ignorado.');
+      Inc(Ignorados);
+      Linha := Linha + 1;
+      Continue;
+      end;
+
+      // ============================================================
+      // VERIFICA DUPLICIDADE NO BANCO
+      // ============================================================
+      QryConsulta.Close;
+      QryConsulta.SQL.Text := 'SELECT id FROM BIBLIOTECA.dbo.livros WHERE titulo = :t';
+      QryConsulta.ParamByName('t').AsString := Titulo;
+      QryConsulta.Open;
+
+      if not QryConsulta.IsEmpty then
+      begin
+        Erros.Add('Linha ' + IntToStr(Linha) + ': "' + Titulo + '" já existe no banco — ignorado.');
+        Inc(Ignorados);
+        Linha := Linha + 1;
+        Continue;
+      end;
+
+      // ============================================================
+      // GRAVA NO BANCO
+      // ============================================================
+      oLivro.id             := 0;
+      oLivro.titulo         := Titulo;
+      oLivro.autor          := Autor;
+      oLivro.genero         := Genero;
+      oLivro.resumo         := Resumo;
+      oLivro.ano_publicacao := Ano;
+      oLivro.editora        := Editora;
+
+      if oLivro.Inserir then
+        Inc(Contador)
+      else
+        Erros.Add('Linha ' + IntToStr(Linha) + ': Erro ao gravar "' + Titulo + '" no banco.');
 
       Linha := Linha + 1;
     end;
 
-    ShowMessage('FIM: Total gravado = ' + IntToStr(Contador) + ' livro(s).');
+    // ============================================================
+    // RELATÓRIO FINAL
+    // ============================================================
+    if Erros.Count > 0 then
+      ShowMessage('Importação concluída com avisos:' + #13#13 + Erros.Text);
+
+    ShowMessage('Resultado da importação:' + #13 +
+                ' Gravados: '  + IntToStr(Contador)  + #13 +
+                ' Ignorados: ' + IntToStr(Ignorados) + #13 +
+                ' Total lido: ' + IntToStr(Contador + Ignorados));
+
     FDQListagem.Refresh;
 
   finally
@@ -363,14 +456,11 @@ begin
       Excel.Quit;
       Excel := Unassigned;
     end;
+    Erros.Free;
     QryConsulta.Free;
   end;
 end;
 
-
-
-
-// Botão de importar limpo, sem ShowMessage duplicado:
 procedure TfrmCadLivro.btnImportarXLSXClick(Sender: TObject);
 begin
   OpenDialog1.Title      := 'Selecionar Planilha Excel';
@@ -379,7 +469,6 @@ begin
 
   if OpenDialog1.Execute then
   begin
-    // Validação extra: garante que só aceita .xlsx mesmo
     if not SameText(ExtractFileExt(OpenDialog1.FileName), '.xlsx') then
     begin
       ShowMessage('Arquivo inválido! Selecione apenas arquivos .xlsx');
@@ -391,7 +480,6 @@ begin
     FDQListagem.Open;
   end;
 end;
-
 {$ENDREGION}
 
 end.

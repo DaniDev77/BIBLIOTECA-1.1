@@ -1,11 +1,9 @@
 inherited frmCadLivro: TfrmCadLivro
-  Align = alClient
   Caption = 'frmCadLivro'
   ClientHeight = 559
   ClientWidth = 1200
   Position = poScreenCenter
-  ExplicitLeft = -152
-  ExplicitTop = -110
+  ExplicitTop = -19
   ExplicitWidth = 1216
   ExplicitHeight = 598
   PixelsPerInch = 96
@@ -1762,11 +1760,12 @@ inherited frmCadLivro: TfrmCadLivro
         ExplicitTop = -2
         ExplicitWidth = 981
         object Panel2: TPanel
-          Left = 147
-          Top = 2
+          Left = 125
+          Top = 3
           Width = 941
           Height = 465
           BevelOuter = bvNone
+          Caption = 'Panel2'
           TabOrder = 0
           object Image2: TImage
             Left = 345
@@ -3377,8 +3376,8 @@ inherited frmCadLivro: TfrmCadLivro
             Stretch = True
           end
           object Label2: TLabel
-            Left = 340
-            Top = 315
+            Left = 613
+            Top = 312
             Width = 60
             Height = 19
             Caption = 'Resumo:'
@@ -3391,7 +3390,7 @@ inherited frmCadLivro: TfrmCadLivro
           end
           object edtLivroId: TLabeledEdit
             Tag = 1
-            Left = 227
+            Left = 236
             Top = 193
             Width = 72
             Height = 23
@@ -3416,7 +3415,7 @@ inherited frmCadLivro: TfrmCadLivro
             TabOrder = 0
           end
           object edtTitulo: TLabeledEdit
-            Left = 380
+            Left = 401
             Top = 193
             Width = 272
             Height = 23
@@ -3439,10 +3438,11 @@ inherited frmCadLivro: TfrmCadLivro
             TabOrder = 1
           end
           object edtAutor: TLabeledEdit
-            Left = 193
+            Left = 196
             Top = 248
             Width = 227
             Height = 23
+            Alignment = taCenter
             Color = clWhite
             EditLabel.Width = 43
             EditLabel.Height = 19
@@ -3463,10 +3463,11 @@ inherited frmCadLivro: TfrmCadLivro
             TabOrder = 2
           end
           object edtGenero: TLabeledEdit
-            Left = 618
-            Top = 248
+            Left = 613
+            Top = 242
             Width = 184
             Height = 23
+            Alignment = taCenter
             Color = clWhite
             EditLabel.Width = 55
             EditLabel.Height = 19
@@ -3487,7 +3488,7 @@ inherited frmCadLivro: TfrmCadLivro
             TabOrder = 3
           end
           object edtAnoPub: TLabeledEdit
-            Left = 718
+            Left = 725
             Top = 193
             Width = 72
             Height = 23
@@ -3512,10 +3513,11 @@ inherited frmCadLivro: TfrmCadLivro
             TabOrder = 4
           end
           object edtEditora: TLabeledEdit
-            Left = 433
+            Left = 489
             Top = 285
             Width = 184
             Height = 23
+            Alignment = taCenter
             Color = clWhite
             EditLabel.Width = 54
             EditLabel.Height = 19
@@ -3536,10 +3538,11 @@ inherited frmCadLivro: TfrmCadLivro
             TabOrder = 5
           end
           object memResumo: TMemo
-            Left = 338
+            Left = 350
             Top = 337
-            Width = 358
+            Width = 323
             Height = 89
+            Alignment = taCenter
             ScrollBars = ssVertical
             TabOrder = 6
           end

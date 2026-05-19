@@ -1,11 +1,10 @@
 inherited frmCadLivro: TfrmCadLivro
-  Align = alClient
   Caption = 'frmCadLivro'
   ClientHeight = 559
   ClientWidth = 1200
   Position = poScreenCenter
   ExplicitLeft = -152
-  ExplicitTop = -110
+  ExplicitTop = -19
   ExplicitWidth = 1216
   ExplicitHeight = 598
   PixelsPerInch = 96
@@ -1762,8 +1761,8 @@ inherited frmCadLivro: TfrmCadLivro
         ExplicitTop = -2
         ExplicitWidth = 981
         object Panel2: TPanel
-          Left = 147
-          Top = 2
+          Left = 132
+          Top = 3
           Width = 941
           Height = 465
           BevelOuter = bvNone
@@ -3377,8 +3376,8 @@ inherited frmCadLivro: TfrmCadLivro
             Stretch = True
           end
           object Label2: TLabel
-            Left = 340
-            Top = 315
+            Left = 477
+            Top = 312
             Width = 60
             Height = 19
             Caption = 'Resumo:'
@@ -3443,6 +3442,7 @@ inherited frmCadLivro: TfrmCadLivro
             Top = 248
             Width = 227
             Height = 23
+            Alignment = taCenter
             Color = clWhite
             EditLabel.Width = 43
             EditLabel.Height = 19
@@ -3467,6 +3467,7 @@ inherited frmCadLivro: TfrmCadLivro
             Top = 248
             Width = 184
             Height = 23
+            Alignment = taCenter
             Color = clWhite
             EditLabel.Width = 55
             EditLabel.Height = 19
@@ -3516,6 +3517,7 @@ inherited frmCadLivro: TfrmCadLivro
             Top = 285
             Width = 184
             Height = 23
+            Alignment = taCenter
             Color = clWhite
             EditLabel.Width = 54
             EditLabel.Height = 19
@@ -3540,6 +3542,7 @@ inherited frmCadLivro: TfrmCadLivro
             Top = 337
             Width = 358
             Height = 89
+            Alignment = taCenter
             ScrollBars = ssVertical
             TabOrder = 6
           end
